@@ -1,0 +1,4 @@
+creds=nmah&_service=ogmt/v1.1/ogmt/getObjectGroup.htm&objectGroupUrl=19th-century-survey-prints
+
+$uri = objectGroupUrl=19th-century-survey-prints
+$service = ogmt/v1.1/ogmt/getObjectGroup.htm
