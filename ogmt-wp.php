@@ -164,7 +164,7 @@
         {
           header('Content-Type: ' . $info['content_type']);
         }
-        echo $results; 
+        echo $results;
         //debug_to_console($results);
 
         exit;
@@ -182,7 +182,4 @@
       exit(1);
     }
   }
-
-  edan_call();
-
 ?>
