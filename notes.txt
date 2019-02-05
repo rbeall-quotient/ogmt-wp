@@ -2,3 +2,7 @@ creds=nmah&_service=ogmt/v1.1/ogmt/getObjectGroup.htm&objectGroupUrl=19th-centur
 
 $uri = objectGroupUrl=19th-century-survey-prints
 $service = ogmt/v1.1/ogmt/getObjectGroup.htm
+
+****
+
+http://localhost:8080/ogmt_local/ogmt/

@@ -1,11 +1,7 @@
 <?php
-function debug_to_console( $data )
-{
-    $output = $data;
-    if ( is_array( $output ) )
-        $output = implode( ',', $output);
-
-    echo "<script>console.log(" . $output . " );</script>";
-}
+  function console_log($content)
+  {
+    echo '<script>console.log("'.$content.'")</script>';
+  }
 
 ?>
