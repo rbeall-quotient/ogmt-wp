@@ -1,7 +1,26 @@
 <?php
+  /**
+   * This file handles adding custom query variables and mapping those variables
+   * to an EDAN call. From there, we insert the data retrieved from the EDAN
+   * call into the page content.
+   *
+   * Note: Because WordPress is a glorified blogging platform, all views are
+   * different types of 'posts'. As a result, we cannot map a WordPress url to
+   * a callback function that calls an external API (EDAN). Instead, we have to
+   * create a page and then modify the content based on custom query variables.
+   *
+   * for example:
+   * http://localhost:8080/ogmt_local/ogmt/?creds=nmah&_service=ogmt/v1.1/ogmt/getObjectGroup.htm&objectGroupUrl=19th-century-survey-prints
+   *
+   */
 
   add_action('init', 'add_tags');
+  add_filter( 'the_content', 'insert_edan_content');
 
+  /**
+   * Callback for adding custom query variables corresponding to
+   * EDAN call.
+   */
   function add_tags()
   {
     add_rewrite_tag('%creds%', '(.*)');
@@ -9,51 +28,73 @@
     add_rewrite_tag('%objectGroupUrl%', '(.*)');
   }
 
-  add_filter( 'the_content', 'insert_edan_content');
-  //apply_filters('the_content', 'content', $creds, $_service, $objectGroupUrl);
-
-  function insert_edan_content( $content)
+  /**
+   * Callback function for inserting EDAN content based on
+   * custom query vars added in add_tags. Currently inserts
+   * values of query vars into page.
+   */
+  function insert_edan_content( $content )
   {
-    if(get_current_url() == "ogmt")
+    //if url does not match EDAN OGMT path, do not insert content
+    if(get_url() == "ogmt")
     {
-      $creds=get_query_var('creds');
-      $_service=get_query_var('_service');
-      $objectGroupUrl=get_query_var('objectGroupUrl');
+      //get values of EDAN OGMT query vars
+      $creds = get_query_var('creds');
+      $_service = get_query_var('_service');
+      $objectGroupUrl = get_query_var('objectGroupUrl');
 
-      console_log("creds: ".$creds);
-      console_log("_service: ".$_service);
-      console_log("objectGroupUrl: ".$objectGroupUrl);
-      console_log("url: ".get_current_url());
+      //validate query vars
+      if($creds && $_service && $objectGroupUrl)
+      {
+        //log vars to browser console (only for testing)
+        console_log("creds: ".$creds);
+        console_log("_service: ".$_service);
+        console_log("objectGroupUrl: ".$objectGroupUrl);
+        console_log("url: ".get_url());
 
-      $content .= '<h3>creds:</h1>';
-      $content .= '<p>'.$creds.'</p>';
-      $content .= '<h3>_service:</h1>';
-      $content .= '<p>'.$_service.'</p>';
-      $content .= '<h3>objectGroupUrl:</h1>';
-      $content .= '<p>'.$objectGroupUrl.'</p>';
+        //insert the vars into the page content
+        $content .= '<h3>creds:</h1>';
+        $content .= '<p>'.$creds.'</p>';
+        $content .= '<h3>_service:</h1>';
+        $content .= '<p>'.$_service.'</p>';
+        $content .= '<h3>objectGroupUrl:</h1>';
+        $content .= '<p>'.$objectGroupUrl.'</p>';
+      }
+      else
+      {
+        //if the vars are invalid, display this on the page
+        $content .= '<h3>Invalid Credentials</h3>';
+      }
     }
 
     return $content;
   }
 
-  //adapted from: https://roots.io/routing-wp-requests/
-  function get_current_url()
+
+
+  /**
+   * Return url stripped of query vars and '/' and '?' characters.
+   * This will correspond to the EDAN object groups call.
+   *
+   * Adapted from: https://roots.io/routing-wp-requests/
+   *
+   * @return String page url without query variables
+   */
+  function get_url()
   {
     // Get current URL path, stripping out slashes on boundaries
-    $current_url = trim(esc_url_raw(add_query_arg([])), '/');
+    $url = trim(esc_url_raw(add_query_arg([])), '/');
     // Get the path of the home URL, stripping out slashes on boundaries
     $home_path = trim(parse_url(home_url(), PHP_URL_PATH), '/');
     // If a URL part exists, and the current URL part starts with it...
-    if ($home_path && strpos($current_url, $home_path) === 0)
+    if ($home_path && strpos($url, $home_path) === 0)
     {
       // ... just remove the home URL path form the current URL path
-      $current_url = trim(substr($current_url, strlen($home_path)), '/');
+      $url = trim(substr($url, strlen($home_path)), '/');
     }
 
-    $urlParts = explode('?', $current_url, 2);
-    $urlPath = trim($urlParts[0], '/');
-
-    return $urlPath;
+    //trim query vars and forward slashes
+    return trim(explode('?', $url, 2)[0], '/');
   }
 
 ?>
