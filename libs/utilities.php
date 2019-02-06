@@ -11,7 +11,13 @@
    */
   function console_log($content)
   {
-    echo '<script>console.log("'.$content.'")</script>';
+    echo '<script>console.log("'.$content.'");</script>';
+  }
+
+  function console_json($json)
+  {
+    echo '<script>console.log("hello world")</script>';
+    echo '<script>console.log(JSON.parse('.$json.'))</script>';
   }
 
 ?>

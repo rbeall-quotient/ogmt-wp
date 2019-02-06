@@ -15,6 +15,7 @@
    */
 
   add_action('init', 'add_tags');
+  add_action('init', 'get_web_info');
   add_filter( 'the_content', 'insert_edan_content');
 
   /**
@@ -59,6 +60,8 @@
         $content .= '<p>'.$_service.'</p>';
         $content .= '<h3>objectGroupUrl:</h1>';
         $content .= '<p>'.$objectGroupUrl.'</p>';
+        $content .= '<h3>Object Group JSON</h3>';
+        $content .= '<p>'.generic_call($creds, $_service, $objectGroupUrl).'</p>';
       }
       else
       {
@@ -95,6 +98,12 @@
 
     //trim query vars and forward slashes
     return trim(explode('?', $url, 2)[0], '/');
+  }
+
+  function get_web_info()
+  {
+    console_log("Short URL: ".get_url());
+    console_log("Long URL: ".trim(esc_url_raw(add_query_arg([])), '/'));
   }
 
 ?>
