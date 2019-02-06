@@ -28,3 +28,4 @@
 
   require 'libs/utilities.php';
   require 'libs/routes.php';
+  require 'libs/ogmt_post.php';
