@@ -28,3 +28,6 @@
 
   require 'libs/utilities.php';
   require 'libs/routes.php';
+  require 'libs/EDANHandler.php';
+
+  //edan_call();
