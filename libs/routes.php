@@ -49,10 +49,13 @@
       {
         $results = generic_call($creds, $_service, $objectGroupUrl);
         $objectGroup   = json_decode($results);
+
         if( $objectGroup != null )
         {
+          add_filter('the_title', 'set_ogmt_title', 20, 2);
+          apply_filters('the_title', 'title', $objectGroup->{'title'});
+
           $content .= '<h3>JSON parse successful</h3>';
-          $content .= '<p>'.$objectGroup->{'title'}.'</p>';
         }
         else
         {
@@ -100,6 +103,18 @@
   {
     console_log("Short URL: ".get_url());
     console_log("Long URL: ".trim(esc_url_raw(add_query_arg([])), '/'));
+  }
+
+  function set_ogmt_title($title, $ogmtTitle)
+  {
+    if ( in_the_loop() && is_page())
+    {
+      console_log("current title: $title");
+      console_log("OGMT TITLE: $ogmtTitle");
+		  $title = $ogmtTitle;
+    }
+
+    return $title;
   }
 
 ?>
