@@ -1,0 +1,69 @@
+{
+  "menu": [{
+    "id": "jdi-1477398434501-1477398434501-1",
+    "url": "introduction",
+    "title": "Introduction"
+  }, {
+    "id": "jdi-1477398442873-1477398442874-0",
+    "url": "about-the-surveys",
+    "title": "About the Surveys"
+  }],
+  "page": {
+    "title": "Introduction",
+    "url": "introduction",
+    "listTitle": "",
+    "content": "\u003cp\u003eThe 19th century United States Federal Government was interested to enlarge and examine the country\u0026rsquo;s land holdings to the west and the south. It commissioned many exploratory expeditions in order to research information about these lands, and their potential benefits, to the country. The expeditions included the United States and Mexico Boundary Survey, the United States Naval Astronomical Expedition to the Southern Hemisphere, and the United States Pacific Railroad Surveys.\u003c/p\u003e\n\u003cp\u003e\u003cspan\u003eImagery prepared to describe the narratives and expedition findings included topographical landscapes, scientific specimens, native peoples, and anthropological artifacts encountered and collected. The expeditions were staffed with naturalists whose collected material many times found a home in the collections of the Smithsonian\u0026rsquo;s U.S. National Museum.\u0026nbsp;\u0026nbsp;\u003c/span\u003e\u003ca href\u003d\"http://americanhistory.si.edu/collections/object-groups/19th-century-survey-prints?ogmt_page\u003dabout-the-surveys\"\u003eRead more about the surveys.\u003c/a\u003e\u003c/p\u003e",
+    "feature": {
+      "type": "0",
+      "thumbnail": "",
+      "media": "",
+      "alt": ""
+    },
+    "settings": {},
+    "pageId": "jdi-1477398434501-1477398434501-1",
+    "objectGroupId": "jdi-1477398427273-1477398427498-0"
+  },
+  "feature": {
+    "type": "image",
+    "url": "http://amhistory.si.edu/ogmt/images/upload/19th-century-survey-prints/survey_header.jpg",
+    "alt": "Survey Print",
+    "html": "",
+    "media": "\u003cimg src\u003d\"http://amhistory.si.edu/ogmt/images/upload/19th-century-survey-prints/survey_header.jpg\" alt\u003d\"Survey Print\"\u003e",
+    "thumbnail": "http://amhistory.si.edu/ogmt/images/upload/19th-century-survey-prints/thumb_image_238.jpg"
+  },
+  "settings": {
+    "ux_objects_display": 1
+  },
+  "defaultPageId": "jdi-1477398434501-1477398434501-1",
+  "title": "19th Century Survey Prints",
+  "listTitle": "19th Century Survey Prints",
+  "description": "\u003cp\u003eNearly 40 examples of prints from three government survey expeditions to the American West: the U.S. and Mexico Boundary Survey, the U.S. Naval Astronomical Expedition to the Southern Hemisphere, and the U.S. Pacific Railroad Surveys.\u003c/p\u003e",
+  "keywords": "survey, prints, United, States, Naval, Astronomical, Expedition, Southern, Hemisphere, Pacific, U.S., findings",
+  "featured": 0,
+  "groupType": 1,
+  "published": 0,
+  "objectGroupId": "jdi-1477398427273-1477398427498-0",
+  "url": "19th-century-survey-prints",
+  "objects": {
+    "listType": 0,
+    "size": 38,
+    "listName": "1379",
+    "items": ["nmah_802445", "nmah_1317607", "nmah_1317694", "nmah_802444", "nmah_1317696", "nmah_802446", "nmah_1317697", "nmah_785539", "nmah_785555", "nmah_802189", "nmah_802165", "nmah_796464", "nmah_802141", "nmah_802157", "nmah_802134", "nmah_802195", "nmah_802153", "nmah_802169", "nmah_802186", "nmah_802172", "nmah_802179", "nmah_802173", "nmah_802161", "nmah_802156", "nmah_833921", "nmah_802175", "nmah_802185", "nmah_802146", "nmah_804537", "nmah_1336263", "nmah_1320023", "nmah_1318535", "nmah_1320024", "nmah_1336130", "nmah_1318532", "nmah_803333", "nmah_785538", "nmah_802176"]
+  },
+  "defaultPage": {
+    "title": "Introduction",
+    "url": "introduction",
+    "listTitle": "",
+    "content": "\u003cp\u003eThe 19th century United States Federal Government was interested to enlarge and examine the country\u0026rsquo;s land holdings to the west and the south. It commissioned many exploratory expeditions in order to research information about these lands, and their potential benefits, to the country. The expeditions included the United States and Mexico Boundary Survey, the United States Naval Astronomical Expedition to the Southern Hemisphere, and the United States Pacific Railroad Surveys.\u003c/p\u003e\n\u003cp\u003e\u003cspan\u003eImagery prepared to describe the narratives and expedition findings included topographical landscapes, scientific specimens, native peoples, and anthropological artifacts encountered and collected. The expeditions were staffed with naturalists whose collected material many times found a home in the collections of the Smithsonian\u0026rsquo;s U.S. National Museum.\u0026nbsp;\u0026nbsp;\u003c/span\u003e\u003ca href\u003d\"http://americanhistory.si.edu/collections/object-groups/19th-century-survey-prints?ogmt_page\u003dabout-the-surveys\"\u003eRead more about the surveys.\u003c/a\u003e\u003c/p\u003e",
+    "feature": {
+      "type": "0",
+      "thumbnail": "",
+      "media": "",
+      "alt": ""
+    },
+    "settings": {},
+    "pageId": "jdi-1477398434501-1477398434501-1",
+    "objectGroupId": "jdi-1477398427273-1477398427498-0"
+  },
+  "publicSearch": true
+}

@@ -23,7 +23,6 @@
   You should have received a copy of the GNU General Public License
   along with OGMT WP. If not, see https://www.gnu.org/licenses/gpl-3.0.en.html.
   */
-  namespace RoutingWP;
   date_default_timezone_set('UTC');
 
   require 'libs/utilities.php';
