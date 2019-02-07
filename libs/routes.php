@@ -51,8 +51,9 @@
         $objectGroup   = json_decode($results);
         if( $objectGroup != null )
         {
-          $content .= '<h3>JSON parse successful</h3>';
-          $content .= '<p>'.$objectGroup->{'title'}.'</p>';
+          $content .= '<h2>'.$objectGroup->{'title'}.'</h2>';
+          $content .= $objectGroup->{'feature'}->{'media'};
+          $content .= $objectGroup->{'page'}->{'content'};
         }
         else
         {
