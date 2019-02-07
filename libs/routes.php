@@ -47,21 +47,17 @@
       //validate query vars
       if($creds && $_service && $objectGroupUrl)
       {
-        //log vars to browser console (only for testing)
-        console_log("creds: ".$creds);
-        console_log("_service: ".$_service);
-        console_log("objectGroupUrl: ".$objectGroupUrl);
-        console_log("url: ".get_url());
-
-        //insert the vars into the page content
-        $content .= '<h3>creds:</h1>';
-        $content .= '<p>'.$creds.'</p>';
-        $content .= '<h3>_service:</h1>';
-        $content .= '<p>'.$_service.'</p>';
-        $content .= '<h3>objectGroupUrl:</h1>';
-        $content .= '<p>'.$objectGroupUrl.'</p>';
-        $content .= '<h3>Object Group JSON</h3>';
-        $content .= '<p>'.generic_call($creds, $_service, $objectGroupUrl).'</p>';
+        $results = generic_call($creds, $_service, $objectGroupUrl);
+        $objectGroup   = json_decode($results);
+        if( $objectGroup != null )
+        {
+          $content .= '<h3>JSON parse successful</h3>';
+          $content .= '<p>'.$objectGroup->{'title'}.'</p>';
+        }
+        else
+        {
+          $content .= '<h3>JSON parsing failed</h3>';
+        }
       }
       else
       {
