@@ -11,3 +11,7 @@ http://localhost:8080/ogmt_local/ogmt/
 Object Groups Sample Call:
 
 http://localhost:8080/ogmt_local/ogmt/?creds=nmah&_service=ogmt/v1.1/ogmt/getObjectGroup.htm&objectGroupUrl=19th-century-survey-prints
+
+For putting to helena:
+
+put -r /Users/rbeall/Documents/Projects/Current/ogmt/ogmt-wp

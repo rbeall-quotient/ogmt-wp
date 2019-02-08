@@ -43,6 +43,7 @@
     * we are changing the title and this title filter might be called before
     * we access content.
     */
+
     if(get_url() == "ogmt")
     {
       $objectGroup = get_object_group(get_edan_vars());
@@ -88,6 +89,8 @@
     {
       $url = trim(substr($url, strlen($home_path)), '/');
     }
+
+    $url = str_replace('index.php/', '', $url);
 
     return trim(explode('?', $url, 2)[0], '/');
   }
