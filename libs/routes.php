@@ -49,8 +49,21 @@
 
       if($objectGroup)
       {
-        $content .= $objectGroup->{'feature'}->{'media'};
-        $content .= $objectGroup->{'page'}->{'content'};
+        //Validate that media exists to display
+        if(property_exists($objectGroup->{'feature'},'media'))
+        {
+          $content .= $objectGroup->{'feature'}->{'media'};
+        }
+
+        //Validate if page->content is present. Display description instead
+        if(property_exists($objectGroup->{'page'},'content'))
+        {
+          $content .= $objectGroup->{'page'}->{'content'};
+        }
+        elseif(property_exists($objectGroup, 'description'))
+        {
+          $content .= $objectGroup->{'description'};
+        }
       }
     }
 
