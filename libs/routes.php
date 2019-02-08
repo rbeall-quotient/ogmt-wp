@@ -14,11 +14,13 @@
    *
    */
 
+  /*** actions ***/
   add_action('init', 'add_tags');
-  add_action('init', 'get_web_info');
-  add_filter( 'the_content', 'insert_edan_content');
 
-  //Try Global vars for tomorrow
+  /*** filters ***/
+  add_filter( 'the_content', 'insert_edan_content');
+  add_filter('pre_get_document_title', 'set_ogmt_title');
+  add_filter( 'the_title', 'set_ogmt_title', 10);
 
   /**
   * Callback for adding custom query variables corresponding to
@@ -32,55 +34,28 @@
   }
 
   /**
-  * Callback function for inserting EDAN content based on
-  * custom query vars added in add_tags. Currently inserts
-  * values of query vars into page.
+  * Callback function for inserting EDAN content into
+  * OGMT page
   */
   function insert_edan_content( $content )
   {
-    //if url does not match EDAN OGMT path, do not insert content
+    /*Using stripped down url instead of page title because we
+    * we are changing the title and this title filter might be called before
+    * we access content.
+    */
     if(get_url() == "ogmt")
     {
-      //get values of EDAN OGMT query vars
-      $creds = get_query_var('creds');
-      $_service = get_query_var('_service');
-      $objectGroupUrl = get_query_var('objectGroupUrl');
+      $objectGroup = get_object_group(get_edan_vars());
 
-      //validate query vars
-      if($creds && $_service && $objectGroupUrl)
+      if($objectGroup)
       {
-        add_filter('pre_get_document_title', 'change_the_title');
-
-        $results = generic_call($creds, $_service, $objectGroupUrl);
-        $objectGroup = json_decode($results);
-
-        //add_filter('wp_title', 'rewrite_title', 20, 2);
-        //apply_filters('wp_title', 'title', $objectGroup->{'title'});
-
-
-        if( $objectGroup != null )
-        {
-          wp_cache_set('ogmt_title', $objectGroup->{'title'});
-
-          $content .= '<h2>'.$objectGroup->{'title'}.'</h2>';
-          $content .= $objectGroup->{'feature'}->{'media'};
-          $content .= $objectGroup->{'page'}->{'content'};
-        }
-        else
-        {
-          $content .= '<h3>JSON parsing failed</h3>';
-        }
-      }
-      else
-      {
-        //if the vars are invalid, display this on the page
-        $content .= '<h3>Invalid Credentials</h3>';
+        $content .= $objectGroup->{'feature'}->{'media'};
+        $content .= $objectGroup->{'page'}->{'content'};
       }
     }
 
     return $content;
   }
-
 
 
   /**
@@ -93,71 +68,44 @@
   */
   function get_url()
   {
-    // Get current URL path, stripping out slashes on boundaries
     $url = trim(esc_url_raw(add_query_arg([])), '/');
-    // Get the path of the home URL, stripping out slashes on boundaries
     $home_path = trim(parse_url(home_url(), PHP_URL_PATH), '/');
-    // If a URL part exists, and the current URL part starts with it...
+
     if ($home_path && strpos($url, $home_path) === 0)
     {
-      // ... just remove the home URL path form the current URL path
       $url = trim(substr($url, strlen($home_path)), '/');
     }
 
-    //trim query vars and forward slashes
     return trim(explode('?', $url, 2)[0], '/');
   }
 
-  function get_web_info()
+  /**
+   * Get array containing query vars from url
+   * @return array EDAN query vars
+   */
+  function get_edan_vars()
   {
-    console_log("Short URL: ".get_url());
-    console_log("Long URL: ".trim(esc_url_raw(add_query_arg([])), '/'));
+    return array(
+      "creds" => get_query_var('creds'),
+      "_service" => get_query_var('_service'),
+      "objectGroupUrl" => get_query_var('objectGroupUrl'),
+    );
   }
 
-  function rewrite_title($title, $new_title)
+  /**
+   * Modify title to match ObjectGroup information
+   *
+   * Note: used for both doc title and display title
+   *
+   * @param String $title title for display
+   */
+  function set_ogmt_title( $title )
   {
-    console_log("rewrite title");
-    $title = $new_title;
-    return $title;
-  }
-
-  add_filter('pre_get_document_title', 'change_the_title');
-
-  function change_the_title($title)
-  {
-    if(get_query_var('objectGroupUrl'))
+    if(wp_cache_get('ogmt_title') || get_object_group(get_edan_vars()))
     {
-      return get_query_var('objectGroupUrl');
+      return wp_cache_get('ogmt_title');
     }
 
     return $title;
   }
-
-  function suppress_if_blurb( $title, $id = null )
-  {
-    $new_title = wp_cache_get('ogmt_title');
-
-    $creds = get_query_var("creds");
-    $_service = get_query_var('_service');
-    $objectGroupUrl = get_query_var('objectGroupUrl');
-
-    if($new_title)
-    {
-        return $new_title;
-    }
-    elseif($creds && $_service && $objectGroupUrl)
-    {
-        $new_title = json_decode(generic_call($creds, $_service, $objectGroupUrl))->{'title'};
-        wp_cache_set("ogmt_title", $new_title);
-        return $new_title;
-    }
-    else
-    {
-      return title; 
-    }
-
-  }
-
-  add_filter( 'the_title', 'suppress_if_blurb', 10, 2 );
-
 ?>
