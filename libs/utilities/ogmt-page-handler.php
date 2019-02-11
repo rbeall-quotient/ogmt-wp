@@ -1,13 +1,13 @@
 <?php
 
+  add_action('init', 'ogmt_add_page');
+
   if ( ! function_exists( 'post_exists' ) )
   {
       require_once( ABSPATH . 'wp-admin/includes/post.php' );
   }
 
-  add_action('init', 'add_ogmt_post');
-
-  function add_ogmt_post()
+  function ogmt_add_page()
   {
     if(!post_exists('OGMT'))
     {
@@ -24,5 +24,4 @@
       wp_insert_post( $ogmt_post );
     }
   }
-
 ?>

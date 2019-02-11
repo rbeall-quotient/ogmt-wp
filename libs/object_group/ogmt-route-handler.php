@@ -15,18 +15,18 @@
    */
 
   /*** actions ***/
-  add_action('init', 'add_tags');
+  add_action('init', 'ogmt_add_tags');
 
   /*** filters ***/
-  add_filter( 'the_content', 'insert_edan_content');
-  add_filter('pre_get_document_title', 'set_ogmt_title');
-  add_filter( 'the_title', 'set_ogmt_title', 10);
+  add_filter( 'the_content', 'ogmt_insert_content');
+  add_filter('pre_get_document_title', 'ogmt_set_title');
+  add_filter( 'the_title', 'ogmt_set_title', 10);
 
   /**
   * Callback for adding custom query variables corresponding to
   * EDAN call.
   */
-  function add_tags()
+  function ogmt_add_tags()
   {
     add_rewrite_tag('%creds%', '(.*)');
     add_rewrite_tag('%_service%', '(.*)');
@@ -37,16 +37,17 @@
   * Callback function for inserting EDAN content into
   * OGMT page
   */
-  function insert_edan_content( $content )
+  function ogmt_insert_content( $content )
   {
+    $handler = new ogmt_edan_handler();
     /*Using stripped down url instead of page title because we
     * we are changing the title and this title filter might be called before
     * we access content.
     */
 
-    if(get_url() == "ogmt")
+    if(ogmt_name_from_url() == "ogmt")
     {
-      $objectGroup = get_object_group(get_edan_vars());
+      $objectGroup = $handler->get_object_group();
 
       if($objectGroup)
       {
@@ -71,6 +72,25 @@
     return $content;
   }
 
+  /**
+   * Modify title to match ObjectGroup information
+   *
+   * Note: used for both doc title and display title
+   *
+   * @param String $title title for display
+   */
+  function ogmt_set_title( $title )
+  {
+    $handler = new ogmt_edan_handler();
+
+    if(wp_cache_get('ogmt_title') || $handler->get_object_group())
+    {
+      return wp_cache_get('ogmt_title');
+    }
+
+    return $title;
+  }
+
 
   /**
   * Return url stripped of query vars and '/' and '?' characters.
@@ -80,7 +100,7 @@
   *
   * @return String page url without query variables
   */
-  function get_url()
+  function ogmt_name_from_url()
   {
     $url = trim(esc_url_raw(add_query_arg([])), '/');
     $home_path = trim(parse_url(home_url(), PHP_URL_PATH), '/');
@@ -93,35 +113,5 @@
     $url = str_replace('index.php/', '', $url);
 
     return trim(explode('?', $url, 2)[0], '/');
-  }
-
-  /**
-   * Get array containing query vars from url
-   * @return array EDAN query vars
-   */
-  function get_edan_vars()
-  {
-    return array(
-      "creds" => get_query_var('creds'),
-      "_service" => get_query_var('_service'),
-      "objectGroupUrl" => get_query_var('objectGroupUrl'),
-    );
-  }
-
-  /**
-   * Modify title to match ObjectGroup information
-   *
-   * Note: used for both doc title and display title
-   *
-   * @param String $title title for display
-   */
-  function set_ogmt_title( $title )
-  {
-    if(wp_cache_get('ogmt_title') || get_object_group(get_edan_vars()))
-    {
-      return wp_cache_get('ogmt_title');
-    }
-
-    return $title;
   }
 ?>
