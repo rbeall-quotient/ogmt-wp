@@ -15,3 +15,4 @@
   require 'libs/utilities/ogmt-page-handler.php';
   require 'libs/object_group/ogmt-route-handler.php';
   require 'libs/object_group/ogmt-edan-handler.php';
+  require 'libs/views/ogmt-view-manager.php';

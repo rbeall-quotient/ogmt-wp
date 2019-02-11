@@ -11,6 +11,10 @@ wp-content/mu-plugins/
 wp-content/wp-cache-config.php
 wp-content/plugins/hello.php
 /libs/object_group/.config.ini
+/docs/notes.txt
+/docs/sample.css
+/docs/ushistory.html
+/docs/sample.json
 
 /.htaccess
 /license.txt

@@ -40,32 +40,21 @@
   function ogmt_insert_content( $content )
   {
     $handler = new ogmt_edan_handler();
+
     /*Using stripped down url instead of page title because we
     * we are changing the title and this title filter might be called before
     * we access content.
     */
-
     if(ogmt_name_from_url() == "ogmt")
     {
       $objectGroup = $handler->get_object_group();
 
       if($objectGroup)
       {
-        //Validate that media exists to display
-        if(property_exists($objectGroup->{'feature'},'media'))
-        {
-          $content .= $objectGroup->{'feature'}->{'media'};
-        }
-
-        //Validate if page->content is present. Display description instead
-        if(property_exists($objectGroup->{'page'},'content'))
-        {
-          $content .= $objectGroup->{'page'}->{'content'};
-        }
-        elseif(property_exists($objectGroup, 'description'))
-        {
-          $content .= $objectGroup->{'description'};
-        }
+        //instantiate view manager and append standard view and menu view to content. 
+        $view_manager = new ogmt_view_manager($objectGroup);
+        $content .= $view_manager->get_standard_view();
+        $content .= $view_manager->get_menu_view();
       }
     }
 

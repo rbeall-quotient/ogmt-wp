@@ -2,11 +2,18 @@
 
   add_action('init', 'ogmt_add_page');
 
+  /**
+   * Code required for post_exists() function to work
+   */
   if ( ! function_exists( 'post_exists' ) )
   {
       require_once( ABSPATH . 'wp-admin/includes/post.php' );
   }
 
+  /**
+   * Function tests if OGMT page is present and if not, creates the
+   * OGMT page on init.
+   */
   function ogmt_add_page()
   {
     if(!post_exists('OGMT'))
