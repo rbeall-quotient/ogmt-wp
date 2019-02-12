@@ -51,6 +51,12 @@
         $_GET['_service'] = $edan_vars['_service'];
         $_GET['objectGroupUrl'] = $edan_vars['objectGroupUrl'];
 
+        //check if pageUrl is present, if so, add to query
+        if(array_key_exists('pageUrl', $edan_vars))
+        {
+          $_GET['pageUrl'] = $edan_vars['pageUrl'];
+        }
+
         // Query/search details
         $uri = http_build_query($_GET);
         console_log("URI: ".$uri);
@@ -71,9 +77,12 @@
             $objectGroup = json_decode($results);
             if($objectGroup)
             {
-              //if json is successfully retrieved and decoded, cache title and json
+              //if json is successfully retrieved and decoded, cache title and json along with subtitle (if present)
               wp_cache_set('objectGroup', $objectGroup);
               wp_cache_set('ogmt_title', $objectGroup->{'title'});
+              wp_cache_set('ogmt_subtitle', $objectGroup->{'page'}->{'title'});
+              wp_cache_set('ogmt_json', $results);
+
               return $objectGroup;
             }
             else
@@ -114,14 +123,24 @@
      */
     function validate_vars($edan_vars)
     {
-      if($edan_vars['creds'] && $edan_vars['_service'] && $edan_vars['objectGroupUrl'])
+      foreach($edan_vars as $var)
+      {
+          if(!$var)
+          {
+            return false;
+          }
+      }
+
+      return true;
+
+      /*if($edan_vars['creds'] && $edan_vars['_service'] && $edan_vars['objectGroupUrl'] && $edan_vars['menuUrl'])
       {
         return true;
       }
       else
       {
         return false;
-      }
+      }*/
     }
 
     /**
@@ -130,11 +149,19 @@
      */
     function get_vars()
     {
-      return array(
+      $vars = array(
         "creds" => get_query_var('creds'),
         "_service" => get_query_var('_service'),
         "objectGroupUrl" => get_query_var('objectGroupUrl'),
       );
+
+      //if pageUrl is present, add it to the list
+      if(get_query_var('pageUrl'))
+      {
+        $vars["pageUrl"] = get_query_var('pageUrl');
+      }
+
+      return $vars;
     }
   }
 ?>

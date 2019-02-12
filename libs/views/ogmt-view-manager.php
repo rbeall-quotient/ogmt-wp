@@ -16,7 +16,7 @@
     /**
      * Display object group media and content
      *
-     * @return String media and content to append to $content variable. 
+     * @return String media and content to append to $content variable.
      */
     function get_standard_view()
     {
@@ -70,7 +70,7 @@
 
       $url = trim(esc_url_raw(add_query_arg([])), '/');
       $url = explode('?', $url, 2)[0];
-      $url .= "?creds=$creds&_service=$_service&objectGroupUrl=$objectGroupUrl&menuUrl=$q_var";
+      $url .= "?creds=$creds&_service=$_service&objectGroupUrl=$objectGroupUrl&pageUrl=$q_var";
 
       return $url;
     }

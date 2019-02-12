@@ -19,7 +19,7 @@
 
   /*** filters ***/
   add_filter( 'the_content', 'ogmt_insert_content');
-  add_filter('pre_get_document_title', 'ogmt_set_title');
+  add_filter('pre_get_document_title', 'ogmt_set_doc_title');
   add_filter( 'the_title', 'ogmt_set_title', 10);
 
   /**
@@ -31,6 +31,8 @@
     add_rewrite_tag('%creds%', '(.*)');
     add_rewrite_tag('%_service%', '(.*)');
     add_rewrite_tag('%objectGroupUrl%', '(.*)');
+    add_rewrite_tag('%pageUrl%', '(.*)');
+    add_rewrite_tag('%jsonDump%', '(.*)');
   }
 
   /**
@@ -51,10 +53,20 @@
 
       if($objectGroup)
       {
-        //instantiate view manager and append standard view and menu view to content. 
-        $view_manager = new ogmt_view_manager($objectGroup);
-        $content .= $view_manager->get_standard_view();
-        $content .= $view_manager->get_menu_view();
+        if(get_query_var('jsonDump'))
+        {
+          print_r("<pre>");
+          echo htmlspecialchars(json_encode($objectGroup, JSON_PRETTY_PRINT));
+          //print_r(json_encode(wp_cache_get('ogmt_json')));
+          print_r("</pre>");
+        }
+        else
+        {
+          //instantiate view manager and append standard view and menu view to content.
+          $view_manager = new ogmt_view_manager($objectGroup);
+          $content .= $view_manager->get_standard_view();
+          $content .= $view_manager->get_menu_view();
+        }
       }
     }
 
@@ -64,8 +76,6 @@
   /**
    * Modify title to match ObjectGroup information
    *
-   * Note: used for both doc title and display title
-   *
    * @param String $title title for display
    */
   function ogmt_set_title( $title )
@@ -74,12 +84,43 @@
 
     if(wp_cache_get('ogmt_title') || $handler->get_object_group())
     {
+      //If on a subpage, display subpage title below object group title
+      if(wp_cache_get('ogmt_subtitle') && wp_cache_get('ogmt_subtitle') != 'Introduction')
+      {
+          $title = "<div>".wp_cache_get('ogmt_title')."<h6>".wp_cache_get('ogmt_subtitle')."</h6></div>";
+          return $title;
+      }
+
       return wp_cache_get('ogmt_title');
     }
 
     return $title;
   }
 
+  /**
+   * Modify title to match ObjectGroup information
+   *
+   * Note: used for both doc title and display title
+   *
+   * @param String $title title for display
+   */
+  function ogmt_set_doc_title( $title )
+  {
+    $handler = new ogmt_edan_handler();
+
+    if(wp_cache_get('ogmt_title') || $handler->get_object_group())
+    {
+      //if on a subpage, modify the doc title accordingly
+      if(wp_cache_get('ogmt_subtitle') && wp_cache_get('ogmt_subtitle') != 'Introduction')
+      {
+          return wp_cache_get('ogmt_title') . " -- " . wp_cache_get('ogmt_subtitle');
+      }
+
+      return wp_cache_get('ogmt_title');
+    }
+
+    return $title;
+  }
 
   /**
   * Return url stripped of query vars and '/' and '?' characters.
