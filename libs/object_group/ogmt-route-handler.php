@@ -81,7 +81,11 @@
   {
     $handler = new ogmt_edan_handler();
 
-    if(wp_cache_get('ogmt_title') || $handler->get_object_group())
+    /**
+     * if in the loop and the title is cached (or if object group is retrieved successfully)
+     * modify the page title on display. 
+     */
+    if(in_the_loop() && (wp_cache_get('ogmt_title') || $handler->get_object_group()))
     {
       //If on a subpage, display subpage title below object group title
       if(wp_cache_get('ogmt_subtitle') && wp_cache_get('ogmt_subtitle') != 'Introduction')
@@ -112,10 +116,11 @@
       //if on a subpage, modify the doc title accordingly
       if(wp_cache_get('ogmt_subtitle') && wp_cache_get('ogmt_subtitle') != 'Introduction')
       {
-          return wp_cache_get('ogmt_title') . " -- " . wp_cache_get('ogmt_subtitle');
+          //get_bloginfo('name') returns site title.
+          return wp_cache_get('ogmt_title') . " -- " . wp_cache_get('ogmt_subtitle') . ' | ' . get_bloginfo('name');
       }
 
-      return wp_cache_get('ogmt_title');
+      return wp_cache_get('ogmt_title') . ' | ' . get_bloginfo('name');
     }
 
     return $title;
