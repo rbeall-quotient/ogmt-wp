@@ -64,7 +64,8 @@
         {
           //instantiate view manager and append standard view and menu view to content.
           $view_manager = new ogmt_view_manager($objectGroup);
-          $content .= $view_manager->get_content_grid();
+          $content .= $view_manager->get_standard_view();
+          $content .= $view_manager->get_menu_view();
         }
       }
     }

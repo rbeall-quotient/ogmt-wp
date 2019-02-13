@@ -48,13 +48,15 @@
      */
     function get_menu_view()
     {
-      $content = "<h3>Contents: </h3>";
+      $content = "<div><h3>Contents: </h3>";
 
       foreach($this->object_group->menu as $menu)
       {
         $url = $this->get_menu_url($menu->url);
         $content .= "<a href=\"$url\">$menu->title</a><br/>";
       }
+
+      $content .= "</div>";
 
       return $content;
     }
@@ -71,16 +73,6 @@
       $url .= "?creds=$creds&_service=$_service&objectGroupUrl=$objectGroupUrl&pageUrl=$q_var";
 
       return $url;
-    }
-
-    function get_content_grid()
-    {
-      $content  = '<div style="width: 100%; overflow: hidden;">';
-      $content .= '<div style="width: 75%; float: left;">' . $this->get_standard_view() . '</div>';
-      $content .= '<div style="float: right;">' . $this->get_menu_view() . '</div>';
-      $content .= '</div>';
-
-      return $content;
     }
   }
 
