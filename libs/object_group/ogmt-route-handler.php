@@ -82,21 +82,21 @@
   function ogmt_set_title( $title )
   {
     $handler = new ogmt_edan_handler();
+    $objectGroup = $handler->get_object_group();
 
     /**
      * if in the loop and the title is cached (or if object group is retrieved successfully)
      * modify the page title on display.
      */
-    if(in_the_loop() && (wp_cache_get('ogmt_title') || $handler->get_object_group()))
+    if(in_the_loop() && $objectGroup)
     {
-      //If on a subpage, display subpage title below object group title
-      if(wp_cache_get('ogmt_subtitle') && wp_cache_get('ogmt_subtitle') != 'Introduction')
-      {
-          $title = "<div>".wp_cache_get('ogmt_title')."<h6>".wp_cache_get('ogmt_subtitle')."</h6></div>";
-          return $title;
-      }
+      //$title = '<div>' . $objectGroup->{'title'};
+      $title = $objectGroup->{'title'};
 
-      return wp_cache_get('ogmt_title');
+      if(property_exists($objectGroup->{'page'}, 'pageId') && $objectGroup->{'page'}->{'pageId'} != $objectGroup->{'defaultPageId'})
+      {
+          $title = "<div><h6>" . $title . "</h6>" . $objectGroup->{'page'}->{'title'} . "</div>";
+      }
     }
 
     return $title;
@@ -112,17 +112,21 @@
   function ogmt_set_doc_title( $title )
   {
     $handler = new ogmt_edan_handler();
+    $objectGroup = $handler->get_object_group();
 
-    if(wp_cache_get('ogmt_title') || $handler->get_object_group())
+    if($objectGroup)
     {
-      //if on a subpage, modify the doc title accordingly
-      if(wp_cache_get('ogmt_subtitle') && wp_cache_get('ogmt_subtitle') != 'Introduction')
+      $title = $objectGroup->{'title'};
+      //if not on default page, modify the doc title accordingly
+      if(property_exists($objectGroup->{'page'}, 'pageId') && $objectGroup->{'page'}->{'pageId'} != $objectGroup->{'defaultPageId'})
       {
           //get_bloginfo('name') returns site title.
-          return wp_cache_get('ogmt_title') . " -- " . wp_cache_get('ogmt_subtitle') . ' | ' . get_bloginfo('name');
+          $title = $title . " -- " . $objectGroup->{'page'}->{'title'} . ' | ' . get_bloginfo('name');
       }
-
-      return wp_cache_get('ogmt_title') . ' | ' . get_bloginfo('name');
+      else
+      {
+        $title .= ' | ' . get_bloginfo('name');
+      }
     }
 
     return $title;

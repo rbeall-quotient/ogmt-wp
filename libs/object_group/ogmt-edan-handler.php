@@ -79,8 +79,6 @@
             {
               //if json is successfully retrieved and decoded, cache title and json along with subtitle (if present)
               wp_cache_set('objectGroup', $objectGroup);
-              wp_cache_set('ogmt_title', $objectGroup->{'title'});
-              wp_cache_set('ogmt_subtitle', $objectGroup->{'page'}->{'title'});
               wp_cache_set('ogmt_json', $results);
 
               return $objectGroup;
