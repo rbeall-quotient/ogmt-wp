@@ -73,6 +73,11 @@
       return $url;
     }
 
+    /**
+     * Place standard view and menu view into a grid.
+     *
+     * @return String content to append
+     */
     function get_content_grid()
     {
       $content  = '<div style="width: 100%; overflow: hidden;">';

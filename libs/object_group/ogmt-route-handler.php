@@ -64,6 +64,8 @@
         {
           //instantiate view manager and append standard view and menu view to content.
           $view_manager = new ogmt_view_manager($objectGroup);
+
+          //get page content and menu placed in a grid
           $content .= $view_manager->get_content_grid();
         }
       }
@@ -83,7 +85,7 @@
 
     /**
      * if in the loop and the title is cached (or if object group is retrieved successfully)
-     * modify the page title on display. 
+     * modify the page title on display.
      */
     if(in_the_loop() && (wp_cache_get('ogmt_title') || $handler->get_object_group()))
     {
