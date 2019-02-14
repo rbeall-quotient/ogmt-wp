@@ -49,10 +49,13 @@
     */
     if(ogmt_name_from_url() == "ogmt")
     {
-      $objectGroup = $handler->get_object_group();
+      //$objectGroup = $handler->get_object_group();
+      $ogmt = $handler->get_ogmt_data();
 
-      if($objectGroup)
+      if($ogmt)
       {
+        $objectGroup = $ogmt['objectGroup'];
+
         if(get_query_var('jsonDump'))
         {
           print_r("<pre>");
@@ -82,7 +85,7 @@
   function ogmt_set_title( $title )
   {
     $handler = new ogmt_edan_handler();
-    $objectGroup = $handler->get_object_group();
+    $objectGroup = $handler->get_ogmt_data()['objectGroup'];
 
     /**
      * if in the loop and the title is cached (or if object group is retrieved successfully)
@@ -112,7 +115,7 @@
   function ogmt_set_doc_title( $title )
   {
     $handler = new ogmt_edan_handler();
-    $objectGroup = $handler->get_object_group();
+    $objectGroup = $handler->get_ogmt_data()['objectGroup'];
 
     if($objectGroup)
     {

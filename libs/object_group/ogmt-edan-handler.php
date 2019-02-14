@@ -8,23 +8,12 @@
   class ogmt_edan_handler
   {
     /**
-     * Retrieve decoded JSON of object group based on passed query vars
-     * @param  array $edan_vars EDAN query vars
+     * Method to call EDAN API (modified to make a variety of calls based on passed edan_vars)
+     * @param  String $edan_vars EDAN query vars
+     * @return String            JSON results
      */
-    function get_object_group()
+    function edan_call($edan_vars)
     {
-      //if object group is already cached, return cached value
-      if(wp_cache_get('objectGroup'))
-      {
-        return wp_cache_get('objectGroup');
-      }
-
-      //if not cached, retrieve query vars
-      $edan_vars = $this->get_vars();
-
-      //validate query vars
-      if($this->validate_vars($edan_vars))
-      {
         $config = parse_ini_file('.config.ini', TRUE);
         $_GET   = array();
 
@@ -32,13 +21,13 @@
         {
           if (empty($edan_vars['creds']))
           {
-            console_log('Empty creds.' . "\n");
+            console_log('Empty creds');
             exit(0);
           }
 
           if(!isset($config[$edan_vars['creds']]))
           {
-            console_log('Invalid creds specified. Check your config.' . "\n");
+            console_log('Invalid creds specified. Check your config.');
             exit(0);
           }
           else
@@ -48,18 +37,13 @@
           }
         }
 
-        $_GET['_service'] = $edan_vars['_service'];
-        $_GET['objectGroupUrl'] = $edan_vars['objectGroupUrl'];
-
-        //check if pageUrl is present, if so, add to query
-        if(array_key_exists('pageUrl', $edan_vars))
+        foreach($edan_vars as $key => $var)
         {
-          $_GET['pageUrl'] = $edan_vars['pageUrl'];
+          $_GET[$key] = $var;
         }
 
         // Query/search details
         $uri = http_build_query($_GET);
-        console_log("URI: ".$uri);
         // Solr doesn't use array syntax; it allows parameters to be passed multiple
         // times. As a workaround, just remove any encoded PHP indexed-array syntax.
         $uri = preg_replace('/%5B[0-9]+%5D=/', '=', $uri);
@@ -74,27 +58,13 @@
         {
           if ($info['http_code'] == 200)
           {
-            $objectGroup = json_decode($results);
-            if($objectGroup)
-            {
-              //if json is successfully retrieved and decoded, cache title and json along with subtitle (if present)
-              wp_cache_set('objectGroup', $objectGroup);
-              wp_cache_set('ogmt_json', $results);
-
-              return $objectGroup;
-            }
-            else
-            {
-              //if json fails to decode, return false
-              return false;
-            }
-
+            return $results;
             exit;
           }
           else
           {
             //if EDAN call fails, return false
-            console_log('Request failed: HTTP code ' . $info['http_code'] . ' returned' . "\n");
+            console_log('Request failed: HTTP code ' . $info['http_code'] . ' returned');
             return false;
             exit(1);
           }
@@ -102,43 +72,66 @@
         else
         {
           //if no response, return false
-          console_log('Request failed: ' . $info . "\n");
+          console_log('Request failed: ' . $info);
           return false;
           exit(1);
         }
-      }
-      else
-      {
-        //if query vars fail to validate, return false
-        return false;
-      }
     }
 
     /**
-     * Test if query vars exist
-     * @param  array $edan_vars EDAN Query Vars
-     * @return boolean  true on validation, false on failure
+     * Function to retrieve objectGroup.
+     * @return array array containing object group json or false on failure
      */
-    function validate_vars($edan_vars)
+    function get_ogmt_data()
     {
-      foreach($edan_vars as $var)
+      $ogmt_cache = array();
+
+      $objService = 'ogmt/v1.1/ogmt/getObjectGroup.htm';
+      //console_log("encoded service: ".urlencode($objService));
+      //$searchService = 'metadata%2Fv1.1%2Fmetadata%2FgetObjectLists.htm';
+
+      //if ogmt data is already cached, return cached value
+      if(wp_cache_get('ogmt_cache'))
       {
-          if(!$var)
-          {
-            return false;
-          }
+        return wp_cache_get('ogmt_cache');
       }
 
-      return true;
+      $group_vars = $this->get_vars();
+      $group_vars['_service'] = $objService;
 
-      /*if($edan_vars['creds'] && $edan_vars['_service'] && $edan_vars['objectGroupUrl'] && $edan_vars['menuUrl'])
+      $objectGroup = json_decode($this->edan_call($group_vars));
+
+      if($objectGroup)
       {
-        return true;
+        $ogmt_cache['objectGroup'] = $objectGroup;
+
+        /*$search_vars = array
+        (
+          'creds' => get_query_var('creds'),
+          '_service' => $searchService,
+          'objectGroupId' => $objectGroup->{'objectGroupId'},
+        );
+
+        $searchJSON = $this->edan_call($search_vars);
+
+        if($searchJSON)
+        {
+          $ogmt_cache['searchJSON'] = $searchJSON;
+        }
+        else
+        {
+          $ogmt_cache['searchJSON'] = false;
+        }*/
+
+        wp_cache_set('ogmt_cache', $ogmt_cache);
+        return $ogmt_cache;
+        /*if(property_exists($objectGroup, 'objects'))
+        {
+
+        }*/
       }
-      else
-      {
-        return false;
-      }*/
+
+      return false;
     }
 
     /**
@@ -147,16 +140,11 @@
      */
     function get_vars()
     {
-      $vars = array(
-        "creds" => get_query_var('creds'),
-        "_service" => get_query_var('_service'),
-        "objectGroupUrl" => get_query_var('objectGroupUrl'),
-      );
+      $vars = array();
 
-      //if pageUrl is present, add it to the list
-      if(get_query_var('pageUrl'))
+      foreach($_GET as $key => $value)
       {
-        $vars["pageUrl"] = get_query_var('pageUrl');
+        $vars[$key] = $value;
       }
 
       return $vars;
