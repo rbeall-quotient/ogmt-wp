@@ -88,7 +88,7 @@
 
       $objService = 'ogmt/v1.1/ogmt/getObjectGroup.htm';
       //console_log("encoded service: ".urlencode($objService));
-      //$searchService = 'metadata%2Fv1.1%2Fmetadata%2FgetObjectLists.htm';
+      $searchService = 'metadata/v1.1/metadata/getObjectLists.htm';
 
       //if ogmt data is already cached, return cached value
       if(wp_cache_get('ogmt_cache'))
@@ -101,19 +101,30 @@
 
       $objectGroup = json_decode($this->edan_call($group_vars));
 
+      //if $objectGroup returned, cache it and call getObjectLists
       if($objectGroup)
       {
+        //add objectGroup to ogmt_cache array
         $ogmt_cache['objectGroup'] = $objectGroup;
 
-        /*$search_vars = array
+        //if object group selected for, get object list
+        $search_vars = array
         (
           'creds' => get_query_var('creds'),
-          '_service' => $searchService,
+          '_service' => $searchService, //add search service to query
           'objectGroupId' => $objectGroup->{'objectGroupId'},
+          'facet' => true,//show facets
         );
+
+        //if a pageId is present, add it to the query
+        if(property_exists($objectGroup, 'page'))
+        {
+          $search_vars['pageId'] = $objectGroup->{'page'}->{'pageId'};
+        }
 
         $searchJSON = $this->edan_call($search_vars);
 
+        //if searchJSON returned, cache it, otherwise cache a false placeholder
         if($searchJSON)
         {
           $ogmt_cache['searchJSON'] = $searchJSON;
@@ -121,16 +132,13 @@
         else
         {
           $ogmt_cache['searchJSON'] = false;
-        }*/
+        }
 
         wp_cache_set('ogmt_cache', $ogmt_cache);
         return $ogmt_cache;
-        /*if(property_exists($objectGroup, 'objects'))
-        {
-
-        }*/
       }
 
+      //return false on failure
       return false;
     }
 

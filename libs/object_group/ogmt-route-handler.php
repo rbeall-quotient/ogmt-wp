@@ -55,13 +55,19 @@
       if($ogmt)
       {
         $objectGroup = $ogmt['objectGroup'];
+        $searchJSON  = $ogmt['searchJSON'];
 
         if(get_query_var('jsonDump'))
         {
           print_r("<pre>");
           echo htmlspecialchars(json_encode($objectGroup, JSON_PRETTY_PRINT));
-          //print_r(json_encode(wp_cache_get('ogmt_json')));
           print_r("</pre>");
+          if($searchJSON)
+          {
+            print_r("<pre>");
+            echo htmlspecialchars(json_encode(json_decode($searchJSON), JSON_PRETTY_PRINT));
+            print_r("</pre>");
+          }
         }
         else
         {
@@ -70,6 +76,14 @@
 
           //get page content and menu placed in a grid
           $content .= $view_manager->get_content_grid();
+
+          //If $searchJSON returned, pretty print it. 
+          if($searchJSON)
+          {
+            //print the search json below.
+            $content .= "<br/>";
+            $content .= "<pre>" . htmlspecialchars(json_encode(json_decode($searchJSON), JSON_PRETTY_PRINT)) . "</pre>";
+          }
         }
       }
     }
