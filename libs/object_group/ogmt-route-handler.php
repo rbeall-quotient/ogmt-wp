@@ -49,6 +49,7 @@
     */
     if(ogmt_name_from_url() == "ogmt")
     {
+      console_log("Call utility function: ".ogmt_name_from_url());
       //$objectGroup = $handler->get_object_group();
       $ogmt = $handler->get_ogmt_data();
 
@@ -76,14 +77,18 @@
 
           //get page content and menu placed in a grid
           $content .= $view_manager->get_content_grid();
+          $id = "21";
+          $class = "ogmt-test";
+          $content .= "<p class=\"$class\" id=\"$id\">Hello World</p>";
+          $content .= "<button onclick=\"hide($id)\">Push Me!</button>";
 
-          //If $searchJSON returned, pretty print it. 
-          if($searchJSON)
+          //If $searchJSON returned, pretty print it.
+          /*if($searchJSON)
           {
             //print the search json below.
             $content .= "<br/>";
             $content .= "<pre>" . htmlspecialchars(json_encode(json_decode($searchJSON), JSON_PRETTY_PRINT)) . "</pre>";
-          }
+          }*/
         }
       }
     }
@@ -157,7 +162,7 @@
   *
   * @return String page url without query variables
   */
-  function ogmt_name_from_url()
+  /*function ogmt_name_from_url()
   {
     $url = trim(esc_url_raw(add_query_arg([])), '/');
     $home_path = trim(parse_url(home_url(), PHP_URL_PATH), '/');
@@ -170,5 +175,5 @@
     $url = str_replace('index.php/', '', $url);
 
     return trim(explode('?', $url, 2)[0], '/');
-  }
+  }*/
 ?>
