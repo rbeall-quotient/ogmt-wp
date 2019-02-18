@@ -8,9 +8,10 @@
   {
     public $object_group;
 
-    function __construct($object_group)
+    function __construct($ogmt_cache)
     {
-      $this->object_group = $object_group;
+      $this->object_group = $ogmt_cache['objectGroup'];
+      $this->search_results = $ogmt_cache['searchResults'];
     }
 
     /**
@@ -59,6 +60,25 @@
       return $content;
     }
 
+    /**
+     * Function for generating prefix information above object list
+     *
+     * Note: Will build out once object list is implemented. 
+     *
+     * @return String HTML string for the prefix.
+     */
+    function get_search_preview()
+    {
+      $groupName = $this->object_group->{'title'};
+      $pageName  = property_exists($this->object_group, 'page') ? ' - ' . $this->object_group->{'page'}->{'title'} : '';
+      $itemNums  = $this->search_results->{'size'};
+
+      $content   = '<div id="search-results-prefix"></div>';
+      $content  .= '<div id="edan-results-summary" class="edan-results-summary">"' . $groupName . $pageName . '" showing ' . $itemNums . ' items.</div>';
+
+      return $content;
+    }
+
     //get object group url and append the correct menu url
     function get_menu_url($q_var)
     {
@@ -84,6 +104,11 @@
       $content .= '<div style="width: 75%; float: left;">' . $this->get_standard_view() . '</div>';
       $content .= '<div style="float: right;">' . $this->get_menu_view() . '</div>';
       $content .= '</div>';
+
+      if($this->search_results)
+      {
+        $content .= $this->get_search_preview();
+      }
 
       return $content;
     }

@@ -56,7 +56,7 @@
       if($ogmt)
       {
         $objectGroup = $ogmt['objectGroup'];
-        $searchJSON  = $ogmt['searchJSON'];
+        $searchResults  = $ogmt['searchResults'];
 
         if(get_query_var('jsonDump'))
         {
@@ -66,22 +66,23 @@
           if($searchJSON)
           {
             print_r("<pre>");
-            echo htmlspecialchars(json_encode(json_decode($searchJSON), JSON_PRETTY_PRINT));
+            echo htmlspecialchars(json_encode($searchResults, JSON_PRETTY_PRINT));
             print_r("</pre>");
           }
         }
         else
         {
           //instantiate view manager and append standard view and menu view to content.
-          $view_manager = new ogmt_view_manager($objectGroup);
+          $view_manager = new ogmt_view_manager($ogmt);
 
           //get page content and menu placed in a grid
           $content .= $view_manager->get_content_grid();
-          $id = "21";
+
+          /*$id = "21";
           $class = "ogmt-test";
           $content .= "<p class=\"$class\" id=\"$id\">Hello World</p>";
           $content .= "<button onclick=\"hide($id)\">Push Me!</button>";
-
+*/
           //If $searchJSON returned, pretty print it.
           /*if($searchJSON)
           {

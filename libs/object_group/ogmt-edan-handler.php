@@ -104,9 +104,6 @@
       //if $objectGroup returned, cache it and call getObjectLists
       if($objectGroup)
       {
-        //add objectGroup to ogmt_cache array
-        $ogmt_cache['objectGroup'] = $objectGroup;
-
         //if object group selected for, get object list
         $search_vars = array
         (
@@ -122,17 +119,10 @@
           $search_vars['pageId'] = $objectGroup->{'page'}->{'pageId'};
         }
 
-        $searchJSON = $this->edan_call($search_vars);
-
-        //if searchJSON returned, cache it, otherwise cache a false placeholder
-        if($searchJSON)
-        {
-          $ogmt_cache['searchJSON'] = $searchJSON;
-        }
-        else
-        {
-          $ogmt_cache['searchJSON'] = false;
-        }
+        $searchResults = json_decode($this->edan_call($search_vars));
+        //add objectGroup to ogmt_cache array
+        $ogmt_cache['objectGroup'] = $objectGroup;
+        $ogmt_cache['searchResults'] = $searchResults ? $searchResults : false;
 
         wp_cache_set('ogmt_cache', $ogmt_cache);
         return $ogmt_cache;
