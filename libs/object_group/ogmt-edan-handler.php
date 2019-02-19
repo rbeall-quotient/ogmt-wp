@@ -119,6 +119,8 @@
           $search_vars['pageId'] = $objectGroup->{'page'}->{'pageId'};
         }
 
+        $search_vars['start'] = $this->validate_list_index(get_query_var('listStart'), $objectGroup);
+
         $searchResults = json_decode($this->edan_call($search_vars));
         //add objectGroup to ogmt_cache array
         $ogmt_cache['objectGroup'] = $objectGroup;
@@ -146,6 +148,25 @@
       }
 
       return $vars;
+    }
+
+    function validate_list_index($index, $objectGroup)
+    {
+      if($index)
+      {
+        if(is_numeric($index) && ($index >= 0))
+        {
+          if(property_exists($objectGroup->{'objects'}, 'size'))
+          {
+            if($index * 10 < $objectGroup->{'objects'}->{'size'})
+            {
+              return $index;
+            }
+          }
+        }
+      }
+
+      return 0;
     }
   }
 ?>

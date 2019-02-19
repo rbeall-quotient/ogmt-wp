@@ -32,6 +32,7 @@
     add_rewrite_tag('%_service%', '(.*)');
     add_rewrite_tag('%objectGroupUrl%', '(.*)');
     add_rewrite_tag('%pageUrl%', '(.*)');
+    add_rewrite_tag('%listStart%', '(.*)');
     add_rewrite_tag('%jsonDump%', '(.*)');
   }
 
@@ -63,7 +64,7 @@
           print_r("<pre>");
           echo htmlspecialchars(json_encode($objectGroup, JSON_PRETTY_PRINT));
           print_r("</pre>");
-          if($searchJSON)
+          if($searchResults)
           {
             print_r("<pre>");
             echo htmlspecialchars(json_encode($searchResults, JSON_PRETTY_PRINT));
@@ -77,19 +78,6 @@
 
           //get page content and menu placed in a grid
           $content .= $view_manager->get_content_grid();
-
-          /*$id = "21";
-          $class = "ogmt-test";
-          $content .= "<p class=\"$class\" id=\"$id\">Hello World</p>";
-          $content .= "<button onclick=\"hide($id)\">Push Me!</button>";
-*/
-          //If $searchJSON returned, pretty print it.
-          /*if($searchJSON)
-          {
-            //print the search json below.
-            $content .= "<br/>";
-            $content .= "<pre>" . htmlspecialchars(json_encode(json_decode($searchJSON), JSON_PRETTY_PRINT)) . "</pre>";
-          }*/
         }
       }
     }
@@ -154,27 +142,4 @@
 
     return $title;
   }
-
-  /**
-  * Return url stripped of query vars and '/' and '?' characters.
-  * This will correspond to the EDAN object groups call.
-  *
-  * Adapted from: https://roots.io/routing-wp-requests/
-  *
-  * @return String page url without query variables
-  */
-  /*function ogmt_name_from_url()
-  {
-    $url = trim(esc_url_raw(add_query_arg([])), '/');
-    $home_path = trim(parse_url(home_url(), PHP_URL_PATH), '/');
-
-    if ($home_path && strpos($url, $home_path) === 0)
-    {
-      $url = trim(substr($url, strlen($home_path)), '/');
-    }
-
-    $url = str_replace('index.php/', '', $url);
-
-    return trim(explode('?', $url, 2)[0], '/');
-  }*/
 ?>
