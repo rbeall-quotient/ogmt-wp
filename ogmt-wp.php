@@ -15,6 +15,7 @@
   require 'libs/utilities/ogmt-page-handler.php';
   require 'libs/object_group/ogmt-route-handler.php';
   require 'libs/object_group/ogmt-edan-handler.php';
+  require 'libs/views/ogmt-groups-views.php';
   require 'libs/views/ogmt-view-manager.php';
   require 'libs/admin/ogmt-admin-menu.php';
   require 'libs/scripts/ogmt-include-scripts.php';

@@ -124,7 +124,7 @@
     function get_search_preview()
     {
       $groupName = $this->object_group->{'title'};
-      $pageName  = property_exists($this->object_group, 'page') ? ' - ' . $this->object_group->{'page'}->{'title'} : '';
+      $pageName  = property_exists($this->object_group->{'page'}, 'title') ? ' - ' . $this->object_group->{'page'}->{'title'} : '';
       $itemNums  = $this->search_results->{'numFound'};
 
       //$content   = '<div id="search-results-prefix"></div>';
@@ -312,10 +312,13 @@
 
         foreach($this->search_results->{'facets'} as $key => $val)
         {
-          $content .= '<li>';
-          $content .= '<p>' . $key . '</p>';
-          $content .= $this->get_facet($key, $val);
-          $content .= '</li>';
+          if(count($val) != 0)
+          {
+            $content .= '<li>';
+            $content .= '<p>' . $key . '</p>';
+            $content .= $this->get_facet($key, $val);
+            $content .= '</li>';
+          }
         }
 
         $content .= '</ul>';

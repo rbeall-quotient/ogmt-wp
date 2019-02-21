@@ -51,36 +51,59 @@
     */
     if(ogmt_name_from_url() == "ogmt")
     {
-      console_log("Call utility function: ".ogmt_name_from_url());
-      //$objectGroup = $handler->get_object_group();
-      $ogmt = $handler->get_ogmt_data();
 
-      if($ogmt)
+      if(get_query_var('objectGroupUrl'))
       {
-        $objectGroup = $ogmt['objectGroup'];
-        $searchResults  = $ogmt['searchResults'];
+        $ogmt = $handler->get_ogmt_data();
+
+        if($ogmt)
+        {
+
+          $objectGroup = $ogmt['objectGroup'];
+          $searchResults  = $ogmt['searchResults'];
+
+          if(get_query_var('jsonDump'))
+          {
+            print_r("<pre>");
+            echo htmlspecialchars(json_encode($objectGroup, JSON_PRETTY_PRINT));
+            print_r("</pre>");
+            if($searchResults)
+            {
+              print_r("<pre>");
+              echo htmlspecialchars(json_encode($searchResults, JSON_PRETTY_PRINT));
+              print_r("</pre>");
+            }
+          }
+          else
+          {
+            //instantiate view manager and append standard view and menu view to content.
+            $view_manager = new ogmt_view_manager($ogmt);
+
+            //get page content and menu placed in a grid
+            $content .= $view_manager->get_content();
+          }
+        }
+      }
+      else
+      {
+        $ogmt     = $handler->get_object_groups();
+        $views    = new ogmt_groups_views($ogmt);
+
+        $content .= $views->show_groups();
 
         if(get_query_var('jsonDump'))
         {
-          print_r("<pre>");
-          echo htmlspecialchars(json_encode($objectGroup, JSON_PRETTY_PRINT));
+          print_r("<pre>Featured: ");
+          echo htmlspecialchars(json_encode($ogmt['featured'], JSON_PRETTY_PRINT));
           print_r("</pre>");
-          if($searchResults)
-          {
-            print_r("<pre>");
-            echo htmlspecialchars(json_encode($searchResults, JSON_PRETTY_PRINT));
-            print_r("</pre>");
-          }
-        }
-        else
-        {
-          //instantiate view manager and append standard view and menu view to content.
-          $view_manager = new ogmt_view_manager($ogmt);
 
-          //get page content and menu placed in a grid
-          $content .= $view_manager->get_content();
+          print_r("<pre>Groups: ");
+          echo htmlspecialchars(json_encode($ogmt['groups'], JSON_PRETTY_PRINT));
+          print_r("</pre>");
         }
       }
+
+
     }
 
     return $content;
@@ -94,20 +117,31 @@
   function ogmt_set_title( $title )
   {
     $handler = new ogmt_edan_handler();
-    $objectGroup = $handler->get_ogmt_data()['objectGroup'];
+
 
     /**
      * if in the loop and the title is cached (or if object group is retrieved successfully)
      * modify the page title on display.
      */
-    if(in_the_loop() && $objectGroup)
+    if(in_the_loop() && ogmt_name_from_url() == "ogmt")
     {
-      //$title = '<div>' . $objectGroup->{'title'};
-      $title = $objectGroup->{'title'};
-
-      if(property_exists($objectGroup->{'page'}, 'pageId') && $objectGroup->{'page'}->{'pageId'} != $objectGroup->{'defaultPageId'})
+      if(get_query_var('objectGroupUrl'))
       {
-          $title = "<div><h6>" . $title . "</h6>" . $objectGroup->{'page'}->{'title'} . "</div>";
+        $objectGroup = $handler->get_ogmt_data()['objectGroup'];
+
+        if($objectGroup)
+        {
+          $title = $objectGroup->{'title'};
+
+          if(property_exists($objectGroup->{'page'}, 'pageId') && $objectGroup->{'page'}->{'pageId'} != $objectGroup->{'defaultPageId'})
+          {
+              $title = "<div><h6>" . $title . "</h6>" . $objectGroup->{'page'}->{'title'} . "</div>";
+          }
+        }
+      }
+      else
+      {
+        $title = "Object Groups";
       }
     }
 
@@ -123,22 +157,36 @@
    */
   function ogmt_set_doc_title( $title )
   {
-    $handler = new ogmt_edan_handler();
-    $objectGroup = $handler->get_ogmt_data()['objectGroup'];
-
-    if($objectGroup)
+    if(ogmt_name_from_url() != "ogmt")
     {
-      $title = $objectGroup->{'title'};
-      //if not on default page, modify the doc title accordingly
-      if(property_exists($objectGroup->{'page'}, 'pageId') && $objectGroup->{'page'}->{'pageId'} != $objectGroup->{'defaultPageId'})
+      return $title;
+    }
+
+    $handler = new ogmt_edan_handler();
+
+    if(get_query_var('objectGroupUrl'))
+    {
+      $objectGroup = $handler->get_ogmt_data()['objectGroup'];
+
+      if($objectGroup)
       {
-          //get_bloginfo('name') returns site title.
-          $title = $title . " -- " . $objectGroup->{'page'}->{'title'} . ' | ' . get_bloginfo('name');
+        $title = $objectGroup->{'title'};
+        //if not on default page, modify the doc title accordingly
+        if(property_exists($objectGroup->{'page'}, 'pageId') && $objectGroup->{'page'}->{'pageId'} != $objectGroup->{'defaultPageId'})
+        {
+            //get_bloginfo('name') returns site title.
+            $title = $title . " -- " . $objectGroup->{'page'}->{'title'} . ' | ' . get_bloginfo('name');
+        }
+        else
+        {
+          $title .= ' | ' . get_bloginfo('name');
+        }
       }
-      else
-      {
-        $title .= ' | ' . get_bloginfo('name');
-      }
+    }
+    else
+    {
+      $groups = $handler->get_ogmt_data()['groups'];
+      $title = "Object Groups";
     }
 
     return $title;

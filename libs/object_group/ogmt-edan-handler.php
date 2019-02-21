@@ -142,7 +142,7 @@
         );
 
         //if a pageId is present, add it to the query
-        if(property_exists($objectGroup, 'page'))
+        if(property_exists($objectGroup, 'page') && property_exists($objectGroup->{'page'}, 'pageId'))
         {
           $search_vars['pageId'] = $objectGroup->{'page'}->{'pageId'};
         }
@@ -160,6 +160,33 @@
 
       //return false on failure
       return false;
+    }
+
+    function get_object_groups()
+    {
+      //if ogmt data is already cached, return cached value
+      if(wp_cache_get('ogmt_cache'))
+      {
+        return wp_cache_get('ogmt_cache');
+      }
+
+      $ogmt_cache = array();
+      $service = '/ogmt/v1.1/ogmt/getObjectGroups.htm';
+
+      $group_vars = array(
+        'creds' => 'nmah'
+      );
+
+      $feature_vars = array(
+        'cred' => 'nmah',
+        'featured' => 0,
+      );
+
+      $ogmt_cache['featured'] = json_decode($this->edan_call($feature_vars, $service));
+      $ogmt_cache['groups'] = json_decode($this->edan_call($group_vars, $service));
+
+      wp_cache_set('ogmt_cache', $ogmt_cache);
+      return $ogmt_cache;
     }
 
     /**
