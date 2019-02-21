@@ -67,21 +67,10 @@
             array_push($fqs, $fq[0] . ":\"" . str_replace(' ', '+', $fq[1]) . "\"");
           }
 
-          print_r('<pre>');
-          echo htmlspecialchars(json_encode($fqs, JSON_PRETTY_PRINT));
-          print_r('</pre>');
-
-          //$fqs = json_encode($fqs);
-
           $uri_string .= '&fqs=' . json_encode($fqs);
         }
 
-        // Query/search details
-        print_r('<pre>');
-        echo $uri_string;
-        print_r('</pre>');
-
-        $uri = http_build_query($_GET);
+        //$uri = http_build_query($_GET);
         // Solr doesn't use array syntax; it allows parameters to be passed multiple
         // times. As a workaround, just remove any encoded PHP indexed-array syntax.
         //$uri = preg_replace('/%5B[0-9]+%5D=/', '=', $uri);
