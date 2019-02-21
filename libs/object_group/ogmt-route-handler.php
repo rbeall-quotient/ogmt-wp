@@ -33,6 +33,7 @@
     add_rewrite_tag('%objectGroupUrl%', '(.*)');
     add_rewrite_tag('%pageUrl%', '(.*)');
     add_rewrite_tag('%listStart%', '(.*)');
+    add_rewrite_tag('%edan_fq%', '(.*)');
     add_rewrite_tag('%jsonDump%', '(.*)');
   }
 
@@ -77,7 +78,7 @@
           $view_manager = new ogmt_view_manager($ogmt);
 
           //get page content and menu placed in a grid
-          $content .= $view_manager->get_content_grid();
+          $content .= $view_manager->get_content();
         }
       }
     }

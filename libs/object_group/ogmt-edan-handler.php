@@ -12,7 +12,7 @@
      * @param  String $edan_vars EDAN query vars
      * @return String            JSON results
      */
-    function edan_call($edan_vars)
+    function edan_call($edan_vars, $service, $issearch=false)
     {
         $config = parse_ini_file('.config.ini', TRUE);
         $_GET   = array();
@@ -37,25 +37,68 @@
           }
         }
 
+        $uri_string = "";
+        $COUNT=0;
+
         foreach($edan_vars as $key => $var)
         {
+          if($COUNT!=0)
+          {
+            $uri_string .= "&";
+          }
+
+          $uri_string .= "$key=$var";
+
           $_GET[$key] = $var;
+          $COUNT++;
+        }
+
+        $edan_fqs = get_query_var('edan_fq');
+
+        if($edan_fqs && $issearch)
+        {
+          $fqs = array();
+
+          foreach($edan_fqs as $fq)
+          {
+            console_log("fq: $fq");
+            $fq = explode(':', $fq, 2);
+
+            array_push($fqs, $fq[0] . ":\"" . str_replace(' ', '+', $fq[1]) . "\"");
+          }
+
+          print_r('<pre>');
+          echo htmlspecialchars(json_encode($fqs, JSON_PRETTY_PRINT));
+          print_r('</pre>');
+
+          //$fqs = json_encode($fqs);
+
+          $uri_string .= '&fqs=' . json_encode($fqs);
         }
 
         // Query/search details
+        print_r('<pre>');
+        echo $uri_string;
+        print_r('</pre>');
+
         $uri = http_build_query($_GET);
         // Solr doesn't use array syntax; it allows parameters to be passed multiple
         // times. As a workaround, just remove any encoded PHP indexed-array syntax.
-        $uri = preg_replace('/%5B[0-9]+%5D=/', '=', $uri);
+        //$uri = preg_replace('/%5B[0-9]+%5D=/', '=', $uri);
+        //console_log($uri);
         // Execute
         $edan = new EDANInterface($config['edan_server'], $config['edan_app_id'], $config['edan_auth_key'], $config['edan_tier_type']);
 
         // Response
         $info = '';
-        $results = $edan->sendRequest($uri, $edan_vars['_service'], FALSE, $info);
+        $results = $edan->sendRequest($uri_string, $service, FALSE, $info);
 
         if (is_array($info))
         {
+          /*print_r('<pre>');
+          var_dump($info);
+          print_r("</pre>");*/
+
           if ($info['http_code'] == 200)
           {
             return $results;
@@ -87,7 +130,6 @@
       $ogmt_cache = array();
 
       $objService = 'ogmt/v1.1/ogmt/getObjectGroup.htm';
-      //console_log("encoded service: ".urlencode($objService));
       $searchService = 'metadata/v1.1/metadata/getObjectLists.htm';
 
       //if ogmt data is already cached, return cached value
@@ -97,20 +139,17 @@
       }
 
       $group_vars = $this->get_vars();
-      $group_vars['_service'] = $objService;
 
-      $objectGroup = json_decode($this->edan_call($group_vars));
+      $objectGroup = json_decode($this->edan_call($group_vars, $objService));
 
       //if $objectGroup returned, cache it and call getObjectLists
       if($objectGroup)
       {
-        //if object group selected for, get object list
         $search_vars = array
         (
           'creds' => get_query_var('creds'),
-          '_service' => $searchService, //add search service to query
           'objectGroupId' => $objectGroup->{'objectGroupId'},
-          'facet' => true,//show facets
+          'facet' => 'true',//show facets
         );
 
         //if a pageId is present, add it to the query
@@ -121,7 +160,7 @@
 
         $search_vars['start'] = $this->validate_list_index(get_query_var('listStart'), $objectGroup);
 
-        $searchResults = json_decode($this->edan_call($search_vars));
+        $searchResults = json_decode($this->edan_call($search_vars, $searchService, 1));
         //add objectGroup to ogmt_cache array
         $ogmt_cache['objectGroup'] = $objectGroup;
         $ogmt_cache['searchResults'] = $searchResults ? $searchResults : false;
@@ -144,7 +183,10 @@
 
       foreach($_GET as $key => $value)
       {
-        $vars[$key] = $value;
+        if(gettype($value) != 'array')
+        {
+          $vars[$key] = $value;
+        }
       }
 
       return $vars;

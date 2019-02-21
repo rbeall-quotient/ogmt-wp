@@ -14,12 +14,48 @@
       $this->search_results = $ogmt_cache['searchResults'];
     }
 
+    /**Main View**/
+
+    /**
+     * Place standard view and menu view into a grid.
+     *
+     * @return String content to append
+     */
+    function get_content()
+    {
+      $content  = '<div style="width: 100%; overflow: hidden;">';
+      $content .= '<div style="width: 65%; float: left;">' . $this->get_object_group_content() . '</div>';
+      $content .= '<div style="float: right;"><div>' . $this->get_menu_view() . '</div><hr/><div>'.$this->get_facets_menu().'</div></div>';
+      $content .= '</div>';
+
+      if($this->search_results && $this->search_results->{'numFound'} > 0)
+      {
+        $content .= $this->get_search_preview();
+        $page = get_query_var('objIndex');
+
+        if(!$page)
+        {
+          $page = 0;
+        }
+
+        console_log('page: '.$page);
+
+        $content .= $this->get_object_list($page);
+      }
+
+      return $content;
+    }
+
+    /****/
+
+    /***Object Group Views***/
+
     /**
      * Display object group media and content
      *
      * @return String media and content to append to $content variable.
      */
-    function get_standard_view()
+    function get_object_group_content()
     {
       $content = "";
 
@@ -60,6 +96,24 @@
       return $content;
     }
 
+    //get object group url and append the correct menu url
+    function get_menu_url($q_var)
+    {
+      $_service = get_query_var('_service');
+      $creds = get_query_var('creds');
+      $objectGroupUrl = get_query_var('objectGroupUrl');
+
+      $url = trim(esc_url_raw(add_query_arg([])), '/');
+      $url = explode('?', $url, 2)[0];
+      $url .= "?creds=$creds&_service=$_service&objectGroupUrl=$objectGroupUrl&pageUrl=$q_var";
+
+      return $url;
+    }
+
+    /*******/
+
+    /**Search Displays**/
+
     /**
      * Function for generating prefix information above object list
      *
@@ -86,7 +140,11 @@
     {
       $content  = '<ul style="text-align: left">';
 
-      if($info['current'] == 1)
+      if($info['total'] == 1)
+      {
+        $content .= "";
+      }
+      elseif($info['current'] == 1)
       {
         $content .= '<li style="display: inline-block; padding: 5px;">';
         $content .= '<a href='.$this->get_list_url($info['current']).'>Next</a>';
@@ -167,20 +225,6 @@
       return $info;
     }
 
-    //get object group url and append the correct menu url
-    function get_menu_url($q_var)
-    {
-      $_service = get_query_var('_service');
-      $creds = get_query_var('creds');
-      $objectGroupUrl = get_query_var('objectGroupUrl');
-
-      $url = trim(esc_url_raw(add_query_arg([])), '/');
-      $url = explode('?', $url, 2)[0];
-      $url .= "?creds=$creds&_service=$_service&objectGroupUrl=$objectGroupUrl&pageUrl=$q_var";
-
-      return $url;
-    }
-
     function get_list_url($num)
     {
       $creds = get_query_var('creds');
@@ -189,7 +233,7 @@
       $listStart = $num;
 
       $url  = trim(esc_url_raw(add_query_arg([])), '/');
-      $url .= explode('?', $url, 2)[0];
+      $url  = explode('?', $url, 2)[0];
       $url .= "?creds=$creds&objectGroupUrl=$objectGroupUrl&";
 
       if($pageUrl)
@@ -199,37 +243,17 @@
 
       $url .= "listStart=$num";
 
-      return $url;
-    }
+      $edan_fq = get_query_var('edan_fq');
 
-    /**
-     * Place standard view and menu view into a grid.
-     *
-     * @return String content to append
-     */
-    function get_content_grid()
-    {
-      $content  = '<div style="width: 100%; overflow: hidden;">';
-      $content .= '<div style="width: 75%; float: left;">' . $this->get_standard_view() . '</div>';
-      $content .= '<div style="float: right;">' . $this->get_menu_view() . '</div>';
-      $content .= '</div>';
-
-      if($this->search_results && $this->search_results->{'numFound'} > 0)
+      if($edan_fq)
       {
-        $content .= $this->get_search_preview();
-        $page = get_query_var('objIndex');
-
-        if(!$page)
+        foreach($edan_fq as $fq)
         {
-          $page = 0;
+          $url .= '&edan_fq[]=' . $fq;
         }
-
-        console_log('page: '.$page);
-
-        $content .= $this->get_object_list($page);
       }
 
-      return $content;
+      return $url;
     }
 
     function get_object_list($page)
@@ -263,6 +287,122 @@
 
       return $content;
     }
+
+    /***facets***/
+
+    function get_facets_menu()
+    {
+      $content = "";
+
+      if($this->search_results && property_exists($this->search_results, 'facets'))
+      {
+        $edan_fqs = get_query_var('edan_fq');
+        if($edan_fqs)
+        {
+          $content .= '<ul style="list-style:none;">';
+          foreach($edan_fqs as $fq)
+          {
+            $content .= '<li><a href="' . $this->remove_facet_link($fq) . '">[X]' . $fq . '</a></li>';
+          }
+          $content .= '</ul>';
+        }
+
+        $content .= '<h3>Filter Your Results</h3>';
+        $content .= '<ul style="list-style:none;">';
+
+        foreach($this->search_results->{'facets'} as $key => $val)
+        {
+          $content .= '<li>';
+          $content .= '<p>' . $key . '</p>';
+          $content .= $this->get_facet($key, $val);
+          $content .= '</li>';
+        }
+
+        $content .= '</ul>';
+
+        return $content;
+      }
+
+    }
+
+    function get_facet($key, $facet)
+    {
+      $content = '<ul style="list-style:none;">';
+
+      foreach($facet as $vals)
+      {
+        $content .= '<span>';
+        $content .= '<div><a href="' . $this->add_facet_link($key, $vals[0]) . '">' . $vals[0] . '</a>  ';
+        $content .= $vals[1]; ' </div>';
+        $content .= '</span>';
+      }
+
+      $content .= '</ul>';
+
+      return $content;
+    }
+
+    function add_facet_link($key, $filter)
+    {
+      $url  = trim(esc_url_raw(add_query_arg([])), '/');
+      $url  = explode('?', $url, 2)[0];
+
+      $url .= '?creds=' . get_query_var('creds');
+      $url .= '&objectGroupUrl=' . get_query_var('objectGroupUrl');
+
+      $pageUrl = get_query_var('pageUrl');
+
+      if($pageUrl)
+      {
+        $url .= '&pageUrl=' . $pageUrl;
+      }
+
+      $edan_fqs = get_query_var('edan_fq');
+
+      if($edan_fqs)
+      {
+        foreach($edan_fqs as $fq)
+        {
+          $url .= '&edan_fq[]=' . $fq;
+        }
+      }
+
+      $url .= '&edan_fq[]=' . $key . ':' . $filter;
+
+      return $url;
+    }
+
+    function remove_facet_link($facet)
+    {
+      $url  = trim(esc_url_raw(add_query_arg([])), '/');
+      $url  = explode('?', $url, 2)[0];
+
+      $url .= '?creds=' . get_query_var('creds');
+      $url .= '&objectGroupUrl=' . get_query_var('objectGroupUrl');
+
+      $pageUrl = get_query_var('pageUrl');
+
+      if($pageUrl)
+      {
+        $url .= '&pageUrl=' . $pageUrl;
+      }
+
+      $edan_fqs = get_query_var('edan_fq');
+
+      if($edan_fqs)
+      {
+        foreach($edan_fqs as $fq)
+        {
+          if($fq != $facet)
+          {
+            $url .= '&edan_fq[]=' . $fq;
+          }
+        }
+      }
+      return $url;
+    }
+    /************/
+
   }
 
 ?>
