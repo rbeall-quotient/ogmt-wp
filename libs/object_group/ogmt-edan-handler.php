@@ -7,6 +7,18 @@
 
   class ogmt_edan_handler
   {
+    function get_ogmt_cache()
+    {
+      if(get_query_var('objectGroupUrl'))
+      {
+        return $this->get_ogmt_data();
+      }
+      else
+      {
+        return $this->get_object_groups();
+      }
+    }
+
     /**
      * Method to call EDAN API (modified to make a variety of calls based on passed edan_vars)
      * @param  String $edan_vars EDAN query vars

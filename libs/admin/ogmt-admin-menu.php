@@ -26,7 +26,9 @@
 
   /**
    * Add a settings link on the plugin page for OGMT linking to settings page
+   *
    * @param array $links array of action links with new link appended.
+   * @return array merged list of links
    */
   function add_action_link( $links )
   {

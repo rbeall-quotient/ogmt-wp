@@ -11,11 +11,22 @@
 
   date_default_timezone_set('UTC');
 
+  //utility functions
   require 'libs/utilities/ogmt-utilities.php';
   require 'libs/utilities/ogmt-page-handler.php';
+
+  //PHP for handling routing to ogmt and calling EDAN
   require 'libs/object_group/ogmt-route-handler.php';
   require 'libs/object_group/ogmt-edan-handler.php';
-  require 'libs/views/ogmt-groups-views.php';
+
+  //PHP for serving html views for ogmt data
+  require 'libs/views/ogmt-url-manager.php';
+  require 'libs/views/ogmt-groups-list-view.php';
+  require 'libs/views/ogmt-single-group-view.php';
   require 'libs/views/ogmt-view-manager.php';
+
+  //Admin menu PHP
   require 'libs/admin/ogmt-admin-menu.php';
+
+  //JS and CSS to include
   require 'libs/scripts/ogmt-include-scripts.php';

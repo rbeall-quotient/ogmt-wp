@@ -29,7 +29,6 @@
   function ogmt_add_tags()
   {
     add_rewrite_tag('%creds%', '(.*)');
-    add_rewrite_tag('%_service%', '(.*)');
     add_rewrite_tag('%objectGroupUrl%', '(.*)');
     add_rewrite_tag('%pageUrl%', '(.*)');
     add_rewrite_tag('%listStart%', '(.*)');
@@ -43,67 +42,14 @@
   */
   function ogmt_insert_content( $content )
   {
-    $handler = new ogmt_edan_handler();
-
     /*Using stripped down url instead of page title because we
     * we are changing the title and this title filter might be called before
     * we access content.
     */
     if(ogmt_name_from_url() == "ogmt")
     {
-
-      if(get_query_var('objectGroupUrl'))
-      {
-        $ogmt = $handler->get_ogmt_data();
-
-        if($ogmt)
-        {
-
-          $objectGroup = $ogmt['objectGroup'];
-          $searchResults  = $ogmt['searchResults'];
-
-          if(get_query_var('jsonDump'))
-          {
-            print_r("<pre>");
-            echo htmlspecialchars(json_encode($objectGroup, JSON_PRETTY_PRINT));
-            print_r("</pre>");
-            if($searchResults)
-            {
-              print_r("<pre>");
-              echo htmlspecialchars(json_encode($searchResults, JSON_PRETTY_PRINT));
-              print_r("</pre>");
-            }
-          }
-          else
-          {
-            //instantiate view manager and append standard view and menu view to content.
-            $view_manager = new ogmt_view_manager($ogmt);
-
-            //get page content and menu placed in a grid
-            $content .= $view_manager->get_content();
-          }
-        }
-      }
-      else
-      {
-        $ogmt     = $handler->get_object_groups();
-        $views    = new ogmt_groups_views($ogmt);
-
-        $content .= $views->show_groups();
-
-        if(get_query_var('jsonDump'))
-        {
-          print_r("<pre>Featured: ");
-          echo htmlspecialchars(json_encode($ogmt['featured'], JSON_PRETTY_PRINT));
-          print_r("</pre>");
-
-          print_r("<pre>Groups: ");
-          echo htmlspecialchars(json_encode($ogmt['groups'], JSON_PRETTY_PRINT));
-          print_r("</pre>");
-        }
-      }
-
-
+      $view_handler = new ogmt_view_handler();
+      $content = $view_handler->get_ogmt_content();
     }
 
     return $content;
@@ -118,7 +64,6 @@
   {
     $handler = new ogmt_edan_handler();
 
-
     /**
      * if in the loop and the title is cached (or if object group is retrieved successfully)
      * modify the page title on display.
@@ -127,7 +72,7 @@
     {
       if(get_query_var('objectGroupUrl'))
       {
-        $objectGroup = $handler->get_ogmt_data()['objectGroup'];
+        $objectGroup = $handler->get_ogmt_cache()['objectGroup'];
 
         if($objectGroup)
         {
@@ -166,7 +111,7 @@
 
     if(get_query_var('objectGroupUrl'))
     {
-      $objectGroup = $handler->get_ogmt_data()['objectGroup'];
+      $objectGroup = $handler->get_ogmt_cache()['objectGroup'];
 
       if($objectGroup)
       {
@@ -185,7 +130,6 @@
     }
     else
     {
-      $groups = $handler->get_ogmt_data()['groups'];
       $title = "Object Groups";
     }
 

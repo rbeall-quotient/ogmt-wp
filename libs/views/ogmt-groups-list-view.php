@@ -1,16 +1,32 @@
 <?php
-  class ogmt_groups_views
+  /**
+   * Class that serves up object groups list view
+   *
+   * Featured object groups are displayed first, followed by non-featured
+   * object groups.
+   */
+  class ogmt_groups_list_view
   {
-    public $groups;
-    public $featured;
-
+    /**
+     * Constructor gathers json from ogmt cache and instantiates new
+     * ogmt_url_manager().
+     *
+     * @param String $ogmt_cache cached edan json responses
+     */
     function __construct($ogmt_cache)
     {
       $this->featured = $ogmt_cache['featured'];
       $this->groups = $ogmt_cache['groups'];
+
+      $this->url_handler = new ogmt_url_manager();
     }
 
-    function show_groups()
+    /**
+     * Display featured and general object groups
+     *
+     * @return String html content with object group data
+     */
+    function content()
     {
       $content  = '<div>';
       $content .= '<div>' . $this->get_featured_view() . '</div>';
@@ -20,6 +36,11 @@
       return $content;
     }
 
+    /**
+     * Display featured object groups in a horizontal list
+     *
+     * @return String html string of featured groups content
+     */
     function get_featured_view()
     {
       $content  = '<h5>Featured Groups</h5>';
@@ -28,7 +49,7 @@
       foreach($this->featured->{'objectGroups'} as $group)
       {
         $content .= '<li style="display:inline-block; padding: 20px;">';
-        $content .= '<a href="' . $this->get_group_link($group->{'url'}). '">';
+        $content .= '<a href="' . $this->url_handler->group_url($group->{'url'}). '">';
         $content .= '<img style="height:350px; width:350px;" alt="' . $group->{'feature'}->{'alt'} . '" src="' . $group->{'feature'}->{'url'} . '"/>';
         $content .= '<figcaption>' . $group->{'title'} . '</figcaption>';
         $content .= '</a>';
@@ -39,15 +60,11 @@
       return $content;
     }
 
-    function get_group_link($group)
-    {
-      $url  = trim(esc_url_raw(add_query_arg([])), '/');
-      $url  = explode('?', $url, 2)[0];
-      $url .= "?creds=nmah&objectGroupUrl=$group";
-
-      return $url;
-    }
-
+    /**
+     * Display vertical list of object groups
+     *
+     * @return String html string of object group content
+     */
     function show_object_groups()
     {
       $content  = '<h5>All Object Groups</h5>';
@@ -55,13 +72,13 @@
 
       foreach($this->groups->{'objectGroups'} as $group)
       {
-        $url = $this->get_group_link($group->{'url'});
+        $url = $this->url_handler->group_url($group->{'url'});
+
         $content .= '<li><span style="display:inline-block;">';
         $content .= '<a href="' . $url . '">';
 
         if(property_exists($group->{'feature'}, 'media'))
         {
-          console_log("media");
           $content .= $group->{'feature'}->{'media'};
         }
         else

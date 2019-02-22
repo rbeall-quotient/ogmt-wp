@@ -1,5 +1,6 @@
 <?php
 
+  //Add ogmt page on init if not already installed
   add_action('init', 'ogmt_add_page');
 
   /**
