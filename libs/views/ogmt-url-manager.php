@@ -86,7 +86,6 @@
       $url = $this->get_url();
 
       $vars = array(
-        'creds' => get_query_var('creds'),
         'objectGroupUrl' => get_query_var('objectGroupUrl'),
         'pageUrl' => $pageUrl
       );
@@ -109,7 +108,6 @@
       $url  = $this->get_url();
 
       $vars = array(
-        'creds' => get_query_var('creds'),
         'objectGroupUrl' => get_query_var('objectGroupUrl'),
         'pageUrl' => get_query_var('pageUrl'),
         'listStart' => $listStart
@@ -133,7 +131,6 @@
       $url  = $this->get_url();
 
       $vars = array(
-        'creds' => get_query_var('creds'),
         'objectGroupUrl' => get_query_var('objectGroupUrl'),
         'pageUrl' => get_query_var('pageUrl')
       );
@@ -155,7 +152,6 @@
       $url  = $this->get_url();
 
       $vars = array(
-        'creds' => get_query_var('creds'),
         'objectGroupUrl' => get_query_var('objectGroupUrl'),
         'pageUrl' => get_query_var('pageUrl')
       );
@@ -177,7 +173,6 @@
       $url  = $this->get_url();
 
       $vars = array(
-        'creds' => 'nmah',//this will need to be changed 
         'objectGroupUrl' => $group
       );
 

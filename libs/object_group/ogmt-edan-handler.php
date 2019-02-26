@@ -27,6 +27,10 @@
     function edan_call($edan_vars, $service, $issearch=false)
     {
         $config = parse_ini_file('.config.ini', TRUE);
+
+        console_log(get_option('ogmt_settings')['creds']);
+
+        $edan_vars['creds'] = get_option( 'ogmt_settings' )['creds'];
         $_GET   = array();
 
         if (isset($edan_vars['creds']))
@@ -82,11 +86,6 @@
           $uri_string .= '&fqs=' . json_encode($fqs);
         }
 
-        //$uri = http_build_query($_GET);
-        // Solr doesn't use array syntax; it allows parameters to be passed multiple
-        // times. As a workaround, just remove any encoded PHP indexed-array syntax.
-        //$uri = preg_replace('/%5B[0-9]+%5D=/', '=', $uri);
-        //console_log($uri);
         // Execute
         $edan = new EDANInterface($config['edan_server'], $config['edan_app_id'], $config['edan_auth_key'], $config['edan_tier_type']);
 
@@ -96,10 +95,6 @@
 
         if (is_array($info))
         {
-          /*print_r('<pre>');
-          var_dump($info);
-          print_r("</pre>");*/
-
           if ($info['http_code'] == 200)
           {
             return $results;
@@ -148,7 +143,6 @@
       {
         $search_vars = array
         (
-          'creds' => get_query_var('creds'),
           'objectGroupId' => $objectGroup->{'objectGroupId'},
           'facet' => 'true',//show facets
         );
@@ -185,13 +179,10 @@
       $ogmt_cache = array();
       $service = '/ogmt/v1.1/ogmt/getObjectGroups.htm';
 
-      $group_vars = array(
-        'creds' => 'nmah'
-      );
+      $group_vars = array();
 
       $feature_vars = array(
-        'cred' => 'nmah',
-        'featured' => 0,
+        'featured' => 1,
       );
 
       $ogmt_cache['featured'] = json_decode($this->edan_call($feature_vars, $service));

@@ -28,7 +28,6 @@
   */
   function ogmt_add_tags()
   {
-    add_rewrite_tag('%creds%', '(.*)');
     add_rewrite_tag('%objectGroupUrl%', '(.*)');
     add_rewrite_tag('%pageUrl%', '(.*)');
     add_rewrite_tag('%listStart%', '(.*)');
