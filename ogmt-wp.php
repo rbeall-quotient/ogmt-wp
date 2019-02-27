@@ -13,7 +13,7 @@
 
   //utility functions
   require 'libs/utilities/ogmt-utilities.php';
-  require 'libs/utilities/ogmt-page-handler.php';
+  require 'libs/utilities/ogmt-options-handler.php';
 
   //PHP for handling routing to ogmt and calling EDAN
   require 'libs/object_group/ogmt-route-handler.php';
@@ -27,6 +27,7 @@
 
   //Admin menu PHP
   require 'libs/admin/ogmt-admin-menu.php';
+  require 'libs/admin/ogmt-sanitizer.php';
 
   //JS and CSS to include
   require 'libs/scripts/ogmt-include-scripts.php';

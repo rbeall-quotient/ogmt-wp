@@ -41,11 +41,14 @@
   */
   function ogmt_insert_content( $content )
   {
+    //get options from admin menu and plug them into the options handler
+    $options = new options_handler(get_option('ogmt_settings'));
+
     /*Using stripped down url instead of page title because we
     * we are changing the title and this title filter might be called before
     * we access content.
     */
-    if(ogmt_name_from_url() == "ogmt")
+    if(ogmt_name_from_url() == $options->get_path())
     {
       $view_handler = new ogmt_view_handler();
       $content = $view_handler->get_ogmt_content();
@@ -61,13 +64,14 @@
    */
   function ogmt_set_title( $title )
   {
+    $options = new options_handler(get_option('ogmt_settings'));
     $handler = new ogmt_edan_handler();
 
     /**
      * if in the loop and the title is cached (or if object group is retrieved successfully)
      * modify the page title on display.
      */
-    if(in_the_loop() && ogmt_name_from_url() == "ogmt")
+    if(in_the_loop() && ogmt_name_from_url() == $options->get_path())
     {
       if(get_query_var('objectGroupUrl'))
       {
@@ -85,7 +89,7 @@
       }
       else
       {
-        $title = "Object Groups";
+        $title = $options->get_title();
       }
     }
 
@@ -101,7 +105,9 @@
    */
   function ogmt_set_doc_title( $title )
   {
-    if(ogmt_name_from_url() != "ogmt")
+    $options = new options_handler(get_option('ogmt_settings'));
+
+    if(ogmt_name_from_url() != $options->get_path())
     {
       return $title;
     }
@@ -129,7 +135,7 @@
     }
     else
     {
-      $title = "Object Groups";
+      $title = $options->get_title();
     }
 
     return $title;

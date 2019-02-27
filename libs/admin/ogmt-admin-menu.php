@@ -35,6 +35,14 @@
    				<td>Creds:</td>
    				<td><input type="text" name="ogmt_settings[creds]" value="<?php echo $settings[ 'creds' ]; ?>" /></td>
    			</tr>
+        <tr>
+   				<td>Object Groups Path:</td>
+   				<td><input type="text" name="ogmt_settings[path]" value="<?php echo $settings[ 'path' ]; ?>" /></td>
+   			</tr>
+        <tr>
+   				<td>Object Groups Title:</td>
+   				<td><input type="text" name="ogmt_settings[title]" value="<?php echo $settings[ 'title' ]; ?>" /></td>
+   			</tr>
    			<tr>
    				<td colspan="2"><?php echo submit_button(); ?></td>
    			</tr>
@@ -80,6 +88,7 @@
    */
   function ogmt_santize_values($settings)
   {
-    return $settings;
+    $sanitizer = new ogmt_sanitizer();
+    return $sanitizer->sanitize($settings);
   }
 ?>

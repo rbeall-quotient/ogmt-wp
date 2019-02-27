@@ -28,9 +28,11 @@
     {
         $config = parse_ini_file('.config.ini', TRUE);
 
-        console_log(get_option('ogmt_settings')['creds']);
+        //get creds from options_handler
+        $options = new options_handler(get_option('ogmt_settings'));
 
-        $edan_vars['creds'] = get_option( 'ogmt_settings' )['creds'];
+        //$edan_vars['creds'] = get_option( 'ogmt_settings' )['creds'];
+        $edan_vars['creds'] = $options->get_creds();
         $_GET   = array();
 
         if (isset($edan_vars['creds']))
