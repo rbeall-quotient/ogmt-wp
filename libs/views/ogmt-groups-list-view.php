@@ -11,7 +11,7 @@
      * Constructor gathers json from ogmt cache and instantiates new
      * ogmt_url_manager().
      *
-     * @param String $ogmt_cache cached edan json responses
+     * @param string $ogmt_cache cached edan json responses
      */
     function __construct($ogmt_cache)
     {
@@ -24,7 +24,7 @@
     /**
      * Display featured and general object groups
      *
-     * @return String html content with object group data
+     * @return string html content with object group data
      */
     function content()
     {
@@ -39,7 +39,7 @@
     /**
      * Display featured object groups in a horizontal list
      *
-     * @return String html string of featured groups content
+     * @return string html string of featured groups content
      */
     function get_featured_view()
     {
@@ -63,7 +63,7 @@
     /**
      * Display vertical list of object groups
      *
-     * @return String html string of object group content
+     * @return string html string of object group content
      */
     function show_object_groups()
     {

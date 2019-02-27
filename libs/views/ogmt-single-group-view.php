@@ -22,7 +22,7 @@
     /**
      * Place standard view and menu view into a grid.
      *
-     * @return String content to append
+     * @return string content to append
      */
     function content()
     {
@@ -54,7 +54,7 @@
     /**
      * Display object group media and content
      *
-     * @return String media and content to append to $content variable.
+     * @return string media and content to append to $content variable.
      */
     function get_objectGroup_content()
     {
@@ -82,7 +82,7 @@
     /**
      * display menu items for object group
      *
-     * @return String return menu items to append to $content variable.
+     * @return string return menu items to append to $content variable.
      */
     function get_menu_view()
     {
@@ -102,16 +102,19 @@
      *
      * Note: Will build out once object list is implemented.
      *
-     * @return String HTML string for the prefix.
+     * @return string HTML string for the prefix.
      */
     function get_search_preview()
     {
-      $groupName = $this->objectGroup->{'title'};
-      $pageName  = property_exists($this->objectGroup->{'page'}, 'title') ? ' - ' . $this->objectGroup->{'page'}->{'title'} : '';
-      $itemNums  = $this->searchResults->{'numFound'};
+      $options = new options_handler(get_option('ogmt_settings'));
 
-      //$content   = '<div id="search-results-prefix"></div>';
-      $content   = '<div id="edan-results-summary" class="edan-results-summary">"' . $groupName . $pageName . '" showing ' . $itemNums . ' items.</div>';
+      $name = $this->objectGroup->{'title'};
+      //$pageName  = property_exists($this->objectGroup->{'page'}, 'title') ? ' - ' . $this->objectGroup->{'page'}->{'title'} : '';
+      $page  = property_exists($this->objectGroup->{'page'}, 'title') ? $this->objectGroup->{'page'}->{'title'} : '';
+      $count  = $this->searchResults->{'numFound'};
+
+      //$content   = '<div id="edan-results-summary" class="edan-results-summary">"' . $groupName . $pageName . '" showing ' . $itemNums . ' items.</div>';
+      $content   = '<div id="edan-results-summary" class="edan-results-summary">' . $options->get_results_message($count, $name, $page) . '</div>';
       $info = $this->obj_page_info();
       $content  .= '<div>Page ' . $info['current'] . ' ' . ($info['total'] ? 'of ' . $info['total'] : '') . '</div>';
       $content  .= $this->get_top_nav($info);
@@ -122,8 +125,8 @@
     /**
      * Display nav links above objects list
      *
-     * @param  String $info current and total page numbers
-     * @return String html string of nav links
+     * @param  string $info current and total page numbers
+     * @return string html string of nav links
      */
     function get_top_nav($info)
     {
@@ -226,7 +229,7 @@
     /**
      * Retrieve html string of objects
      *
-     * @return String html string of objects
+     * @return string html string of objects
      */
     function get_object_list()
     {
@@ -246,7 +249,7 @@
     /**
      * Get html for individual objects
      * @param  object $row row of decoded json data for a particular object
-     * @return String html string for object data
+     * @return string html string for object data
      */
     function get_object($row)
     {
@@ -272,7 +275,7 @@
     /**
      * Get menu of facets to filter object search
      *
-     * @return String html string of facet menu
+     * @return string html string of facet menu
      */
     function get_facets_menu()
     {
@@ -315,10 +318,10 @@
     /**
      * Get html string of specific facet
      *
-     * @param  String $key   category of filter
-     * @param  String $facet filter to retrieve link for
+     * @param  string $key   category of filter
+     * @param  string $facet filter to retrieve link for
      *
-     * @return String html for a specific filter
+     * @return string html for a specific filter
      */
     function get_facet($key, $facet)
     {

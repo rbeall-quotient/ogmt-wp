@@ -33,15 +33,30 @@
    		<table>
    			<tr>
    				<td>Creds:</td>
-   				<td><input type="text" name="ogmt_settings[creds]" value="<?php echo $settings[ 'creds' ]; ?>" /></td>
+   				<td>
+            <input type="text" name="ogmt_settings[creds]" value="<?php echo $settings[ 'creds' ]; ?>" />
+            <br/>
+            <hr>
+            <br/>
+          </td>
    			</tr>
         <tr>
    				<td>Object Groups Path:</td>
-   				<td><input type="text" name="ogmt_settings[path]" value="<?php echo $settings[ 'path' ]; ?>" /></td>
+   				<td>
+            <input type="text" name="ogmt_settings[path]" value="<?php echo $settings[ 'path' ]; ?>" />
+          </td>
    			</tr>
         <tr>
    				<td>Object Groups Title:</td>
-   				<td><input type="text" name="ogmt_settings[title]" value="<?php echo $settings[ 'title' ]; ?>" /></td>
+   				<td>
+            <input type="text" name="ogmt_settings[title]" value="<?php echo $settings[ 'title' ]; ?>" />
+            <br/>
+            <hr>
+            <br/>
+          </td>
+   			</tr>
+   				<td>"Have Results" Message:</td>
+   				<td><input type="text" name="ogmt_settings[rmessage]" value="<?php echo $settings[ 'rmessage' ]; ?>" /></td>
    			</tr>
    			<tr>
    				<td colspan="2"><?php echo submit_button(); ?></td>

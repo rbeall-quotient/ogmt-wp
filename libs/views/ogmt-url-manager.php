@@ -7,7 +7,7 @@
     /**
      * Get the base url of the page
      *
-     * @return String ogmt page url
+     * @return string ogmt page url
      */
     function get_url()
     {
@@ -22,7 +22,7 @@
      *
      * Note: all params besides edan fqs
      * @param  array $q_vars array of query vars
-     * @return String query string
+     * @return string query string
      */
     function validate_single_vars($q_vars)
     {
@@ -51,7 +51,7 @@
      * Gather edan_fq query vars array and process as query string
      * @param  array  $fqs   array of edan_fq vars
      * @param  boolean $facet name of facet to exclude or false if not necessary
-     * @return String  query string of $edan_fq vars
+     * @return string  query string of $edan_fq vars
      */
     function validate_fqs($fqs, $facet=false)
     {
@@ -78,8 +78,8 @@
      *
      * Note: Used for getting links to items in object group menu array
      *
-     * @param  String $pageUrl pageUrl of menu item
-     * @return String Url for menu item
+     * @param  string $pageUrl pageUrl of menu item
+     * @return string Url for menu item
      */
     function page_url($pageUrl)
     {
@@ -100,8 +100,8 @@
      *
      * Note: Used for getting links to specific pages of objects in bottom view
      *
-     * @param  String $listStart page number for list of objects
-     * @return String Url for list items
+     * @param  string $listStart page number for list of objects
+     * @return string Url for list items
      */
     function list_url($listStart)
     {
@@ -122,9 +122,9 @@
     /**
      * Url for a specific facet filter
      *
-     * @param String $key    Name of facet category
-     * @param String $filter Name of filter
-     * @return String url string with fqs attached
+     * @param string $key    Name of facet category
+     * @param string $filter Name of filter
+     * @return string url string with fqs attached
      */
     function add_facet_url($key, $filter)
     {
@@ -144,8 +144,8 @@
 
     /**
      * Remove a specific fqs variable from url
-     * @param  String $facet facet to remove
-     * @return String url string without passed facet
+     * @param  string $facet facet to remove
+     * @return string url string without passed facet
      */
     function remove_facet_url($facet)
     {
@@ -165,8 +165,8 @@
     /**
      * Append objectGroupUrl to query and return url string
      *
-     * @param  String $group objectGroupUrl
-     * @return String url string with added objectGroupUrl
+     * @param  string $group objectGroupUrl
+     * @return string url string with added objectGroupUrl
      */
     function group_url($group)
     {

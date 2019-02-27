@@ -7,7 +7,7 @@
   /**
    * function for logging php strings to browser console for testing and
    * debugging
-   * @param  String $content content to be logged
+   * @param  string $content content to be logged
    */
   function console_log($content)
   {
@@ -20,7 +20,7 @@
   *
   * Adapted from: https://roots.io/routing-wp-requests/
   *
-  * @return String page url without query variables
+  * @return string page url without query variables
   */
   function ogmt_name_from_url()
   {

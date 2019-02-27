@@ -18,7 +18,7 @@
      *
      * if jsonDump passed, print JSON to the page.
      *
-     * @return String object group content
+     * @return string object group content
      */
     function get_ogmt_content()
     {

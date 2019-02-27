@@ -60,7 +60,7 @@
   /**
    * Modify title to match ObjectGroup information
    *
-   * @param String $title title for display
+   * @param string $title title for display
    */
   function ogmt_set_title( $title )
   {
@@ -101,7 +101,7 @@
    *
    * Note: used for both doc title and display title
    *
-   * @param String $title title for display
+   * @param string $title title for display
    */
   function ogmt_set_doc_title( $title )
   {

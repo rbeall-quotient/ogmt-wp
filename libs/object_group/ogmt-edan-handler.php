@@ -21,8 +21,8 @@
 
     /**
      * Method to call EDAN API (modified to make a variety of calls based on passed edan_vars)
-     * @param  String $edan_vars EDAN query vars
-     * @return String            JSON results
+     * @param  string $edan_vars EDAN query vars
+     * @return string            JSON results
      */
     function edan_call($edan_vars, $service, $issearch=false)
     {
