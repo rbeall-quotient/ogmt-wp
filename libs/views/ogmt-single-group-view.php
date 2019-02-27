@@ -191,10 +191,13 @@
      */
     function obj_page_info()
     {
+      $options = new options_handler(get_option('ogmt_settings'));
+      $rows = $options->get_rows();
+
       $info = array();
       $index = get_query_var('listStart');
 
-      if($index && is_numeric($index) && $index < ($this->searchResults->{'numFound'}/10))
+      if($index && is_numeric($index) && $index < ($this->searchResults->{'numFound'}/$rows))
       {
         $info['current'] = ($index + 1);
       }
@@ -205,7 +208,7 @@
 
       if($index < $this->searchResults->{'numFound'})
       {
-        $num = $this->searchResults->{'numFound'}/10;
+        $num = $this->searchResults->{'numFound'}/$rows;
 
         if(($num - intval($num)) > 0)
         {

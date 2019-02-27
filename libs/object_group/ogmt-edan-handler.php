@@ -125,6 +125,8 @@
      */
     function get_ogmt_data()
     {
+      $options = new options_handler(get_option('ogmt_settings'));
+
       $ogmt_cache = array();
 
       $objService = 'ogmt/v1.1/ogmt/getObjectGroup.htm';
@@ -146,6 +148,7 @@
         $search_vars = array
         (
           'objectGroupId' => $objectGroup->{'objectGroupId'},
+          'rows' => $options->get_rows(),//num of rows
           'facet' => 'true',//show facets
         );
 

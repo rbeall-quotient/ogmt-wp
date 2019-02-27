@@ -46,6 +46,16 @@
     }
 
     /**
+     * Get number of rows returned for search
+     *
+     * @return int number of objects to return
+     */
+    function get_rows()
+    {
+      return $this->options['rows'];
+    }
+
+    /**
      * Get the results message to display above search results with values
      * put in place of tokens
      *
