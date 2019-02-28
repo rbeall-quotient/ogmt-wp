@@ -6,13 +6,18 @@
   class options_handler
   {
     /**
-     * Constructor takes and saves options array
+     * Constructor for options_handler
      *
-     * @param array $options options array
+     * @param array  $options array of admin settings
+     * @param boolean $facets selector for initializing facets arrays
      */
     function __construct($options)
     {
       $this->options = $options;
+
+      //Set to null to check for intialization
+      $this->fnames  = NULL;
+      $this->hfacets = NULL;
     }
 
     /**
@@ -22,6 +27,11 @@
      */
     function get_creds()
     {
+      if(!array_key_exists('creds', $this->options))
+      {
+        return '';
+      }
+
       return $this->options['creds'];
     }
 
@@ -32,6 +42,11 @@
      */
     function get_path()
     {
+      if(!array_key_exists('path', $this->options))
+      {
+        return '';
+      }
+
       return $this->options['path'];
     }
 
@@ -42,7 +57,27 @@
      */
     function get_title()
     {
+      if(!array_key_exists('title', $this->options))
+      {
+        return '';
+      }
+
       return $this->options['title'];
+    }
+
+    /**
+     * Get message above selected facets
+     *
+     * @return string message for removal of selected facets
+     */
+    function get_remove_message()
+    {
+      if(!array_key_exists('remove', $this->options))
+      {
+        return '';
+      }
+
+      return $this->options['remove'];
     }
 
     /**
@@ -52,6 +87,11 @@
      */
     function get_rows()
     {
+      if(!array_key_exists('rows', $this->options))
+      {
+        return 10;
+      }
+
       return $this->options['rows'];
     }
 
@@ -66,12 +106,102 @@
      */
     function get_results_message($count, $name, $page='')
     {
+      if(!array_key_exists('rmessage', $this->options))
+      {
+        return '';
+      }
+
       $message = $this->options['rmessage'];
       $message = str_replace('@count', $count, $message);
       $message = str_replace('@name', $name, $message);
       $message = str_replace('@page', $page, $message);
 
       return $message;
+    }
+
+    /**
+     * If replacement for facet exists, return it for display
+     *
+     * @param  string $facet original facet name
+     * @return string replacement facet name or original if no replacement exists
+     */
+    function replace_facet($facet)
+    {
+      if(!$this->fnames || !array_key_exists($facet, $this->fnames))
+      {
+        return $facet;
+      }
+      else
+      {
+        return $this->fnames[$facet];
+      }
+    }
+
+    /**
+     * Check if the facet should be ignored, tracking against the list of
+     * facets to ignore.
+     *
+     * @param  string $facet facet value to check
+     * @return string        false to ignore facet, true to show it
+     */
+    function ignore_facet($facet)
+    {
+      if($this->hfacets && in_array($facet, $this->hfacets))
+      {
+        return false;
+      }
+      else
+      {
+        return true;
+      }
+    }
+
+    /**
+     * Initialize both facet arrays for use in view manager
+     */
+    function initialize_facet_arrays()
+    {
+      $this->initialize_fnames();
+      $this->initialize_hfacets();
+    }
+
+    /**
+     * Split facet names data into array where original facet name
+     * is the key and the replacement is the value in a series of
+     * key:value pairs.
+     */
+    function initialize_fnames()
+    {
+      $this->fnames = array();
+
+      if(array_key_exists('fnames', $this->options))
+      {
+        $pairs = explode("\n", $this->options['fnames']);
+
+        foreach($pairs as $p)
+        {
+          $fn = explode('|', $p);
+          $this->fnames[$fn[0]] = $fn[1];
+        }
+      }
+    }
+
+    /**
+     * Get each facet to be ignored and place them all in an array.
+     */
+    function initialize_hfacets()
+    {
+      $this->hfacets = array();
+
+      if(array_key_exists('hfacets', $this->options))
+      {
+        $pairs = explode("\n", $this->options['hfacets']);
+
+        foreach($pairs as $p)
+        {
+          array_push($this->hfacets, trim($p));
+        }
+      }
     }
   }
 ?>

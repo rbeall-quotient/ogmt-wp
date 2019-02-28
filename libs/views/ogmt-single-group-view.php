@@ -282,6 +282,9 @@
      */
     function get_facets_menu()
     {
+      $options = new options_handler(get_option('ogmt_settings'));
+      $options->initialize_facet_arrays();
+
       $content = "";
 
       if($this->searchResults && property_exists($this->searchResults, 'facets'))
@@ -289,7 +292,9 @@
         $edan_fqs = get_query_var('edan_fq');
         if($edan_fqs)
         {
+          $content .= '<h4>' . $options->get_remove_message() . '</h4>';
           $content .= '<ul style="list-style:none;">';
+
           foreach($edan_fqs as $fq)
           {
             $content .= '<li><a href="' . $this->url_handler->remove_facet_url($fq) . '">[X]' . $fq . '</a></li>';
@@ -302,10 +307,10 @@
 
         foreach($this->searchResults->{'facets'} as $key => $val)
         {
-          if(count($val) != 0)
+          if(count($val) != 0 && $options->ignore_facet($key))
           {
             $content .= '<li>';
-            $content .= '<p>' . $key . '</p>';
+            $content .= '<p>' . $options->replace_facet($key) . '</p>';
             $content .= $this->get_facet($key, $val);
             $content .= '</li>';
           }

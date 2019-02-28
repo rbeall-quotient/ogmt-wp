@@ -28,7 +28,7 @@
    	$settings = get_option( 'ogmt_settings' );
    	?>
     <h3>OGMT Settings</h3>
-   	<form method="post" action="options.php">
+   	<form method="post" action="options.php" id="ogmt-admin">
    		<?php settings_fields( 'ogmt_option_group' ); ?>
    		<table>
    			<tr>
@@ -54,12 +54,30 @@
             <input type="text" name="ogmt_settings[rmessage]" value="<?php echo (array_key_exists( 'rmessage' , $settings)) ? $settings[ 'rmessage' ] : ''; ?>" />
           </td>
    			</tr>
-      </tr>
-        <td>Results Per Page:</td>
-        <td>
-          <input type="text" name="ogmt_settings[rows]" value="<?php echo (array_key_exists( 'rows' , $settings)) ? $settings[ 'rows' ] : 10; ?>" />
-        </td>
-      </tr>
+        </tr>
+          <td>Results Per Page:</td>
+          <td>
+            <input type="text" name="ogmt_settings[rows]" value="<?php echo (array_key_exists( 'rows' , $settings)) ? $settings[ 'rows' ] : 10; ?>" />
+          </td>
+        </tr>
+        </tr>
+          <td>Remove facets message:</td>
+          <td>
+            <input type="text" name="ogmt_settings[remove]" value="<?php echo (array_key_exists( 'remove' , $settings)) ? $settings[ 'remove' ] : ''; ?>" />
+          </td>
+        </tr>
+        </tr>
+          <td>Facet Names:</td>
+          <td>
+            <textarea form ="ogmt-admin" name="ogmt_settings[fnames]" id="fname" cols="100"><?php echo (array_key_exists( 'fnames' , $settings)) ? $settings[ 'fnames' ] : ''; ?></textarea>
+          </td>
+        </tr>
+        </tr>
+          <td>Facets To Hide:</td>
+          <td>
+            <textarea form ="ogmt-admin" name="ogmt_settings[hfacets]" id="hfacets" cols="100"><?php echo (array_key_exists( 'hfacets' , $settings)) ? $settings[ 'hfacets' ] : ''; ?></textarea>
+          </td>
+        </tr>
    			<tr>
    				<td colspan="2"><?php echo submit_button(); ?></td>
    			</tr>
