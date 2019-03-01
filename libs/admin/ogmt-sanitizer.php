@@ -20,7 +20,38 @@
 
       if(array_key_exists('fnames', $options))
       {
-        $options['fnames'] = $this->sanitize_fnames($options['fnames']);
+        $options['fnames'] = $this->sanitize_replacement_entries($options['fnames']);
+      }
+      else
+      {
+        $options['fnames'] = '';
+      }
+
+      if(array_key_exists('hfacets', $options))
+      {
+        $options['hfacets'] = $this->sanitize_single_entry($options['hfacets']);
+      }
+      else
+      {
+        $options['hfacets'] = '';
+      }
+
+      if(array_key_exists('fields', $options))
+      {
+        $options['fields'] = $this->sanitize_single_entry($options['fields']);
+      }
+      else
+      {
+        $options['fields'] = '';
+      }
+
+      if(array_key_exists('labels', $options))
+      {
+        $options['labels'] = $this->sanitize_replacement_entries($options['labels']);
+      }
+      else
+      {
+        $options['labels'] = '';
       }
 
       return $options;
@@ -60,10 +91,10 @@
      * @param  string $fnames raw facet replacement data
      * @return string sanitized replacement data
      */
-    function sanitize_fnames($fnames)
+    function sanitize_replacement_entries($entries)
     {
-      $pairs = explode("\n", $fnames);
-      $fnames = "";
+      $pairs = explode("\n", $entries);
+      $entries = "";
 
       $dupes = array();
 
@@ -71,19 +102,19 @@
       {
         $set = explode('|', $pairs[$index]);
 
-        if(count($set) == 2 && !in_array($set[0], $dupes))
+        if(count($set) == 2 && !in_array($set[0], $dupes) && $set[1] != "")
         {
           if($index > 0)
           {
-            $fnames .= "\n";
+            $entries .= "\n";
           }
 
-          $fnames .= trim($set[0]) . '|' . trim($set[1]);
+          $entries .= trim($set[0]) . '|' . trim($set[1]);
           array_push($dupes, $set[0]);
         }
       }
 
-      return $fnames;
+      return $entries;
     }
 
     /**
@@ -92,10 +123,10 @@
      * @param  string $hfacets raw data of facets to hide
      * @return string processed facets to hide data string
      */
-    function sanitize_hfacets($hfacets)
+    function sanitize_single_entry($entries)
     {
-      $pairs = explode("\n", $hfacets);
-      $hfacets = "";
+      $pairs = explode("\n", $entries);
+      $entries = "";
 
       for($index = 0; $index < count($pairs); $index++)
       {
@@ -103,14 +134,46 @@
         {
           if($index > 0)
           {
-            $hfacets .= "\n";
+            $entries .= "\n";
           }
 
-          $hfacets .= $pairs[$index];
+          $entries .= $pairs[$index];
         }
       }
 
-      return $hfacets;
+      return $entries;
     }
+
+    function sanitize_labels($entries)
+    {
+      $pairs = explode("\n", $entries);
+      $entries = "";
+
+      $keypairs = array();
+
+      $keynames = array();
+      $keycheck = array();
+
+      $dupes = array();
+
+      for($index = 0; $index < count($pairs); $index++)
+      {
+        $set = explode('|', $pairs[$index]);
+
+        if(count($set) == 2 && !in_array($set[0], $dupes) && $set[1] != "")
+        {
+          if($index > 0)
+          {
+            $entries .= "\n";
+          }
+
+          $entries .= trim($set[0]) . '|' . trim($set[1]);
+          array_push($dupes, $set[0]);
+        }
+      }
+
+      return $entries;
+    }
+
   }
 ?>

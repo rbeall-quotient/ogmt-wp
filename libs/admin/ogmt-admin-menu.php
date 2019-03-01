@@ -78,6 +78,18 @@
             <textarea form ="ogmt-admin" name="ogmt_settings[hfacets]" id="hfacets" cols="100"><?php echo (array_key_exists( 'hfacets' , $settings)) ? $settings[ 'hfacets' ] : ''; ?></textarea>
           </td>
         </tr>
+        </tr>
+          <td>Field Order:</td>
+          <td>
+            <textarea form ="ogmt-admin" name="ogmt_settings[fields]" id="fields" cols="100"><?php echo (array_key_exists( 'fields' , $settings)) ? $settings[ 'fields' ] : ''; ?></textarea>
+          </td>
+        </tr>
+        </tr>
+          <td>Field Order:</td>
+          <td>
+            <textarea form ="ogmt-admin" name="ogmt_settings[labels]" id="fields" cols="100"><?php echo (array_key_exists( 'labels' , $settings)) ? $settings[ 'labels' ] : ''; ?></textarea>
+          </td>
+        </tr>
    			<tr>
    				<td colspan="2"><?php echo submit_button(); ?></td>
    			</tr>

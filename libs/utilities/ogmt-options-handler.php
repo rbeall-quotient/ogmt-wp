@@ -18,6 +18,7 @@
       //Set to null to check for intialization
       $this->fnames  = NULL;
       $this->hfacets = NULL;
+      $this->fields  = NULL;
     }
 
     /**
@@ -156,6 +157,59 @@
       }
     }
 
+    function get_display_data($freetext)
+    {
+      $this->initialize_fields();
+      $display  = array();
+
+      if(count($this->fields) >= 0 && $this->fields[0] != '')
+      {
+        $show_all = false;
+
+        if(in_array('*', $this->fields))
+        {
+          $show_all = true;
+        }
+
+        foreach($this->fields as $f)
+        {
+          if($f != '*' && property_exists($freetext, $f))
+          {
+            foreach($freetext->{$f} as $set)
+            {
+              if(!array_key_exists($set->{'label'}, $display))
+              {
+                $display[$set->label] = array();
+              }
+
+              array_push($display[$set->{'label'}], $set->{'content'});
+            }
+
+            unset($freetext->{$f});
+          }
+        }
+
+        if($show_all)
+        {
+          foreach($freetext as $key => $val)
+          {
+            foreach($val as $set)
+            {
+              if(!array_key_exists($set->{'label'}, $display))
+              {
+                $display[$set->label] = array();
+              }
+
+              array_push($display[$set->{'label'}], $set->{'content'});
+            }
+          }
+        }
+      }
+
+      return $display;
+    }
+
+
     /**
      * Initialize both facet arrays for use in view manager
      */
@@ -172,10 +226,9 @@
      */
     function initialize_fnames()
     {
-      $this->fnames = array();
-
       if(array_key_exists('fnames', $this->options))
       {
+        $this->fnames = array();
         $pairs = explode("\n", $this->options['fnames']);
 
         foreach($pairs as $p)
@@ -191,15 +244,28 @@
      */
     function initialize_hfacets()
     {
-      $this->hfacets = array();
-
       if(array_key_exists('hfacets', $this->options))
       {
+        $this->hfacets = array();
         $pairs = explode("\n", $this->options['hfacets']);
 
         foreach($pairs as $p)
         {
           array_push($this->hfacets, trim($p));
+        }
+      }
+    }
+
+    function initialize_fields()
+    {
+      if(array_key_exists('fields', $this->options))
+      {
+        $this->fields = array();
+        $pairs = explode("\n", $this->options['fields']);
+
+        foreach($pairs as $p)
+        {
+          array_push($this->fields, trim($p));
         }
       }
     }

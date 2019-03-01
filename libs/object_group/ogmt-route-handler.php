@@ -43,6 +43,7 @@
   {
     //get options from admin menu and plug them into the options handler
     $options = new options_handler(get_option('ogmt_settings'));
+    //$options->initialize_fields();
 
     /*Using stripped down url instead of page title because we
     * we are changing the title and this title filter might be called before

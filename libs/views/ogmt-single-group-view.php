@@ -256,21 +256,35 @@
      */
     function get_object($row)
     {
-      $content = '';
+      $options = new options_handler(get_option('ogmt_settings'));
+      $labels = $options->get_display_data($row->{'content'}->{'freetext'});
+
+      $content = '<li style="background-color: #eff3f4; padding-left: 20px;">';
+
       if(property_exists($row->{'content'}, 'descriptiveNonRepeating'))
       {
-        $content .= '<li>';
         $content .= '<hr/>';
         $content .= '<h5>' . $row->{'content'}->{'descriptiveNonRepeating'}->{'title'}->{'content'} . '</h5>';
-        $content .= '</li>';
       }
       elseif(property_exists($row->{'content'}, 'title'))
       {
-        $content .= '<li>';
         $content .= '<hr/>';
         $content .= '<h5>' . $row->{'content'}->{'title'} . '</h5>';
-        $content .= '</li>';
       }
+
+      //$content .= '<br/>';
+
+      foreach($labels as $key => $vals)
+      {
+        $content .= '<div><strong>'. $key . '</strong></div>';
+
+        foreach($vals as $txt)
+        {
+          $content .= '<div>' . $txt . '</div>';
+        }
+      }
+
+      $content .= '</li>';
 
       return $content;
     }
