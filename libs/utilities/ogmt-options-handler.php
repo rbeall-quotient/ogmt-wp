@@ -187,6 +187,8 @@
     function get_display_data($freetext)
     {
       $this->initialize_fields();
+      $this->initialize_label_replacements();
+
       $display  = array();
 
       if(count($this->fields) >= 0 && $this->fields[0] != '')
@@ -261,7 +263,11 @@
         foreach($pairs as $p)
         {
           $fn = explode('|', $p);
-          $this->fnames[$fn[0]] = $fn[1];
+
+          if(count($fn) > 1)
+          {
+            $this->fnames[$fn[0]] = $fn[1];
+          }
         }
       }
     }
@@ -303,7 +309,7 @@
     /**
      * Initialize labels array
      */
-    function initialize_labels()
+    function initialize_label_replacements()
     {
       if(array_key_exists('labels', $this->options))
       {
@@ -313,8 +319,12 @@
 
         foreach($pairs as $p)
         {
-          $fn = explode('|', $p);
-          $this->labels[strtolower($fn[0])] = $fn[1];
+          $lr = explode('|', $p);
+
+          if(count($lr) > 1)
+          {
+            $this->labels[strtolower($lr[0])] = $lr[1];
+          }
         }
       }
     }

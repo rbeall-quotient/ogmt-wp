@@ -13,8 +13,6 @@ wp-content/plugins/hello.php
 /libs/object_group/.config.ini
 /docs/*
 /json/*
-/libs/scripts/css/*
-/libs/scripts/js/*
 
 /.htaccess
 /license.txt

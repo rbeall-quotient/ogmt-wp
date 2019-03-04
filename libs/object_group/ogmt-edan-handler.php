@@ -79,7 +79,6 @@
 
           foreach($edan_fqs as $fq)
           {
-            console_log("fq: $fq");
             $fq = explode(':', $fq, 2);
 
             array_push($fqs, $fq[0] . ":\"" . str_replace(' ', '+', $fq[1]) . "\"");
