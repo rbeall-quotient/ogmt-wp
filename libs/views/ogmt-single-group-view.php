@@ -251,12 +251,15 @@
 
     /**
      * Get html for individual objects
+     * 
      * @param  object $row row of decoded json data for a particular object
      * @return string html string for object data
      */
     function get_object($row)
     {
       $options = new options_handler(get_option('ogmt_settings'));
+      $options->initialize_labels();
+
       $labels = $options->get_display_data($row->{'content'}->{'freetext'});
 
       $content = '<li style="background-color: #eff3f4; padding-left: 20px;">';
@@ -276,7 +279,7 @@
 
       foreach($labels as $key => $vals)
       {
-        $content .= '<div><strong>'. $key . '</strong></div>';
+        $content .= '<div><strong>'. $options->replace_label($key) . '</strong></div>';
 
         foreach($vals as $txt)
         {

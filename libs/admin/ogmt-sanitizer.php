@@ -143,37 +143,5 @@
 
       return $entries;
     }
-
-    function sanitize_labels($entries)
-    {
-      $pairs = explode("\n", $entries);
-      $entries = "";
-
-      $keypairs = array();
-
-      $keynames = array();
-      $keycheck = array();
-
-      $dupes = array();
-
-      for($index = 0; $index < count($pairs); $index++)
-      {
-        $set = explode('|', $pairs[$index]);
-
-        if(count($set) == 2 && !in_array($set[0], $dupes) && $set[1] != "")
-        {
-          if($index > 0)
-          {
-            $entries .= "\n";
-          }
-
-          $entries .= trim($set[0]) . '|' . trim($set[1]);
-          array_push($dupes, $set[0]);
-        }
-      }
-
-      return $entries;
-    }
-
   }
 ?>

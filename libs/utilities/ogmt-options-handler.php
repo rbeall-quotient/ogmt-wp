@@ -19,6 +19,7 @@
       $this->fnames  = NULL;
       $this->hfacets = NULL;
       $this->fields  = NULL;
+      $this->labels  = NULL;
     }
 
     /**
@@ -139,6 +140,26 @@
     }
 
     /**
+     * Check if label has a replacement
+     *
+     * Note: flatten $label to lowercase (replacements are case insensitive)
+     *
+     * @param  string $label object field label
+     * @return string        replacement label
+     */
+    function replace_label($label)
+    {
+      if(!$this->labels || !array_key_exists(strtolower($label), $this->labels))
+      {
+        return $label;
+      }
+      else
+      {
+        return $this->labels[strtolower($label)];
+      }
+    }
+
+    /**
      * Check if the facet should be ignored, tracking against the list of
      * facets to ignore.
      *
@@ -157,6 +178,12 @@
       }
     }
 
+    /**
+     * Parse through object fields and append to an array
+     *
+     * @param  object $freetext object of ordered object fields and field values
+     * @return array           array of parsed field values
+     */
     function get_display_data($freetext)
     {
       $this->initialize_fields();
@@ -256,6 +283,9 @@
       }
     }
 
+    /**
+     * Initialize fields array
+     */
     function initialize_fields()
     {
       if(array_key_exists('fields', $this->options))
@@ -266,6 +296,25 @@
         foreach($pairs as $p)
         {
           array_push($this->fields, trim($p));
+        }
+      }
+    }
+
+    /**
+     * Initialize labels array
+     */
+    function initialize_labels()
+    {
+      if(array_key_exists('labels', $this->options))
+      {
+        $this->labels = array();
+
+        $pairs = explode("\n", $this->options['labels']);
+
+        foreach($pairs as $p)
+        {
+          $fn = explode('|', $p);
+          $this->labels[strtolower($fn[0])] = $fn[1];
         }
       }
     }
