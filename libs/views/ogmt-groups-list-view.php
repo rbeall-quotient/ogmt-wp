@@ -43,19 +43,24 @@
      */
     function get_featured_view()
     {
-      $content  = '<h5>Featured Groups</h5>';
-      $content .= '<ul style="list-style:none;">';
+      $content  = '';
 
-      foreach($this->featured->{'objectGroups'} as $group)
+      if($this->featured)
       {
-        $content .= '<li style="display:inline-block; padding: 20px;">';
-        $content .= '<a href="' . $this->url_handler->group_url($group->{'url'}). '">';
-        $content .= '<img style="height:350px; width:350px;" alt="' . $group->{'feature'}->{'alt'} . '" src="' . $group->{'feature'}->{'url'} . '"/>';
-        $content .= '<figcaption>' . $group->{'title'} . '</figcaption>';
-        $content .= '</a>';
-        $content .= '</li>';
+        $content .= '<h5>Featured Groups</h5>';
+        $content .= '<ul style="list-style:none;">';
+
+        foreach($this->featured->{'objectGroups'} as $group)
+        {
+          $content .= '<li style="display:inline-block; padding: 20px;">';
+          $content .= '<a href="' . $this->url_handler->group_url($group->{'url'}). '">';
+          $content .= '<img style="height:350px; width:350px;" alt="' . $group->{'feature'}->{'alt'} . '" src="' . $group->{'feature'}->{'url'} . '"/>';
+          $content .= '<figcaption>' . $group->{'title'} . '</figcaption>';
+          $content .= '</a>';
+          $content .= '</li>';
+        }
+        $content .= '</ul>';
       }
-      $content .= '</ul>';
 
       return $content;
     }
@@ -67,40 +72,45 @@
      */
     function show_object_groups()
     {
-      $content  = '<h5>All Object Groups</h5>';
-      $content .= '<ul style="list-style:none;">';
+      $content  = '';
 
-      foreach($this->groups->{'objectGroups'} as $group)
+      if($this->groups)
       {
-        $url = $this->url_handler->group_url($group->{'url'});
+        $content .= '<h5>All Object Groups</h5>';
+        $content .= '<ul style="list-style:none;">';
 
-        $content .= '<li><span style="display:inline-block;">';
-        $content .= '<a href="' . $url . '">';
-
-        if(property_exists($group->{'feature'}, 'media'))
+        foreach($this->groups->{'objectGroups'} as $group)
         {
-          $content .= $group->{'feature'}->{'media'};
+          $url = $this->url_handler->group_url($group->{'url'});
+
+          $content .= '<li><span style="display:inline-block;">';
+          $content .= '<a href="' . $url . '">';
+
+          if(property_exists($group->{'feature'}, 'media'))
+          {
+            $content .= $group->{'feature'}->{'media'};
+          }
+          else
+          {
+            $content .= '<img src="' . $group->{'feature'}->{'url'} . '"/>';
+          }
+
+          $content .= '</a>';
+
+          $content .= '<div><div><a href="' . $url . '">';
+          $content .= '<h4>' . $group->{'title'} . '</h4></a></div>';
+
+          if(property_exists($group, 'description'))
+          {
+              $content .= '<div>' . $group->{'description'} . '</div>';
+          }
+
+          $content .= '</div></span></li>';
         }
-        else
-        {
-          $content .= '<img src="' . $group->{'feature'}->{'url'} . '"/>';
-        }
 
-        $content .= '</a>';
-
-        $content .= '<div><div><a href="' . $url . '">';
-        $content .= '<h4>' . $group->{'title'} . '</h4></a></div>';
-
-        if(property_exists($group, 'description'))
-        {
-            $content .= '<div>' . $group->{'description'} . '</div>';
-        }
-
-        $content .= '</div></span></li>';
+        $content .= '</ul>';
       }
-
-      $content .= '</ul>';
-
+      
       return $content;
     }
   }
