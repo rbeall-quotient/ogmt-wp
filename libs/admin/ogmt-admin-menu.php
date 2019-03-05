@@ -13,6 +13,9 @@
     add_menu_page('OGMT', 'OGMT Settings', 'manage_options', 'ogmt-settings', 'ogmt_admin_menu');
   }
 
+  /**
+   * Register OGMT settings options array
+   */
   function ogmt_register_settings()
   {
     register_setting( 'ogmt_option_group', 'ogmt_settings', 'ogmt_sanitize_values' );
@@ -99,6 +102,12 @@
           <textarea form ="ogmt-admin" name="ogmt_settings[labels]" id="labels" cols="100"><?php echo (array_key_exists( 'labels' , $settings)) ? $settings[ 'labels' ] : ''; ?></textarea>
           <div class="description">Replace the labels shown with a different label. When making this list, do not list the "facet" name, but the "label." For example the metadata facet, physicalDescription, has a label "Physical Description" -- For this to appear on the object listing as "Phys. Descr." you enter the following line (without quotes) "Physical Description | Phys. Descr." -- notice the pipe "|" character between the label and desired replacement. Replacements are not case sensitive.</div>
         </div>
+        <div class=ogmt-field-label>Mini Fields:</div>
+        <div>
+          <textarea form ="ogmt-admin" name="ogmt_settings[mini]" id="mini" cols="100"><?php echo (array_key_exists( 'mini' , $settings)) ? $settings[ 'mini' ] : ''; ?></textarea>
+          <div class="description">Fields listed here will be marked with the mini class. By default this will cause non-mini fields to be hidden and add a "expand" button to each record to show non-mini fields. Each field should be on its own line. Leave blank for all.</div>
+        </div>
+        <br/>
       </fieldset>
       <br/><hr>
       <div><?php echo submit_button(); ?></div>

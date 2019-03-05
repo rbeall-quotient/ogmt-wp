@@ -20,6 +20,9 @@
       $this->hfacets = NULL;
       $this->fields  = NULL;
       $this->labels  = NULL;
+      $this->mini    = NULL;
+
+      $this->is_mini = false;
     }
 
     /**
@@ -95,6 +98,21 @@
       }
 
       return $this->options['rows'];
+    }
+
+    /**
+     * Test for minimizing
+     *
+     * @return boolean true if yes, false if not
+     */
+    function is_minimized()
+    {
+      if(!$this->mini || $this->options['mini'] == "")
+      {
+        return false;
+      }
+
+      return true; 
     }
 
     /**
@@ -188,6 +206,7 @@
     {
       $this->initialize_fields();
       $this->initialize_label_replacements();
+      $this->initialize_minis();
 
       $display  = array();
 
@@ -204,14 +223,16 @@
         {
           if($f != '*' && property_exists($freetext, $f))
           {
+            $display[$f] = array();
+
             foreach($freetext->{$f} as $set)
             {
               if(!array_key_exists($set->{'label'}, $display))
               {
-                $display[$set->label] = array();
+                $display[$f][$set->label] = array();
               }
 
-              array_push($display[$set->{'label'}], $set->{'content'});
+              array_push($display[$f][$set->{'label'}], $set->{'content'});
             }
 
             unset($freetext->{$f});
@@ -222,20 +243,32 @@
         {
           foreach($freetext as $key => $val)
           {
+            $display[$key] = array();
+
             foreach($val as $set)
             {
               if(!array_key_exists($set->{'label'}, $display))
               {
-                $display[$set->label] = array();
+                $display[$key][$set->label] = array();
               }
 
-              array_push($display[$set->{'label'}], $set->{'content'});
+              array_push($display[$key][$set->{'label'}], $set->{'content'});
             }
           }
         }
       }
 
       return $display;
+    }
+
+    function get_mini($field)
+    {
+      if(in_array($field, $this->mini))
+      {
+        return false;
+      }
+
+      return true;
     }
 
 
@@ -324,6 +357,31 @@
           if(count($lr) > 1)
           {
             $this->labels[strtolower($lr[0])] = $lr[1];
+          }
+        }
+      }
+    }
+
+    /**
+     * Initialize fields array
+     */
+    function initialize_minis()
+    {
+      if(array_key_exists('mini', $this->options))
+      {
+        if($this->options['mini'] != '')
+        {
+          $this->is_mini = true;
+        }
+
+        $this->mini = array();
+        $pairs = explode("\n", $this->options['mini']);
+
+        foreach($pairs as $p)
+        {
+          if($p != '')
+          {
+            array_push($this->mini, trim($p));
           }
         }
       }

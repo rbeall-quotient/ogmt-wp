@@ -241,7 +241,7 @@
 
       foreach($obs as $row)
       {
-        $content .= $this->get_object($row);
+        $content .= $this->get_object($row) . '<br/>';
       }
 
       $content .= '</ul>';
@@ -259,30 +259,67 @@
     {
       $options = new options_handler(get_option('ogmt_settings'));
       $labels = $options->get_display_data($row->{'content'}->{'freetext'});
+      $classname = $row->{'id'};
 
-      $content = '<li style="background-color: #eff3f4; padding-left: 20px;">';
+      $content  = '<li id="' . $classname . '" class="object">';
+      $content .= '<div class="obj-header">';
+
+      if($options->is_minimized())
+      {
+        $content .= "<a id=\"$classname-expander\" onclick=\"hide_non_minis('" . $classname . "')\" href=\"#/\" class=\"expander\">Expand</a>";
+      }
+
+      if(property_exists($row->{'content'}->{'descriptiveNonRepeating'}->{'online_media'}, 'media'))
+      {
+        $src = $row->{'content'}->{'descriptiveNonRepeating'}->{'online_media'}->{'media'}[0]->{'thumbnail'};
+        $content .= "<img src=\"$src\" />";
+      }
 
       if(property_exists($row->{'content'}, 'descriptiveNonRepeating'))
       {
-        $content .= '<hr/>';
-        $content .= '<h5>' . $row->{'content'}->{'descriptiveNonRepeating'}->{'title'}->{'content'} . '</h5>';
+        $content .= '<h4>' . $row->{'content'}->{'descriptiveNonRepeating'}->{'title'}->{'content'} . '</h4>';
       }
       elseif(property_exists($row->{'content'}, 'title'))
       {
-        $content .= '<hr/>';
-        $content .= '<h5>' . $row->{'content'}->{'title'} . '</h5>';
+        $content .= '<h4>' . $row->{'content'}->{'title'} . '</h4>';
       }
 
-      //$content .= '<br/>';
+      $content .= '<hr/></div>';
 
-      foreach($labels as $key => $vals)
+      foreach($labels as $field => $vals)
       {
-        $content .= '<div><strong>'. $options->replace_label($key) . '</strong></div>';
-
-        foreach($vals as $txt)
+        if(!$options->is_minimized())
         {
-          $content .= '<div>' . $txt . '</div>';
+          console_log("Not minimized");
+          $fieldclass = $field;
+          $display = 'block';
         }
+        elseif($options->get_mini($field))
+        {
+          console_log("$field will not display");
+          $fieldclass = $row->{'id'};
+          $display = 'none';
+        }
+        else
+        {
+          console_log("$field will display");
+          $fieldclass = 'mini';
+          $display = 'block';
+        }
+
+        $content .= "<div id=\"$field\" class=\"" . $fieldclass . "\" style=\"display:$display\">";
+
+        foreach($vals as $label => $lns)
+        {
+          $content .= '<div><strong>'. $options->replace_label($label) . '</strong></div>';
+
+          foreach($lns as $txt)
+          {
+            $content .= '<div>' . $txt . '</div>';
+          }
+        }
+
+        $content .= "</div>";
       }
 
       $content .= '</li>';

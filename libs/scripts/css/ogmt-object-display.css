@@ -1,0 +1,24 @@
+.obj-header
+{
+  width: 100%;
+  padding-top: 10px;
+}
+
+.expander
+{
+  float: right;
+  margin-right: 3%
+}
+
+.object-highlight
+{
+  background-color: #eff3f4;
+}
+
+.object
+{
+  border-bottom: solid;
+  padding-bottom: 20px;
+  margin-bottom: 20px;  
+  padding-left: 20px;
+}

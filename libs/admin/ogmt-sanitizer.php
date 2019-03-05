@@ -54,6 +54,15 @@
         $options['labels'] = '';
       }
 
+      if(array_key_exists('mini', $options))
+      {
+        $options['mini'] = $this->sanitize_single_entry($options['mini']);
+      }
+      else
+      {
+        $options['mini'] = '';
+      }
+
       return $options;
     }
 
