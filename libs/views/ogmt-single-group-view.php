@@ -266,7 +266,7 @@
 
       if($options->is_minimized())
       {
-        $content .= "<a id=\"$classname-expander\" onclick=\"hide_non_minis('" . $classname . "')\" href=\"#/\" class=\"expander\">Expand</a>";
+        $content .= "<a id=\"$classname-expander\" onclick=\"toggle_non_minis('" . $classname . "')\" href=\"#/\" class=\"expander\">Expand</a>";
       }
 
       if(property_exists($row->{'content'}->{'descriptiveNonRepeating'}->{'online_media'}, 'media'))

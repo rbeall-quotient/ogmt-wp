@@ -1,4 +1,7 @@
 <?php
+  /**
+   * File for rendering and processing admin menu data for OGMT
+   */
 
   add_action('admin_menu', 'ogmt_add_menu');
   add_action( 'admin_init', 'ogmt_register_settings' );

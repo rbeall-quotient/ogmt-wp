@@ -22,6 +22,7 @@
       $this->labels  = NULL;
       $this->mini    = NULL;
 
+      //is mini-class display toggled?
       $this->is_mini = false;
     }
 
@@ -112,7 +113,7 @@
         return false;
       }
 
-      return true; 
+      return true;
     }
 
     /**
@@ -261,6 +262,12 @@
       return $display;
     }
 
+    /**
+     * Test if field should be displayed or not.
+     *
+     * @param  string $field Name of field
+     * @return boolean        False if field is a mini-field, True if not
+     */
     function get_mini($field)
     {
       if(in_array($field, $this->mini))

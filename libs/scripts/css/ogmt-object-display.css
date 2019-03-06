@@ -1,24 +1,28 @@
+/*Header for Object Header (image, title, and expand button)*/
 .obj-header
 {
   width: 100%;
   padding-top: 10px;
 }
 
+/*Styles for expander button*/
 .expander
 {
   float: right;
   margin-right: 3%
 }
 
+/*Highlight class for expanded object*/
 .object-highlight
 {
   background-color: #eff3f4;
 }
 
+/*Object styles*/
 .object
 {
   border-bottom: solid;
   padding-bottom: 20px;
-  margin-bottom: 20px;  
+  margin-bottom: 20px;
   padding-left: 20px;
 }
