@@ -33,15 +33,7 @@
 
       if($this->searchResults && $this->searchResults->{'numFound'} > 0)
       {
-        $content .= $this->get_search_preview();
-        $page = get_query_var('listStart');
-
-        if(!$page)
-        {
-          $page = 0;
-        }
-
-        $content .= $this->get_object_list();
+        $content .= $this->get_search_view();
       }
 
       return $content;
@@ -98,13 +90,11 @@
     }
 
     /**
-     * Function for generating prefix information above object list
+     * Function for generating object list search html
      *
-     * Note: Will build out once object list is implemented.
-     *
-     * @return string HTML string for the prefix.
+     * @return string HTML string for the object list information
      */
-    function get_search_preview()
+    function get_search_view()
     {
       $options = new options_handler(get_option('ogmt_settings'));
 
@@ -117,7 +107,10 @@
       $content   = '<div id="edan-results-summary" class="edan-results-summary">' . $options->get_results_message($count, $name, $page) . '</div>';
       $info = $this->obj_page_info();
       $content  .= '<div>Page ' . $info['current'] . ' ' . ($info['total'] ? 'of ' . $info['total'] : '') . '</div>';
-      $content  .= $this->get_top_nav($info);
+
+      $content .= $this->get_top_nav();
+      $content .= $this->get_object_list();
+      $content .= $this->get_bottom_nav();
 
       return $content;
     }
@@ -128,56 +121,155 @@
      * @param  string $info current and total page numbers
      * @return string html string of nav links
      */
-    function get_top_nav($info)
+    function get_top_nav()
     {
-      $content  = '<ul style="text-align: left">';
+      $options = new options_handler(get_option('ogmt_settings'));
 
-      if($info['total'] == 1)
+      $info = $this->obj_page_info();
+      $navbar = array();
+
+      $firstprev = $info['current'] != 1; //display "first" and "preview" links
+      $nextlast  = $info['current'] != $info['total']; //display "next" and "last" links
+      $expandall = $options->is_minimized(); //whether to add an "Expand All" link
+
+      if($firstprev)
       {
-        $content .= "";
+        array_push($navbar, '<a href='.$this->url_handler->list_url(0).'>First</a>');
+        array_push($navbar, '<a href='.$this->url_handler->list_url($info['current']-2).'>Previous</a>');
       }
-      elseif($info['current'] == 1)
-      {
-        $content .= '<li style="display: inline-block; padding: 5px;">';
-        $content .= '<a href='.$this->url_handler->list_url($info['current']).'>Next</a>';
-        $content .= '</li>';
 
-        $content .= '<li style="display: inline-block; padding: 5px;">';
-        $content .= '<a href='.$this->url_handler->list_url($info['total']-1).'>Last</a>';
-        $content .= '</li>';
+      if($nextlast)
+      {
+        array_push($navbar, '<a href='.$this->url_handler->list_url($info['current']).'>Next</a>');
+        array_push($navbar, '<a href='.$this->url_handler->list_url($info['total']-1).'>Last</a>');
       }
-      elseif($info['current'] != $info['total'])
+
+      if($expandall)
       {
-        $content .= '<li style="display: inline-block; padding: 5px;">';
-        $content .= '<a href='.$this->url_handler->list_url(0).'>First</a>';
-        $content .= '</li>';
-
-        $content .= '<li style="display: inline-block; padding: 5px;">';
-        $content .= '<a href='.$this->url_handler->list_url($info['current']-2).'>Previous</a>';
-        $content .= '</li>';
-
-        $content .= '<li style="display: inline-block; padding: 5px;">';
-        $content .= '<a href='.$this->url_handler->list_url($info['current']).'>Next</a>';
-        $content .= '</li>';
-
-        $content .= '<li style="display: inline-block; padding: 5px;">';
-        $content .= '<a href='.$this->url_handler->list_url($info['total']-1).'>Last</a>';
-        $content .= '</li>';
+        array_push($navbar, '<a href="#/" onclick="toggle_all()" id="ogmt-expandall">Expand All</a>');
       }
-      else
-      {
-        $content .= '<li style="display: inline-block; padding: 5px;">';
-        $content .= '<a href='.$this->url_handler->list_url(0).'>First</a>';
-        $content .= '</li>';
 
-        $content .= '<li style="display: inline-block; padding: 5px;">';
-        $content .= '<a href='.$this->url_handler->list_url($info['current']-2).'>Previous</a>';
+      $content = '<ul class="ogmt-navbar">';
+
+      foreach($navbar as $item)
+      {
+        $content .= '<li class="ogmt-navbar">';
+        $content .= $item;
         $content .= '</li>';
       }
 
       $content .= '</ul>';
 
       return $content;
+    }
+
+    /**
+     * Get navigation for bottom of object list
+     * @return string navigation content
+     */
+    function get_bottom_nav()
+    {
+      $info = $this->obj_page_info();
+      $navbar = array();
+      $pagelist = $this->get_page_list($info);
+
+      $min = $pagelist[0];
+      $max = $pagelist[count($pagelist) - 1];
+
+      $firstprev = $info['current'] != 1;//display "first" and "preview" links
+      $mindots   = ($min > 1); //display "..." prior to num list
+      $maxdots   = ($max < $info['total']); //display "..." after num list
+      $nextlast  = $info['current'] != $info['total'];//display "next" and "last" links
+
+      if($firstprev)
+      {
+        array_push($navbar, '<a href='.$this->url_handler->list_url(0).'>First</a>');
+        array_push($navbar, '<a href='.$this->url_handler->list_url($info['current']-2).'>Previous</a>');
+      }
+
+      if($mindots)
+      {
+        array_push($navbar, '...');
+      }
+
+      foreach($pagelist as $page)
+      {
+        if($page == $info['current'])
+        {
+          array_push($navbar, $page);
+        }
+        else
+        {
+          array_push($navbar, '<a href='.$this->url_handler->list_url($page-1).'>' . $page . '</a>');
+        }
+      }
+
+      if($maxdots)
+      {
+        array_push($navbar, '...');
+      }
+
+      if($nextlast)
+      {
+        array_push($navbar, '<a href='.$this->url_handler->list_url($info['current']).'>Next</a>');
+        array_push($navbar, '<a href='.$this->url_handler->list_url($info['total']-1).'>Last</a>');
+      }
+
+      $content = '<ul class="ogmt-navbar">';
+
+      foreach($navbar as $item)
+      {
+        $content .= '<li class="ogmt-navbar">';
+        $content .= $item;
+        $content .= '</li>';
+      }
+
+      $content .= '</ul>';
+
+      return $content;
+    }
+
+    function get_page_list($info)
+    {
+      $total   = $info['total'];
+      $current = $info['current'];
+
+      $median = 5;
+
+      $nums = array();
+
+      if($current <= 4)
+      {
+        for($i = 1; $i <= 9; $i++)
+        {
+          if($i <= $total)
+          {
+            array_push($nums, $i);
+          }
+        }
+      }
+      elseif(($current + 4) >= $info['total'])
+      {
+        for($i = $info['total'] - 8; $i <= $info['total']; $i++)
+        {
+          if($i > 0)
+          {
+            array_push($nums, $i);
+          }
+        }
+      }
+      else
+      {
+        for($i = ( $current - 4 ); $i <= ($current + 4); $i++)
+        {
+          if($i > 0 && $i <= $total)
+          {
+            array_push($nums, $i);
+          }
+        }
+      }
+
+      return $nums;
     }
 
     /**
@@ -261,7 +353,7 @@
       $labels = $options->get_display_data($row->{'content'}->{'freetext'});
       $classname = $row->{'id'};
 
-      $content  = '<li id="' . $classname . '" class="object">';
+      $content  = '<li id="' . $classname . '" class="ogmt-object-container">';
       $content .= '<div class="obj-header">';
 
       if($options->is_minimized())
@@ -290,19 +382,16 @@
       {
         if(!$options->is_minimized())
         {
-          console_log("Not minimized");
           $fieldclass = $field;
           $display = 'block';
         }
         elseif($options->get_mini($field))
         {
-          console_log("$field will not display");
-          $fieldclass = $row->{'id'};
+          $fieldclass = $row->{'id'} . " ogmt-object-fields";
           $display = 'none';
         }
         else
         {
-          console_log("$field will display");
           $fieldclass = 'mini';
           $display = 'block';
         }

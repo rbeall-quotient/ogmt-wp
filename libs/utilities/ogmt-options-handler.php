@@ -108,7 +108,7 @@
      */
     function is_minimized()
     {
-      if(!$this->mini || $this->options['mini'] == "")
+      if($this->options['mini'] == "")
       {
         return false;
       }

@@ -25,8 +25,12 @@
     //if on ogmt page, include scripts and styles
     if(ogmt_name_from_url() == $options->get_path())
     {
+      /*scripts*/
       wp_enqueue_script('ogmt-mini-field.js', plugin_dir_url(__FILE__) . 'js/ogmt-mini-field.js');//mini field javascript
-      wp_enqueue_style('ogmt-object-display.css', plugin_dir_url(__FILE__) . 'css/ogmt-object-display.css');//css for object display 
+
+      /*styles*/
+      wp_enqueue_style('ogmt-object-display.css', plugin_dir_url(__FILE__) . 'css/ogmt-object-display.css');//css for object display
+      wp_enqueue_style('ogmt-navbar.css', plugin_dir_url(__FILE__) . 'css/ogmt-navbar.css');//css for object navbar
     }
   }
 ?>
