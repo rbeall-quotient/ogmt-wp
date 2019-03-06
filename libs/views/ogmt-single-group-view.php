@@ -451,7 +451,7 @@
           if(count($val) != 0 && $options->ignore_facet($key))
           {
             $content .= '<li>';
-            $content .= '<p>' . $options->replace_facet($key) . '</p>';
+            $content .= '<a href="#/" onclick="toggle_facet_view(' . "'$key'" . ')">' . $options->replace_facet($key) . '</a>';
             $content .= $this->get_facet($key, $val);
             $content .= '</li>';
           }
@@ -474,7 +474,7 @@
      */
     function get_facet($key, $facet)
     {
-      $content = '<ul style="list-style:none;">';
+      $content = '<ul id="facet-'. $key.'" style="list-style:none; display: none;">';
 
       foreach($facet as $vals)
       {
