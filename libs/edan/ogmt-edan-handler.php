@@ -162,7 +162,7 @@
         $ogmt_cache['objectGroup'] = $objectGroup;
         $ogmt_cache['searchResults'] = $searchResults ? $searchResults : false;
         $ogmt_cache['featured'] = false;
-        $ogmt_cache['groups'] = false; 
+        $ogmt_cache['groups'] = false;
 
         wp_cache_set('ogmt_cache', $ogmt_cache);
         return $ogmt_cache;
@@ -192,7 +192,7 @@
       $ogmt_cache['featured'] = json_decode($this->edan_call($feature_vars, $service));
       $ogmt_cache['groups'] = json_decode($this->edan_call($group_vars, $service));
       $ogmt_cache['objectGroup'] = false;
-      $ogmt_cache['seachResults'] = false;
+      $ogmt_cache['searchResults'] = false;
 
       wp_cache_set('ogmt_cache', $ogmt_cache);
       return $ogmt_cache;
