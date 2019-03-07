@@ -49,3 +49,6 @@
 
   //JS and CSS to include
   require 'libs/scripts/ogmt-include-scripts.php';
+
+  //shortcodes
+  require 'libs/shortcodes/ogmt-shortcodes.php';
