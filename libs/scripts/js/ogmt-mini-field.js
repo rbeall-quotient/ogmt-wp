@@ -7,7 +7,7 @@ function toggle_non_minis(classname)
   //get expander element for object
   var expander = document.getElementById(classname + '-expander');
   //get object element
-  var li = document.getElementById(classname);
+  var li = document.getElementById(classname + '-container');
 
   var doExpand = (expander.textContent == 'Expand');
 
@@ -28,7 +28,7 @@ function toggle_non_minis(classname)
   }
 
   //get fields elements
-  var elements = document.getElementsByClassName(classname);
+  var elements = li.getElementsByClassName('ogmt-object-fields');
 
   //iterate through elements and display if hidden. Hide if currently displayed.
   for(var i = 0; i < elements.length; i++)

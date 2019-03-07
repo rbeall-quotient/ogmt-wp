@@ -215,16 +215,21 @@
         array_push($navbar, '<a href='.$this->url_handler->list_url($info['total']-1).'>Last</a>');
       }
 
-      $content = '<ul class="ogmt-navbar">';
+      $content = "";
 
-      foreach($navbar as $item)
+      if($info["total"] > 1)
       {
-        $content .= '<li class="ogmt-navbar">';
-        $content .= $item;
-        $content .= '</li>';
-      }
+        $content .= '<ul class="ogmt-navbar">';
 
-      $content .= '</ul>';
+        foreach($navbar as $item)
+        {
+          $content .= '<li class="ogmt-navbar">';
+          $content .= $item;
+          $content .= '</li>';
+        }
+
+        $content .= '</ul>';
+      }
 
       return $content;
     }
@@ -330,10 +335,11 @@
     {
       $content  = '<ul style="list-style:none;">';
       $obs      = $this->searchResults->{'rows'};
+      $index    = 0;
 
       foreach($obs as $row)
       {
-        $content .= $this->get_object($row) . '<br/>';
+        $content .= $this->get_object($row, $index++) . '<br/>';
       }
 
       $content .= '</ul>';
@@ -347,13 +353,12 @@
      * @param  object $row row of decoded json data for a particular object
      * @return string html string for object data
      */
-    function get_object($row)
+    function get_object($row, $index)
     {
       $options = new options_handler(get_option('ogmt_settings'));
-      $labels = $options->get_display_data($row->{'content'}->{'freetext'});
-      $classname = $row->{'id'};
+      $classname = $index;
 
-      $content  = '<li id="' . $classname . '" class="ogmt-object-container">';
+      $content  = '<li id="' . $classname . '-container' . '" class="ogmt-object-container">';
       $content .= '<div class="obj-header">';
 
       if($options->is_minimized())
@@ -361,54 +366,66 @@
         $content .= "<a id=\"$classname-expander\" onclick=\"toggle_non_minis('" . $classname . "')\" href=\"#/\" class=\"expander\">Expand</a>";
       }
 
-      if(property_exists($row->{'content'}->{'descriptiveNonRepeating'}->{'online_media'}, 'media'))
-      {
-        $src = $row->{'content'}->{'descriptiveNonRepeating'}->{'online_media'}->{'media'}[0]->{'thumbnail'};
-        $content .= "<img src=\"$src\" />";
-      }
-
       if(property_exists($row->{'content'}, 'descriptiveNonRepeating'))
       {
+        if(property_exists($row->{'content'}->{'descriptiveNonRepeating'}, 'online_media'))
+        {
+          $src = $row->{'content'}->{'descriptiveNonRepeating'}->{'online_media'}->{'media'}[0]->{'thumbnail'};
+          $content .= "<img src=\"$src\" />";
+        }
+
         $content .= '<h4>' . $row->{'content'}->{'descriptiveNonRepeating'}->{'title'}->{'content'} . '</h4>';
       }
       elseif(property_exists($row->{'content'}, 'title'))
       {
-        $content .= '<h4>' . $row->{'content'}->{'title'} . '</h4>';
+        if(property_exists($row->{'content'}->{'title'}, 'content'))
+        {
+          $content .= '<h4>' . $row->{'content'}->{'title'}->{'content'} . '</h4>';
+        }else
+        {
+          $content .= '<h4>' . $row->{'content'}->{'title'} . '</h4>';
+        }
+
       }
 
       $content .= '<hr/></div>';
 
-      foreach($labels as $field => $vals)
+      if(property_exists($row->{'content'}, 'freetext'))
       {
-        if(!$options->is_minimized())
-        {
-          $fieldclass = $field;
-          $display = 'block';
-        }
-        elseif($options->get_mini($field))
-        {
-          $fieldclass = $row->{'id'} . " ogmt-object-fields";
-          $display = 'none';
-        }
-        else
-        {
-          $fieldclass = 'mini';
-          $display = 'block';
-        }
+        $labels = $options->get_display_data($row->{'content'}->{'freetext'});
 
-        $content .= "<div id=\"$field\" class=\"" . $fieldclass . "\" style=\"display:$display\">";
-
-        foreach($vals as $label => $lns)
+        foreach($labels as $field => $vals)
         {
-          $content .= '<div><strong>'. $options->replace_label($label) . '</strong></div>';
-
-          foreach($lns as $txt)
+          if(!$options->is_minimized())
           {
-            $content .= '<div>' . $txt . '</div>';
+            $fieldclass = $field;
+            $display = 'block';
           }
-        }
+          elseif($options->get_mini($field))
+          {
+            $fieldclass = "ogmt-object-fields";
+            $display = 'none';
+          }
+          else
+          {
+            $fieldclass = 'mini';
+            $display = 'block';
+          }
 
-        $content .= "</div>";
+          $content .= "<div id=\"$field\" class=\"" . $fieldclass . "\" style=\"display:$display\">";
+
+          foreach($vals as $label => $lns)
+          {
+            $content .= '<div><strong>'. $options->replace_label($label) . '</strong></div>';
+
+            foreach($lns as $txt)
+            {
+              $content .= '<div>' . $txt . '</div>';
+            }
+          }
+
+          $content .= "</div>";
+        }
       }
 
       $content .= '</li>';
@@ -451,7 +468,7 @@
           if(count($val) != 0 && $options->ignore_facet($key))
           {
             $content .= '<li>';
-            $content .= '<a href="#/" onclick="toggle_facet_view(' . "'$key'" . ')">' . $options->replace_facet($key) . '</a>';
+            $content .= '<a href="#/" onclick="toggle_facet_view(' . "'$key'" . ')" id = "' . $key . '-link">&#9658;' . $options->replace_facet($key) . '</a>';
             $content .= $this->get_facet($key, $val);
             $content .= '</li>';
           }
@@ -478,10 +495,13 @@
 
       foreach($facet as $vals)
       {
-        $content .= '<span>';
-        $content .= '<div><a href="' . $this->url_handler->add_facet_url($key, $vals[0]) . '">' . $vals[0] . '</a>  ';
-        $content .= $vals[1]; ' </div>';
-        $content .= '</span>';
+        if($vals[0] != "")
+        {
+          $content .= '<span><div>';
+          $content .= '<a href="' . $this->url_handler->add_facet_url($key, $vals[0]) . '">' . $vals[0] . '</a>  ';
+          $content .= $vals[1]; ' </div>';
+          $content .= '</span>';
+        }
       }
 
       $content .= '</ul>';
