@@ -2,7 +2,7 @@
 /**
  * Handles all sanitization of options_data
  */
-  class ogmt_sanitizer
+  class sanitizer_handler
   {
     /**
      * Primary sanitization function. Extracts data and calls specific
