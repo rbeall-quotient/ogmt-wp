@@ -7,15 +7,15 @@
 
   class ogmt_edan_handler
   {
-    function get_ogmt_cache()
+    function get_cache()
     {
       if(get_query_var('objectGroupUrl'))
       {
-        return $this->get_ogmt_data();
+        return $this->get_group();
       }
       else
       {
-        return $this->get_object_groups();
+        return $this->get_groups_list();
       }
     }
 
@@ -120,7 +120,7 @@
      * Function to retrieve objectGroup.
      * @return array array containing object group json or false on failure
      */
-    function get_ogmt_data()
+    function get_group()
     {
       $options = new options_handler(get_option('ogmt_settings'));
 
@@ -161,6 +161,8 @@
         //add objectGroup to ogmt_cache array
         $ogmt_cache['objectGroup'] = $objectGroup;
         $ogmt_cache['searchResults'] = $searchResults ? $searchResults : false;
+        $ogmt_cache['featured'] = false;
+        $ogmt_cache['groups'] = false; 
 
         wp_cache_set('ogmt_cache', $ogmt_cache);
         return $ogmt_cache;
@@ -170,7 +172,7 @@
       return false;
     }
 
-    function get_object_groups()
+    function get_groups_list()
     {
       //if ogmt data is already cached, return cached value
       if(wp_cache_get('ogmt_cache'))
@@ -189,6 +191,8 @@
 
       $ogmt_cache['featured'] = json_decode($this->edan_call($feature_vars, $service));
       $ogmt_cache['groups'] = json_decode($this->edan_call($group_vars, $service));
+      $ogmt_cache['objectGroup'] = false;
+      $ogmt_cache['seachResults'] = false;
 
       wp_cache_set('ogmt_cache', $ogmt_cache);
       return $ogmt_cache;

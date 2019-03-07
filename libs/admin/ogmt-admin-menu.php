@@ -3,10 +3,11 @@
    * File for rendering and processing admin menu data for OGMT
    */
 
-  add_action('admin_menu', 'ogmt_add_menu');
-  add_action( 'admin_init', 'ogmt_register_settings' );
+   //add admin menu
+  add_action( 'admin_menu', 'ogmt_add_menu');
 
-  add_filter( 'plugin_action_links_ogmt-wp/ogmt-wp.php', 'add_action_link' );
+  //register admin menu settings
+  add_action( 'admin_init', 'ogmt_register_settings' );
 
   /**
    * Function to add a submenu under "settings" that corresponds to OGMT plugin
@@ -22,6 +23,20 @@
   function ogmt_register_settings()
   {
     register_setting( 'ogmt_option_group', 'ogmt_settings', 'ogmt_sanitize_values' );
+  }
+
+  /**
+   * Sanitize settings data
+   *
+   * Note: need to build out later
+   *
+   * @param  array $settings array of settings for ogmt
+   * @return array Array of sanitized data
+   */
+  function ogmt_sanitize_values($settings)
+  {
+    $sanitizer = new sanitizer_handler();
+    return $sanitizer->sanitize($settings);
   }
 
   /**
@@ -51,7 +66,7 @@
         <br/>
         <div class=ogmt-field-label>Object Groups Title:</div>
         <div>
-          <input type="text" name="ogmt_settings[path]" value="<?php echo (array_key_exists( 'path' , $settings)) ? $settings[ 'path' ] : ''; ?>" />
+          <input type="text" name="ogmt_settings[title]" value="<?php echo (array_key_exists( 'title' , $settings)) ? $settings[ 'title' ] : ''; ?>" />
           <div class="description">The title used in breadcrumbs and menu.</div>
         </div>
       </fieldset>
@@ -117,33 +132,4 @@
    	</form>
    	<?php
    }
-
-  /**
-   * Add a settings link on the plugin page for OGMT linking to settings page
-   *
-   * @param array $links array of action links with new link appended.
-   * @return array merged list of links
-   */
-  function add_action_link( $links )
-  {
-    $settings_link = array(
-      '<a href="' . admin_url( 'admin.php?page=ogmt-settings') . '">' . __('Settings', 'ogmt-settings') . '</a>',
-    );
-
-    return array_merge( $links, $settings_link);
-  }
-
-  /**
-   * Sanitize settings data
-   *
-   * Note: need to build out later
-   *
-   * @param  array $settings array of settings for ogmt
-   * @return array Array of sanitized data
-   */
-  function ogmt_sanitize_values($settings)
-  {
-    $sanitizer = new ogmt_sanitizer();
-    return $sanitizer->sanitize($settings);
-  }
 ?>

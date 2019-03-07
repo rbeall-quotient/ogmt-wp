@@ -14,20 +14,38 @@
   //utility functions
   require 'libs/utilities/ogmt-utilities.php';
   require 'libs/utilities/ogmt-options-handler.php';
+  require 'libs/utilities/ogmt-url-handler.php';
+  require 'libs/utilities/ogmt-sanitizer-handler.php';
 
-  //PHP for handling routing to ogmt and calling EDAN
-  require 'libs/object_group/ogmt-route-handler.php';
-  require 'libs/object_group/ogmt-edan-handler.php';
+  //Page
+  require 'libs/page/ogmt-content.php';
+  require 'libs/page/ogmt-titles.php';
+  require 'libs/page/ogmt-query-init.php';
+
+  //EDAN
+  require 'libs/edan/ogmt-edan-handler.php';
 
   //PHP for serving html views for ogmt data
-  require 'libs/views/ogmt-url-manager.php';
-  require 'libs/views/ogmt-groups-list-view.php';
-  require 'libs/views/ogmt-single-group-view.php';
   require 'libs/views/ogmt-view-manager.php';
+
+  //single group views
+  require 'libs/views/single-group/ogmt-single-group-view.php';
+  require 'libs/views/single-group/ogmt-facet-view.php';
+  require 'libs/views/single-group/ogmt-group-content-view.php';
+  require 'libs/views/single-group/ogmt-page-menu-view.php';
+  require 'libs/views/single-group/ogmt-search-view.php';
+
+  //group listing views
+  require 'libs/views/group-listing/ogmt-show-groups-view.php';
+  require 'libs/views/group-listing/ogmt-featured-view.php';
+  require 'libs/views/group-listing/ogmt_groups_list_view.php';
+
+  //json views
+  require 'libs/views/json-views/ogmt-json-view.php';
 
   //Admin menu PHP
   require 'libs/admin/ogmt-admin-menu.php';
-  require 'libs/admin/ogmt-sanitizer.php';
+  require 'libs/admin/ogmt-admin-links.php';
 
   //JS and CSS to include
   require 'libs/scripts/ogmt-include-scripts.php';

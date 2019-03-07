@@ -2,7 +2,7 @@
   /**
    * Class for serving up urls based on query vars
    */
-  class ogmt_url_manager
+  class url_handler
   {
     /**
      * Get the base url of the page
