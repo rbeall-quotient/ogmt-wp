@@ -18,49 +18,59 @@
         $options['rows'] = $this->sanitize_rows($options['rows']);
       }
 
-      if(array_key_exists('fnames', $options))
+      if(array_key_exists('fnfield', $options))
       {
-        $options['fnames'] = $this->sanitize_replacement_entries($options['fnames']);
+        $options['fnfield'] = $this->sanitize_replacement_entries($options['fnfield']);
+        $options['fnames'] = $this->initialize_fnames($options['fnfield']);
       }
       else
       {
-        $options['fnames'] = '';
+        $options['fnfield'] = '';
+        $options['fnames'] = NULL;
       }
 
-      if(array_key_exists('hfacets', $options))
+      if(array_key_exists('hffield', $options))
       {
-        $options['hfacets'] = $this->sanitize_single_entry($options['hfacets']);
+        $options['hffield'] = $this->sanitize_single_entry($options['hffield']);
+        $options['hfacets'] = $this->initialize_hfacets($options['hffield']);
       }
       else
       {
-        $options['hfacets'] = '';
+        $options['hffield'] = '';
+        $options['hfacets'] = NULL;
       }
 
-      if(array_key_exists('fields', $options))
+      if(array_key_exists('ffield', $options))
       {
-        $options['fields'] = $this->sanitize_single_entry($options['fields']);
+        $options['ffield'] = $this->sanitize_single_entry($options['ffield']);
+        $options['fields'] = $this->initialize_fields($options['ffield']);
       }
       else
       {
-        $options['fields'] = '';
+        $options['ffield'] = '';
+        $options['fields'] = NULL;
       }
 
-      if(array_key_exists('labels', $options))
+      if(array_key_exists('lfield', $options))
       {
-        $options['labels'] = $this->sanitize_replacement_entries($options['labels']);
+        $options['lfield'] = $this->sanitize_replacement_entries($options['lfield']);
+        $options['labels'] = $this->initialize_label_replacements($options['lfield']);
       }
       else
       {
-        $options['labels'] = '';
+        $options['lfield'] = '';
+        $options['labels'] = NULL;
       }
 
-      if(array_key_exists('mini', $options))
+      if(array_key_exists('mfield', $options))
       {
-        $options['mini'] = $this->sanitize_single_entry($options['mini']);
+        $options['mfield'] = $this->sanitize_single_entry($options['mfield']);
+        $options['mini'] = $this->initialize_minis($options['mfield']);
       }
       else
       {
-        $options['mini'] = '';
+        $options['mfield'] = '';
+        $options['mini'] = NULL;
       }
 
       return $options;
@@ -151,6 +161,143 @@
       }
 
       return $entries;
+    }
+
+    /**
+     * Split facet names data into array where original facet name
+     * is the key and the replacement is the value in a series of
+     * key:value pairs.
+     *
+     * @param string fnfield facet replacements fields string
+     * @return array facet name pairs or NULL if none exist
+     */
+    function initialize_fnames($fnfield)
+    {
+      if(!$fnfield || $fnfield == '')
+      {
+        return NULL;
+      }
+
+      $fnames = array();
+      $pairs = explode("\n", $fnfield);
+
+      foreach($pairs as $p)
+      {
+        $fn = explode('|', $p);
+
+        if(count($fn) > 1)
+        {
+          $fnames[$fn[0]] = $fn[1];
+        }
+      }
+
+      return $fnames;
+    }
+
+    /**
+     * Get each facet to be ignored and place them all in an array.
+     *
+     * @param string hffield hide facets field string
+     * @return array facets to hide or NULL if none exist
+     */
+    function initialize_hfacets($hffield)
+    {
+      if(!$hffield || $hffield ==  '')
+      {
+        return NULL;
+      }
+
+      $hfacets = array();
+
+      $pairs = explode("\n", $hffield);
+
+      foreach($pairs as $p)
+      {
+        array_push($hfacets, trim($p));
+      }
+
+      return $hfacets;
+    }
+
+    /**
+     * Initialize fields array
+     *
+     * @param string ffield fields field string
+     * @return array field order or null if none provided
+     */
+    function initialize_fields($ffield)
+    {
+      if(!$ffield || $ffield == '')
+      {
+        return NULL;
+      }
+
+      $fields = array();
+
+      $pairs = explode("\n", $ffield);
+
+      foreach($pairs as $p)
+      {
+        array_push($fields, trim($p));
+      }
+
+      return $fields;
+    }
+
+    /**
+     * Initialize labels array
+     *
+     * @param string lfield label field string
+     * @return array label name pairs or null if none provided
+     */
+    function initialize_label_replacements($lfield)
+    {
+      if(!$lfield || $lfield == '')
+      {
+        return NULL;
+      }
+
+      $labels = array();
+      $pairs = explode("\n", $this->options['lfield']);
+
+      foreach($pairs as $p)
+      {
+        $lr = explode('|', $p);
+
+        if(count($lr) > 1)
+        {
+          $labels[strtolower($lr[0])] = $lr[1];
+        }
+      }
+
+      return $labels;
+    }
+
+    /**
+     * Initialize mini array
+     *
+     * @param string mfield minis field string
+     * @return array mini fields or null if none provided
+     */
+    function initialize_minis($mfield)
+    {
+      if(!$mfield || $mfield == '')
+      {
+        return NULL;
+      }
+
+      $mini = array();
+      $pairs = explode("\n", $mfield);
+
+      foreach($pairs as $p)
+      {
+        if($p != '')
+        {
+          array_push($mini, trim($p));
+        }
+      }
+
+      return $mini;
     }
   }
 ?>

@@ -28,8 +28,6 @@
     {
       $content = "";
 
-      $this->options->initialize_facet_arrays();
-
       if($this->facets)
       {
         $edan_fqs = get_query_var('edan_fq');
