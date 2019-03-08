@@ -15,6 +15,9 @@
   add_shortcode( 'ogmt-search', 'ogmt_search_shortcode');
   add_shortcode( 'ogmt-full-object-group', 'ogmt_single_group_shortcode');
 
+  //shortcode for json
+  add_shortcode( 'ogmt-json', 'ogmt_json_shortcode');
+
   /**
    * show featured groups as a shortcode
    *
@@ -101,5 +104,16 @@
   {
     $single = new single_group_view();
     return $single->get_content();
+  }
+
+  /**
+   * show json shortcode
+   *
+   * @return string json string
+   */
+  function ogmt_json_shortcode()
+  {
+    $json = new json_view();
+    return $json->get_string();
   }
 ?>
