@@ -15,15 +15,11 @@
     {
       $this->options = $options;
 
-      //Set to null to check for intialization
-      $this->fnames  = NULL;
-      $this->hfacets = NULL;
-      $this->fields  = NULL;
-      $this->labels  = NULL;
-      $this->mini    = NULL;
-
-      //is mini-class display toggled?
-      $this->is_mini = false;
+      $this->fnames  = $options['fnames'];
+      $this->hfacets = $options['hfacets'];
+      $this->fields  = $options['fields'];
+      $this->labels  = $options['labels'];
+      $this->mini    = $options['mini'];
     }
 
     /**
@@ -205,13 +201,9 @@
      */
     function get_display_data($freetext)
     {
-      $this->initialize_fields();
-      $this->initialize_label_replacements();
-      $this->initialize_minis();
-
       $display  = array();
 
-      if(count($this->fields) >= 0 && $this->fields[0] != '')
+      if($this->fields != NULL && count($this->fields) >= 0 && $this->fields[0] != '')
       {
         $show_all = false;
 
@@ -276,122 +268,6 @@
       }
 
       return true;
-    }
-
-
-    /**
-     * Initialize both facet arrays for use in view manager
-     */
-    function initialize_facet_arrays()
-    {
-      $this->initialize_fnames();
-      $this->initialize_hfacets();
-    }
-
-    /**
-     * Split facet names data into array where original facet name
-     * is the key and the replacement is the value in a series of
-     * key:value pairs.
-     */
-    function initialize_fnames()
-    {
-      if(array_key_exists('fnames', $this->options))
-      {
-        $this->fnames = array();
-        $pairs = explode("\n", $this->options['fnames']);
-
-        foreach($pairs as $p)
-        {
-          $fn = explode('|', $p);
-
-          if(count($fn) > 1)
-          {
-            $this->fnames[$fn[0]] = $fn[1];
-          }
-        }
-      }
-    }
-
-    /**
-     * Get each facet to be ignored and place them all in an array.
-     */
-    function initialize_hfacets()
-    {
-      if(array_key_exists('hfacets', $this->options))
-      {
-        $this->hfacets = array();
-        $pairs = explode("\n", $this->options['hfacets']);
-
-        foreach($pairs as $p)
-        {
-          array_push($this->hfacets, trim($p));
-        }
-      }
-    }
-
-    /**
-     * Initialize fields array
-     */
-    function initialize_fields()
-    {
-      if(array_key_exists('fields', $this->options))
-      {
-        $this->fields = array();
-        $pairs = explode("\n", $this->options['fields']);
-
-        foreach($pairs as $p)
-        {
-          array_push($this->fields, trim($p));
-        }
-      }
-    }
-
-    /**
-     * Initialize labels array
-     */
-    function initialize_label_replacements()
-    {
-      if(array_key_exists('labels', $this->options))
-      {
-        $this->labels = array();
-
-        $pairs = explode("\n", $this->options['labels']);
-
-        foreach($pairs as $p)
-        {
-          $lr = explode('|', $p);
-
-          if(count($lr) > 1)
-          {
-            $this->labels[strtolower($lr[0])] = $lr[1];
-          }
-        }
-      }
-    }
-
-    /**
-     * Initialize fields array
-     */
-    function initialize_minis()
-    {
-      if(array_key_exists('mini', $this->options))
-      {
-        if($this->options['mini'] != '')
-        {
-          $this->is_mini = true;
-        }
-
-        $this->mini = array();
-        $pairs = explode("\n", $this->options['mini']);
-
-        foreach($pairs as $p)
-        {
-          if($p != '')
-          {
-            array_push($this->mini, trim($p));
-          }
-        }
-      }
     }
   }
 ?>

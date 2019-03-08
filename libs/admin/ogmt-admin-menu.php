@@ -96,13 +96,13 @@
         <br/>
         <div class=ogmt-field-label>Facet Names:</div>
         <div>
-          <textarea form ="ogmt-admin" name="ogmt_settings[fnames]" id="fname" cols="100"><?php echo (array_key_exists( 'fnames' , $settings)) ? $settings[ 'fnames' ] : ''; ?></textarea>
+          <textarea form ="ogmt-admin" name="ogmt_settings[fnfield]" id="fnfield" cols="100"><?php echo (array_key_exists( 'fnfield' , $settings)) ? $settings[ 'fnfield' ] : ''; ?></textarea>
           <div class="description">Use this box to change the order of facets and replace facet names with different names. Use the facet name and the new name/label for the facet, separated by a pipe character. Enter one facet per line. For example to rename the facet name data_source enter "data_source | Data Source" without the quotes. Notice the pipe "|" character between the name and desired replacement. Replacements are case sensitive. By default, any facets not listed here will be shown at the end of the list. You can explicitly remove facets using the "Facets to Hide" box below.</div>
         </div>
         <br/>
         <div class=ogmt-field-label>Facets To Hide:</div>
         <div>
-          <textarea form ="ogmt-admin" name="ogmt_settings[hfacets]" id="hfacets" cols="100"><?php echo (array_key_exists( 'hfacets' , $settings)) ? $settings[ 'hfacets' ] : ''; ?></textarea>
+          <textarea form ="ogmt-admin" name="ogmt_settings[hffield]" id="hffield" cols="100"><?php echo (array_key_exists( 'hffield' , $settings)) ? $settings[ 'hffield' ] : ''; ?></textarea>
           <div class="description">Use this box to indicate any facets which should be hidden. Enter one facet per line, and enter only the facet name such as "data_source" without the quotes.</div>
         </div>
       </fieldset>
@@ -111,18 +111,18 @@
         <legend class="ogmt-header"><strong>Fields and Labels Configuration: </strong></legend><br/>
         <div class=ogmt-field-label>Field Order:</div>
         <div>
-          <textarea form ="ogmt-admin" name="ogmt_settings[fields]" id="fields" cols="100"><?php echo (array_key_exists( 'fields' , $settings)) ? $settings[ 'fields' ] : ''; ?></textarea>
+          <textarea form ="ogmt-admin" name="ogmt_settings[ffield]" id="ffield" cols="100"><?php echo (array_key_exists( 'ffield' , $settings)) ? $settings[ 'ffield' ] : ''; ?></textarea>
           <div class="description">Metadata to show in search results. Each field should be on its own line. Leave blank to hide all field, or * to show all fields. If you want to specify a set of fields and then show the remaining add an * as the last line. Examples of topics: creditLine dataSource objectType.</div>
         </div>
         <br/>
         <div class=ogmt-field-label>Label Replacements:</div>
         <div>
-          <textarea form ="ogmt-admin" name="ogmt_settings[labels]" id="labels" cols="100"><?php echo (array_key_exists( 'labels' , $settings)) ? $settings[ 'labels' ] : ''; ?></textarea>
+          <textarea form ="ogmt-admin" name="ogmt_settings[lfield]" id="labels" cols="100"><?php echo (array_key_exists( 'lfield' , $settings)) ? $settings[ 'lfield' ] : ''; ?></textarea>
           <div class="description">Replace the labels shown with a different label. When making this list, do not list the "facet" name, but the "label." For example the metadata facet, physicalDescription, has a label "Physical Description" -- For this to appear on the object listing as "Phys. Descr." you enter the following line (without quotes) "Physical Description | Phys. Descr." -- notice the pipe "|" character between the label and desired replacement. Replacements are not case sensitive.</div>
         </div>
         <div class=ogmt-field-label>Mini Fields:</div>
         <div>
-          <textarea form ="ogmt-admin" name="ogmt_settings[mini]" id="mini" cols="100"><?php echo (array_key_exists( 'mini' , $settings)) ? $settings[ 'mini' ] : ''; ?></textarea>
+          <textarea form ="ogmt-admin" name="ogmt_settings[mfield]" id="mini" cols="100"><?php echo (array_key_exists( 'mfield' , $settings)) ? $settings[ 'mfield' ] : ''; ?></textarea>
           <div class="description">Fields listed here will be marked with the mini class. By default this will cause non-mini fields to be hidden and add a "expand" button to each record to show non-mini fields. Each field should be on its own line. Leave blank for all.</div>
         </div>
         <br/>
