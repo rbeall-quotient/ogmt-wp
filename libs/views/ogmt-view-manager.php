@@ -17,7 +17,7 @@
       if(get_query_var('jsonDump'))
       {
         $view = new json_view();
-        return $view->get_json();
+        return $view->display_json();
       }
       else
       {
