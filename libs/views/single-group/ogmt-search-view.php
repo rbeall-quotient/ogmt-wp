@@ -273,7 +273,7 @@
       foreach($obs as $row)
       {
         console_log((property_exists($row, 'content')) ? "content" : "no content");
-        $content .= $this->get_object($row->{'content'}, $index++) . '<br/>';
+        $content .= $this->get_object($row->{'content'}, $row->{'url'}, $index++) . '<br/>';
       }
 
       $content .= '</ul>';
@@ -287,9 +287,10 @@
      * @param  object $row row of decoded json data for a particular object
      * @return string html string for object data
      */
-    function get_object($object, $index)
+    function get_object($object, $url, $index)
     {
       $classname = $index;
+      console_log("URL: $url");
 
       $content  = '<li id="' . $classname . '-container' . '" class="ogmt-object-container">';
       $content .= '<div class="obj-header">';
@@ -307,16 +308,16 @@
           $content .= "<img src=\"$src\" />";
         }
 
-        $content .= '<h4>' . $object->{'descriptiveNonRepeating'}->{'title'}->{'content'} . '</h4>';
+        $content .= '<h4><a href="' . $this->url_handler->get_object_url($url) . '">' . $object->{'descriptiveNonRepeating'}->{'title'}->{'content'} . '</a></h4>';
       }
       elseif(property_exists($object, 'title'))
       {
         if(property_exists($object->{'title'}, 'content'))
         {
-          $content .= '<h4>' . $object->{'title'}->{'content'} . '</h4>';
+          $content .= '<h4><a href="' . $this->url_handler->get_object_url($url) . '">' . $object->{'title'}->{'content'} . '</a></h4>';
         }else
         {
-          $content .= '<h4>' . $object->{'title'} . '</h4>';
+          $content .= '<h4><a href="' . $this->url_handler->get_object_url($url) . '">' . $object->{'title'} . '</a></h4>';
         }
 
       }

@@ -240,7 +240,7 @@
 
             foreach($val as $set)
             {
-              if(!array_key_exists($set->{'label'}, $display))
+              if(!array_key_exists($set->{'label'}, $display[$key]))
               {
                 $display[$key][$set->label] = array();
               }

@@ -40,6 +40,8 @@
   require 'libs/views/group-listing/ogmt-featured-view.php';
   require 'libs/views/group-listing/ogmt_groups_list_view.php';
 
+  require 'libs/views/object/ogmt-object-view.php';
+
   //json views
   require 'libs/views/json-views/ogmt-json-view.php';
 

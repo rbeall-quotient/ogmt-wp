@@ -18,6 +18,9 @@
   //shortcode for json
   add_shortcode( 'ogmt-json', 'ogmt_json_shortcode');
 
+  //shortcode for object display
+  add_shortcode('ogmt-object', 'ogmt_object_shortcode');
+
   /**
    * show featured groups as a shortcode
    *
@@ -115,5 +118,16 @@
   {
     $json = new json_view();
     return $json->get_string();
+  }
+
+  /**
+   * Show EDAN object content
+   *
+   * @return string EDAN Object HTML
+   */
+  function ogmt_object_shortcode()
+  {
+    $object = new object_view();
+    return $object->get_content();
   }
 ?>

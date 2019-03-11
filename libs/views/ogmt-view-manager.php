@@ -26,6 +26,10 @@
         {
           $view = new single_group_view();
         }
+        elseif(get_query_var('edanUrl'))
+        {
+          $view = new object_view();
+        }
         else
         {
           //otherwise, serve list of featured and general object groups

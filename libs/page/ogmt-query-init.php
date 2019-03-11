@@ -24,6 +24,9 @@
     //EDAN Query Fqs
     add_rewrite_tag('%edan_fq%', '(.*)');
 
+    //Object EDAN Url 
+    add_rewrite_tag('%edanUrl%', '(.*)');
+
     //Display Result JSON Instead
     add_rewrite_tag('%jsonDump%', '(.*)');
   }

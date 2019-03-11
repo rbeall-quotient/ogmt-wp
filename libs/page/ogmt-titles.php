@@ -40,6 +40,32 @@
           }
         }
       }
+      elseif(get_query_var('edanUrl'))
+      {
+        $object = $edan->get_cache()['object'];
+
+        if($object)
+        {
+          if(property_exists($object, 'content') && property_exists($object->{'content'}, 'descriptiveNonRepeating'))
+          {
+            if(property_exists($object->{'content'}->{'descriptiveNonRepeating'}, 'title'))
+            {
+              $title = $object->{'content'}->{'descriptiveNonRepeating'}->{'title'}->{'content'};
+            }
+          }
+          elseif(property_exists($object, 'title'))
+          {
+            if(property_exists($object->{'title'}, 'content'))
+            {
+              $title = $this->object->{'title'}->{'content'};
+            }
+            else
+            {
+              $title = $this->object->{'title'};
+            }
+          }
+        }
+      }
       else
       {
         $title = $options->get_title();
@@ -82,6 +108,32 @@
           else
           {
             $title .= ' | ' . $sitename;
+          }
+        }
+      }
+      elseif(get_query_var('edanUrl'))
+      {
+        $object = $edan->get_cache()['object'];
+
+        if($object)
+        {
+          if(property_exists($object, 'content') && property_exists($object->{'content'}, 'descriptiveNonRepeating'))
+          {
+            if(property_exists($object->{'content'}->{'descriptiveNonRepeating'}, 'title'))
+            {
+              $title = $object->{'content'}->{'descriptiveNonRepeating'}->{'title'}->{'content'};
+            }
+          }
+          elseif(property_exists($object, 'title'))
+          {
+            if(property_exists($object->{'title'}, 'content'))
+            {
+              $title = $this->object->{'title'}->{'content'};
+            }
+            else
+            {
+              $title = $this->object->{'title'};
+            }
           }
         }
       }

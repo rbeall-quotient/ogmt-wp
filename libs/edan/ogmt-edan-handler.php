@@ -13,6 +13,10 @@
       {
         return $this->get_group();
       }
+      elseif(get_query_var('edanUrl'))
+      {
+        return $this->get_object();
+      }
       else
       {
         return $this->get_groups_list();
@@ -86,6 +90,7 @@
 
         $uri_string .= '&fqs=' . json_encode($fqs);
       }
+      console_log($uri_string);
 
       // Execute
       $edan = new EDANInterface($config['edan_server'], $config['edan_app_id'], $config['edan_auth_key'], $config['edan_tier_type']);
@@ -132,7 +137,14 @@
       //if ogmt data is already cached, return cached value
       if(wp_cache_get('ogmt_cache'))
       {
-        return wp_cache_get('ogmt_cache');
+        $cache = wp_cache_get('ogmt_cache');
+        $group = $cache['objectGroup'];
+        $results = $cache['searchResults'];
+
+        if($group && $results)
+        {
+          return wp_cache_get('ogmt_cache');
+        }
       }
 
       $group_vars = $this->get_vars();
@@ -163,6 +175,7 @@
         $ogmt_cache['searchResults'] = $searchResults ? $searchResults : false;
         $ogmt_cache['featured'] = false;
         $ogmt_cache['groups'] = false;
+        $ogmt_cache['object'] = false;
 
         wp_cache_set('ogmt_cache', $ogmt_cache);
         return $ogmt_cache;
@@ -177,7 +190,14 @@
       //if ogmt data is already cached, return cached value
       if(wp_cache_get('ogmt_cache'))
       {
-        return wp_cache_get('ogmt_cache');
+        $cache = wp_cache_get('ogmt_cache');
+        $featured = $cache['featured'];
+        $groups = $cache['groups'];
+
+        if($featured && $groups)
+        {
+          return wp_cache_get('ogmt_cache');
+        }
       }
 
       $ogmt_cache = array();
@@ -193,6 +213,7 @@
       $ogmt_cache['groups'] = json_decode($this->edan_call($group_vars, $service));
       $ogmt_cache['objectGroup'] = false;
       $ogmt_cache['searchResults'] = false;
+      $ogmt_cache['object'] = false;
 
       wp_cache_set('ogmt_cache', $ogmt_cache);
       return $ogmt_cache;
@@ -215,6 +236,43 @@
       }
 
       return $vars;
+    }
+
+    /**
+     * Get object JSON Data
+     *
+     * @return array object json
+     */
+    function get_object()
+    {
+      //if ogmt data is already cached, return cached value
+      if(wp_cache_get('ogmt_cache'))
+      {
+        $cache = wp_cache_get('ogmt_cache');
+        $object = $cache['object'];
+
+        if($object)
+        {
+          return wp_cache_get('ogmt_cache');
+        }
+      }
+
+      $ogmt_cache = array();
+
+      $service = 'content/v1.1/content/getContent.htm';
+
+      $obj_vars = array(
+        'url' => get_query_var('edanUrl'),
+      );
+
+      $ogmt_cache['object'] = json_decode($this->edan_call($obj_vars, $service));
+      $ogmt_cache['featured'] = false;
+      $ogmt_cache['groups'] = false;
+      $ogmt_cache['objectGroup'] = false;
+      $ogmt_cache['searchResults'] = false;
+
+      wp_cache_set('ogmt_cache', $ogmt_cache);
+      return $ogmt_cache;
     }
 
     function validate_list_index($index, $objectGroup)
