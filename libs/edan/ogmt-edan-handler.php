@@ -200,10 +200,21 @@
         }
       }
 
+      if(get_query_var('ogmtStart'))
+      {
+        $start = get_query_var('ogmtStart') * 20;
+      }
+      else
+      {
+        $start = 0;
+      }
+
       $ogmt_cache = array();
       $service = '/ogmt/v1.1/ogmt/getObjectGroups.htm';
 
-      $group_vars = array();
+      $group_vars = array(
+        'start' => $start,
+      );
 
       $feature_vars = array(
         'featured' => 1,

@@ -19,7 +19,7 @@
 
       $content  = '<div>';
       $content .= '<div>' . $featured->get_featured() . '</div>';
-      $content .= '<div>' . $groups->get_groups() . '</div>';
+      $content .= '<div>' . $groups->get_content() . '</div>';
       $content .= '</div>';
 
       return $content;

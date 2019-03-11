@@ -121,6 +121,27 @@
     }
 
     /**
+     * Append the listStart var to the query
+     *
+     * Note: Used for getting links to specific pages of objects in bottom view
+     *
+     * @param  string $listStart page number for list of objects
+     * @return string Url for list items
+     */
+    function groups_list_url($ogmtStart)
+    {
+      $url  = $this->get_url();
+
+      $vars = array(
+        'ogmtStart' => $ogmtStart
+      );
+
+      $url .= $this->validate_single_vars($vars);
+      
+      return $url;
+    }
+
+    /**
      * Url for a specific facet filter
      *
      * @param string $key    Name of facet category
@@ -197,7 +218,6 @@
       );
 
       $url .= $this->validate_single_vars($vars);
-      console_log("AUGMENTED URL: $url");
 
       return $url;
     }
