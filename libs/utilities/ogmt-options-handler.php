@@ -15,6 +15,7 @@
     {
       $this->options = $options;
 
+      $this->config  = $options['config'];
       $this->fnames  = $options['fnames'];
       $this->hfacets = $options['hfacets'];
       $this->fields  = $options['fields'];
@@ -29,12 +30,24 @@
      */
     function get_creds()
     {
-      if(!array_key_exists('creds', $this->options))
+      return $this->options['creds'];
+    }
+
+    /**
+     * Get parsed config array
+     *
+     * @return array array of edan config values
+     */
+    function get_config()
+    {
+      $conf = parse_ini_string($this->config, TRUE);
+
+      if($conf)
       {
-        return '';
+        return $conf;
       }
 
-      return $this->options['creds'];
+      return array();
     }
 
     /**
@@ -44,11 +57,6 @@
      */
     function get_path()
     {
-      if(!array_key_exists('path', $this->options))
-      {
-        return '';
-      }
-
       return $this->options['path'];
     }
 
@@ -59,11 +67,6 @@
      */
     function get_title()
     {
-      if(!array_key_exists('title', $this->options))
-      {
-        return '';
-      }
-
       return $this->options['title'];
     }
 
@@ -74,11 +77,6 @@
      */
     function get_remove_message()
     {
-      if(!array_key_exists('remove', $this->options))
-      {
-        return '';
-      }
-
       return $this->options['remove'];
     }
 
@@ -89,11 +87,6 @@
      */
     function get_rows()
     {
-      if(!array_key_exists('rows', $this->options))
-      {
-        return 10;
-      }
-
       return $this->options['rows'];
     }
 
@@ -123,11 +116,6 @@
      */
     function get_results_message($count, $name, $page='')
     {
-      if(!array_key_exists('rmessage', $this->options))
-      {
-        return '';
-      }
-
       $message = $this->options['rmessage'];
       $message = str_replace('@count', $count, $message);
       $message = str_replace('@name', $name, $message);

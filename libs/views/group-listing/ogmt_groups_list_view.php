@@ -79,6 +79,12 @@
     function get_top_nav()
     {
       $info = $this->obj_page_info();
+
+      if(!$info['total'])
+      {
+        return '';
+      }
+
       $navbar = array();
 
       $firstprev = $info['current'] != 1; //display "first" and "preview" links
@@ -121,6 +127,11 @@
 
       $info = $this->obj_page_info();
       $pagelist = $this->get_page_list($info);
+
+      if(count($pagelist) < 1)
+      {
+        return '';
+      }
 
       $min = $pagelist[0];
       $max = $pagelist[count($pagelist) - 1];
@@ -255,7 +266,7 @@
         $info['current'] = 1;
       }
 
-      if($index < $this->groups->{'total'})
+      if($this->groups && property_exists($this->groups, 'total') && $index < $this->groups->{'total'})
       {
         $num = $this->groups->{'total'}/20;
 

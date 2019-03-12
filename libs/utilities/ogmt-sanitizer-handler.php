@@ -13,9 +13,43 @@
      */
     function sanitize($options)
     {
+      if(!array_key_exists('creds', $options))
+      {
+        $options['creds'] = '';
+      }
+
+      if(!array_key_exists('config', $options))
+      {
+        $options['config'] = '';
+      }
+
+      if(!array_key_exists('path', $options))
+      {
+        $options['path'] = '';
+      }
+
+      if(!array_key_exists('title', $options))
+      {
+        $options['title'] = '';
+      }
+
+      if(!array_key_exists('remove', $options))
+      {
+        $options['remove'] = '';
+      }
+
+      if(!array_key_exists('rmessage', $options))
+      {
+        $options['rmessage'] = '';
+      }
+
       if(array_key_exists('rows', $options))
       {
         $options['rows'] = $this->sanitize_rows($options['rows']);
+      }
+      else
+      {
+        $options['rows'] = 10;
       }
 
       if(array_key_exists('fnfield', $options))

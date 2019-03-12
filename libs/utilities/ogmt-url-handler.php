@@ -38,7 +38,6 @@
 
         if($val)
         {
-          console_log("KEY: $key | VAL: $val");
           $query .= "$key=$val";
         }
 
@@ -137,7 +136,7 @@
       );
 
       $url .= $this->validate_single_vars($vars);
-      
+
       return $url;
     }
 

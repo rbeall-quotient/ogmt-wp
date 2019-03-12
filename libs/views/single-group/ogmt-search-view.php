@@ -14,12 +14,6 @@
 
       $this->group = $results['objectGroup'];
       $this->search = $results['searchResults'];
-
-      if($this->search)
-      {
-        console_log("TRue");
-      }
-      else{console_log("FAlse");}
     }
 
     /**
@@ -59,6 +53,12 @@
     function get_top_nav()
     {
       $info = $this->obj_page_info();
+
+      if(!$info['total'])
+      {
+        return '';
+      }
+
       $navbar = array();
 
       $firstprev = $info['current'] != 1; //display "first" and "preview" links
@@ -106,6 +106,11 @@
 
       $info = $this->obj_page_info();
       $pagelist = $this->get_page_list($info);
+
+      if(count($pagelist) < 1)
+      {
+        return '';
+      }
 
       $min = $pagelist[0];
       $max = $pagelist[count($pagelist) - 1];
@@ -272,7 +277,6 @@
 
       foreach($obs as $row)
       {
-        console_log((property_exists($row, 'content')) ? "content" : "no content");
         $content .= $this->get_object($row->{'content'}, $row->{'url'}, $index++) . '<br/>';
       }
 
@@ -290,7 +294,6 @@
     function get_object($object, $url, $index)
     {
       $classname = $index;
-      console_log("URL: $url");
 
       $content  = '<li id="' . $classname . '-container' . '" class="ogmt-object-container">';
       $content .= '<div class="obj-header">';

@@ -58,6 +58,12 @@
           <div class="description">Enter creds for the specific repository</div>
         </div>
         <br/>
+        <div class=ogmt-field-label>Config</div>
+        <div>
+          <textarea form ="ogmt-admin" name="ogmt_settings[config]" id="config" cols="100"><?php echo (array_key_exists( 'config' , $settings)) ? $settings[ 'config' ] : ''; ?></textarea>
+          <div class="description">Use this box to copy and paste the edan .config.ini information</div>
+        </div>
+        <br/>
         <div class=ogmt-field-label>Object Groups Path:</div>
         <div>
           <input type="text" name="ogmt_settings[path]" value="<?php echo (array_key_exists( 'path' , $settings)) ? $settings[ 'path' ] : ''; ?>" />

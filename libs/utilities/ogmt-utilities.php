@@ -15,6 +15,15 @@
   }
 
   /**
+   * function for logging php strings to browser console for error messages
+   * @param  string $content error to be logged
+   */
+  function console_error($err)
+  {
+    echo '<script>console.error("'.$err.'");</script>';
+  }
+
+  /**
   * Return url stripped of query vars and '/' and '?' characters.
   * This will correspond to the EDAN object groups call.
   *

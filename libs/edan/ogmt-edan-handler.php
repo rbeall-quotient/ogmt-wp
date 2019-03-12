@@ -30,10 +30,12 @@
      */
     function edan_call($edan_vars, $service, $issearch=false)
     {
-      $config = parse_ini_file('.config.ini', TRUE);
+      //$config = parse_ini_file('.config.ini', TRUE);
 
       //get creds from options_handler
       $options = new options_handler(get_option('ogmt_settings'));
+
+      $config = $options->get_config();
 
       //$edan_vars['creds'] = get_option( 'ogmt_settings' )['creds'];
       $edan_vars['creds'] = $options->get_creds();
@@ -43,13 +45,13 @@
       {
         if (empty($edan_vars['creds']))
         {
-          console_log('Empty creds');
+          console_error('Empty creds');
           return false;
         }
 
         if(!isset($config[$edan_vars['creds']]))
         {
-          console_log('Invalid creds specified. Check your config.');
+          console_error('Invalid creds specified. Check your config.');
           return false;
         }
         else
@@ -90,7 +92,6 @@
 
         $uri_string .= '&fqs=' . json_encode($fqs);
       }
-      console_log($uri_string);
 
       // Execute
       $edan = new EDANInterface($config['edan_server'], $config['edan_app_id'], $config['edan_auth_key'], $config['edan_tier_type']);
@@ -109,14 +110,14 @@
         else
         {
           //if EDAN call fails, return false
-          console_log('Request failed: HTTP code ' . $info['http_code'] . ' returned');
+          console_error('Request failed: HTTP code ' . $info['http_code'] . ' returned');
           return false;
         }
       }
       else
       {
         //if no response, return false
-        console_log('Request failed: ' . $info);
+        console_error('Request failed: ' . $info);
         return false;
       }
     }
