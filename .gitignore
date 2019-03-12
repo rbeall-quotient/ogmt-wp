@@ -11,6 +11,7 @@ wp-content/mu-plugins/
 wp-content/wp-cache-config.php
 wp-content/plugins/hello.php
 /libs/object_group/.config.ini
+/libs/edan/.config.ini
 /docs/*
 /json/*
 
