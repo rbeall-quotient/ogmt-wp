@@ -6,8 +6,8 @@
   {
     function __construct()
     {
-      $edan = new ogmt_edan_handler();
-      $this->cache = $edan->get_cache();
+      $cache_handler = new cache_handler();
+      $this->cache = $cache_handler->get();
     }
 
     /**

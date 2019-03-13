@@ -28,8 +28,10 @@
    */
   function ogmt_featured_shortcode()
   {
-    $featured = new featured_view();
-    return $featured->get_featured();
+    $call = new groups_list_call();
+    $featured = new featured_view($call->get());
+
+    return $featured->get_content();
   }
 
   /**
@@ -39,8 +41,10 @@
    */
   function ogmt_groups_list_shortcode()
   {
-    $groups = new groups_list_view();
-    return $groups->get_groups();
+    $call = new groups_list_call();
+    $groups = new groups_list_view($call->get());
+
+    return $groups->get_content();
   }
 
   /**
@@ -50,7 +54,9 @@
    */
   function ogmt_show_groups_shortcode()
   {
-    $showall = new show_groups_view();
+    $call = new groups_list_call();
+    $showall = new show_groups_view($call->get());
+
     return $showall->get_content();
   }
 
@@ -61,8 +67,10 @@
    */
   function ogmt_facet_shortcode()
   {
-    $facet = new facet_view();
-    return $facet->show_facets();
+    $call = new object_group_call();
+    $facet = new facet_view($call->get());
+
+    return $facet->get_content();
   }
 
   /**
@@ -72,7 +80,9 @@
    */
   function ogmt_group_content_shortcode()
   {
-    $content = new group_content_view();
+    $call = new object_group_call();
+    $content = new group_content_view($call->get());
+
     return $content->get_content();
   }
 
@@ -83,8 +93,10 @@
    */
   function ogmt_page_menu_shortcode()
   {
-    $menu = new page_menu_view();
-    return $menu->get_menu();
+    $call = new object_group_call();
+    $menu = new page_menu_view($call->get());
+
+    return $menu->get_content();
   }
 
   /**
@@ -94,8 +106,10 @@
    */
   function ogmt_search_shortcode()
   {
-    $search = new search_view();
-    return $search->get_search();
+    $call = new object_group_call();
+    $search = new search_view($call->get());
+
+    return $search->get_content();
   }
 
   /**
@@ -105,7 +119,9 @@
    */
   function ogmt_single_group_shortcode()
   {
-    $single = new single_group_view();
+    $call = new object_group_call();
+    $single = new single_group_view($call->get());
+
     return $single->get_content();
   }
 
@@ -127,7 +143,9 @@
    */
   function ogmt_object_shortcode()
   {
-    $object = new object_view();
+    $call = new object_call();
+    $object = new object_view($call->get());
+
     return $object->get_content();
   }
 ?>

@@ -4,16 +4,13 @@
    */
   class search_view
   {
-    function __construct()
+    function __construct($cache)
     {
       $this->url_handler = new url_handler();
       $this->options = new options_handler(get_option('ogmt_settings'));
 
-      $edan = new ogmt_edan_handler();
-      $results = $edan->get_cache();
-
-      $this->group = $results['objectGroup'];
-      $this->search = $results['searchResults'];
+      $this->group = $cache['objectGroup'];
+      $this->search = $cache['searchResults'];
     }
 
     /**
@@ -21,7 +18,7 @@
      *
      * @return string HTML string for the object list information
      */
-    function get_search()
+    function get_content()
     {
       $content = '';
 

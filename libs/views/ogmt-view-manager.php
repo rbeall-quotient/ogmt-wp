@@ -21,19 +21,20 @@
       }
       else
       {
+        $call = new cache_handler();
         //if objectGroupUrl set, serve that particular object group
         if(get_query_var('objectGroupUrl'))
         {
-          $view = new single_group_view();
+          $view = new single_group_view($call->get());
         }
         elseif(get_query_var('edanUrl'))
         {
-          $view = new object_view();
+          $view = new object_view($call->get());
         }
         else
         {
           //otherwise, serve list of featured and general object groups
-          $view = new show_groups_view();
+          $view = new show_groups_view($call->get());
         }
 
         //serve up gathered content

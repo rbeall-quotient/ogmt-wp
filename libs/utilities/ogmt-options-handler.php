@@ -11,16 +11,16 @@
      * @param array  $options array of admin settings
      * @param boolean $facets selector for initializing facets arrays
      */
-    function __construct($options)
+    function __construct()
     {
-      $this->options = $options;
+      $this->options = get_option('ogmt_settings');
 
-      $this->config  = $options['config'];
-      $this->fnames  = $options['fnames'];
-      $this->hfacets = $options['hfacets'];
-      $this->fields  = $options['fields'];
-      $this->labels  = $options['labels'];
-      $this->mini    = $options['mini'];
+      $this->config  = $this->options['config'];
+      $this->fnames  = $this->options['fnames'];
+      $this->hfacets = $this->options['hfacets'];
+      $this->fields  = $this->options['fields'];
+      $this->labels  = $this->options['labels'];
+      $this->mini    = $this->options['mini'];
     }
 
     /**

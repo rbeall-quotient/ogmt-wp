@@ -4,12 +4,11 @@
    */
   class groups_list_view
   {
-    function __construct()
+    function __construct($cache)
     {
-      $edan = new ogmt_edan_handler();
+      $this->groups = $cache['groups'];
       $this->url_handler = new url_handler();
-      $this->options = new options_handler(get_option('ogmt_settings'));
-      $this->groups = $edan->get_cache()['groups'];
+      $this->options = new options_handler();
     }
 
     function get_content()

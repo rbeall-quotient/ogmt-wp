@@ -4,14 +4,13 @@
    */
   class facet_view
   {
-    function __construct()
+    function __construct($cache)
     {
       $this->url_handler = new url_handler();
       $this->options = new options_handler(get_option('ogmt_settings'));
       $this->facets = NULL;
 
-      $edan = new ogmt_edan_handler();
-      $results = $edan->get_cache()['searchResults'];
+      $results = $cache['searchResults'];
 
       if($results && property_exists($results, 'facets'))
       {
@@ -24,7 +23,7 @@
      *
      * @return string html string of facet menu
      */
-    function show_facets()
+    function get_content()
     {
       $content = "";
 

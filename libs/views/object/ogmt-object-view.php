@@ -4,13 +4,9 @@
    */
   class object_view
   {
-    function __construct()
+    function __construct($cache)
     {
-      $this->options = new options_handler(get_option('ogmt_settings'));
-
-      $edan = new ogmt_edan_handler();
-      $cache = $edan->get_cache();
-
+      $this->options = new options_handler();
       $this->object = $cache['object'];
     }
 

@@ -4,11 +4,10 @@
    */
   class featured_view
   {
-    function __construct()
+    function __construct($cache)
     {
-      $edan = new ogmt_edan_handler();
+      $this->featured = $cache['featured'];
       $this->url_handler = new url_handler();
-      $this->featured = $edan->get_cache()['featured'];
     }
 
     /**
@@ -16,7 +15,7 @@
      *
      * @return string html string of featured groups content
      */
-    function get_featured()
+    function get_content()
     {
       $content  = '';
 

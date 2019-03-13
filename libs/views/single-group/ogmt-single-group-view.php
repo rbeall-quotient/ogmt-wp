@@ -4,6 +4,10 @@
    */
   class single_group_view
   {
+    function __construct($cache)
+    {
+      $this->cache = $cache;
+    }
     /**
      * Place standard view and menu view into a grid.
      *
@@ -11,14 +15,14 @@
      */
     function get_content()
     {
-      $group = new group_content_view();
-      $facet = new facet_view();
-      $menu  = new page_menu_view();
-      $search = new search_view();
+      $group = new group_content_view($this->cache);
+      $facet = new facet_view($this->cache);
+      $menu  = new page_menu_view($this->cache);
+      $search = new search_view($this->cache);
 
       $content  = '<div style="width: 100%; overflow: hidden;">';
       $content .= '<div style="width: 65%; float: left;">' . $group->get_content() . '</div>';
-      $content .= '<div style="float: right;"><div>' . $menu->get_menu() . '</div><hr/><div>'.$facet->show_facets().'</div></div>';
+      $content .= '<div style="float: right;"><div>' . $menu->get_content() . '</div><hr/><div>'.$facet->get_content().'</div></div>';
       $content .= '</div>';
 
       $content .= $search->get_search();

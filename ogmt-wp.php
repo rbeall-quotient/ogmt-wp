@@ -24,6 +24,10 @@
 
   //EDAN
   require 'libs/edan/ogmt-edan-handler.php';
+  require 'libs/edan/edan_calls/ogmt-object-group-call.php';
+  require 'libs/edan/edan_calls/ogmt-groups-list-call.php';
+  require 'libs/edan/edan_calls/ogmt-object-call.php';
+  require 'libs/edan/edan_calls/ogmt-cache-handler.php';
 
   //PHP for serving html views for ogmt data
   require 'libs/views/ogmt-view-manager.php';

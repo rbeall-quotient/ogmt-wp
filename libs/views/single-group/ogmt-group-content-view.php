@@ -4,10 +4,9 @@
    */
   class group_content_view
   {
-    function __construct()
+    function __construct($cache)
     {
-      $edan = new ogmt_edan_handler();
-      $this->group = $edan->get_cache()['objectGroup'];
+      $this->group = $cache['objectGroup'];
     }
 
     /**

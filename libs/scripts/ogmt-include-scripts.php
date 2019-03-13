@@ -19,9 +19,6 @@
    */
   function include_object_group_scripts()
   {
-    //option handler to get ogmt page path
-    $options = new options_handler(get_option('ogmt_settings'));
-
     /*scripts*/
     wp_enqueue_script('ogmt-mini-field.js', plugin_dir_url(__FILE__) . 'js/ogmt-mini-field.js');//mini field javascript
     wp_enqueue_script('ogmt-facets-list.js', plugin_dir_url(__FILE__) . 'js/ogmt-facets-list.js');//facet list javascript

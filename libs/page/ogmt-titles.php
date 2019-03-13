@@ -16,8 +16,8 @@
    */
   function ogmt_set_title( $title )
   {
-    $options = new options_handler(get_option('ogmt_settings'));
-    $edan = new ogmt_edan_handler();
+    $options = new options_handler();
+    $cache = new cache_handler();
 
     /**
      * if in the loop and the title is cached (or if object group is retrieved successfully)
@@ -27,7 +27,7 @@
     {
       if(get_query_var('objectGroupUrl'))
       {
-        $objectGroup = $edan->get_cache()['objectGroup'];
+        $objectGroup = $cache->get()['objectGroup'];
 
         if($objectGroup)
         {
@@ -42,7 +42,7 @@
       }
       elseif(get_query_var('edanUrl'))
       {
-        $object = $edan->get_cache()['object'];
+        $object = $cache->get()['object'];
 
         if($object)
         {
@@ -84,14 +84,14 @@
    */
   function ogmt_set_doc_title( $title )
   {
-    $options = new options_handler(get_option('ogmt_settings'));
-    $edan = new ogmt_edan_handler();
+    $options = new options_handler();
+    $cache = new cache_handler();
 
     if(ogmt_name_from_url() == $options->get_path())
     {
       if(get_query_var('objectGroupUrl'))
       {
-        $objectGroup = $edan->get_cache()['objectGroup'];
+        $objectGroup = $cache->get()['objectGroup'];
 
         if($objectGroup)
         {
@@ -113,7 +113,7 @@
       }
       elseif(get_query_var('edanUrl'))
       {
-        $object = $edan->get_cache()['object'];
+        $object = $cache->get()['object'];
 
         if($object)
         {
