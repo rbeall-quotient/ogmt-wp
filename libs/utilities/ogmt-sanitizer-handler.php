@@ -33,6 +33,16 @@
         $options['title'] = '';
       }
 
+      if(!array_key_exists('eswpath', $options))
+      {
+        $options['eswpath'] = '';
+      }
+
+      if(!array_key_exists('eswtitle', $options))
+      {
+        $options['eswtitle'] = '';
+      }
+
       if(!array_key_exists('remove', $options))
       {
         $options['remove'] = '';

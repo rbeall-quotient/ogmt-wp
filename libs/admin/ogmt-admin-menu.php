@@ -134,6 +134,21 @@
         <br/>
       </fieldset>
       <br/><hr>
+      <fieldset>
+        <legend class="ogmt-header"><strong>ESW Configuration:</strong></legend><br/>
+        <div class=ogmt-field-label>EDAN Search Path:</div>
+        <div>
+          <input type="text" name="ogmt_settings[eswpath]" value="<?php echo (array_key_exists( 'eswpath' , $settings)) ? $settings[ 'eswpath' ] : ''; ?>" />
+          <div class="description">The base path for object group pages. If the Pathauto module is installed, those settings may override the base path.</div>
+        </div>
+        <br/>
+        <div class=ogmt-field-label>EDAN Search Title:</div>
+        <div>
+          <input type="text" name="ogmt_settings[eswtitle]" value="<?php echo (array_key_exists( 'eswtitle' , $settings)) ? $settings[ 'eswtitle' ] : ''; ?>" />
+          <div class="description">The title used in breadcrumbs and menu.</div>
+        </div>
+      </fieldset>
+      <br/><hr>
       <div><?php echo submit_button(); ?></div>
    	</form>
    	<?php

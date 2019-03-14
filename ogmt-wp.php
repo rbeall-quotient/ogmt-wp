@@ -37,7 +37,7 @@
   require 'libs/views/single-group/ogmt-facet-view.php';
   require 'libs/views/single-group/ogmt-group-content-view.php';
   require 'libs/views/single-group/ogmt-page-menu-view.php';
-  require 'libs/views/single-group/ogmt-search-view.php';
+  require 'libs/views/single-group/ogmt-object-list-view.php';
 
   //group listing views
   require 'libs/views/group-listing/ogmt-show-groups-view.php';

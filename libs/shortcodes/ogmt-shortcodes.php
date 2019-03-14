@@ -68,7 +68,7 @@
   function ogmt_facet_shortcode()
   {
     $call = new object_group_call();
-    $facet = new facet_view($call->get());
+    $facet = new facet_view($call->get()['searchResults']);
 
     return $facet->get_content();
   }
@@ -107,7 +107,7 @@
   function ogmt_search_shortcode()
   {
     $call = new object_group_call();
-    $search = new search_view($call->get());
+    $search = new object_list_view($call->get());
 
     return $search->get_content();
   }

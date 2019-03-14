@@ -70,6 +70,16 @@
       return $this->options['title'];
     }
 
+    function get_esw_path()
+    {
+      return $this->options['eswpath'];
+    }
+
+    function get_esw_title()
+    {
+      return $this->options['eswtitle'];
+    }
+
     /**
      * Get message above selected facets
      *

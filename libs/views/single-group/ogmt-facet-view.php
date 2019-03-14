@@ -7,10 +7,10 @@
     function __construct($cache)
     {
       $this->url_handler = new url_handler();
-      $this->options = new options_handler(get_option('ogmt_settings'));
+      $this->options = new options_handler();
       $this->facets = NULL;
 
-      $results = $cache['searchResults'];
+      $results = $cache;
 
       if($results && property_exists($results, 'facets'))
       {

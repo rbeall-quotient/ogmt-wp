@@ -2,12 +2,12 @@
   /**
    * Show search results and navigation
    */
-  class search_view
+  class object_list_view
   {
     function __construct($cache)
     {
       $this->url_handler = new url_handler();
-      $this->options = new options_handler(get_option('ogmt_settings'));
+      $this->options = new options_handler();
 
       $this->group = $cache['objectGroup'];
       $this->search = $cache['searchResults'];

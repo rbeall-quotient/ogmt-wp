@@ -191,7 +191,9 @@
      */
     function group_url($group)
     {
-      $url  = $this->get_url();
+      $options = new options_handler();
+
+      $url  = str_replace($options->get_esw_path(), $options->get_path(), $this->get_url());
 
       $vars = array(
         'objectGroupUrl' => $group
