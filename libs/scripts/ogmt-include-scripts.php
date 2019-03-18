@@ -22,6 +22,7 @@
     /*scripts*/
     wp_enqueue_script('ogmt-mini-field.js', plugin_dir_url(__FILE__) . 'js/ogmt-mini-field.js');//mini field javascript
     wp_enqueue_script('ogmt-facets-list.js', plugin_dir_url(__FILE__) . 'js/ogmt-facets-list.js');//facet list javascript
+    wp_enqueue_script('edan-search.js', plugin_dir_url(__FILE__) . 'js/edan-search.js');
 
     /*styles*/
     wp_enqueue_style('ogmt-object-display.css', plugin_dir_url(__FILE__) . 'css/ogmt-object-display.css');//css for object display

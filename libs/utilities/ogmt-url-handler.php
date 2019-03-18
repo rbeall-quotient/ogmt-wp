@@ -153,7 +153,8 @@
 
       $vars = array(
         'objectGroupUrl' => get_query_var('objectGroupUrl'),
-        'pageUrl' => get_query_var('pageUrl')
+        'pageUrl' => get_query_var('pageUrl'),
+        'edan_q' => get_query_var('edan_q')
       );
 
       $url .= $this->validate_single_vars($vars);
@@ -174,7 +175,8 @@
 
       $vars = array(
         'objectGroupUrl' => get_query_var('objectGroupUrl'),
-        'pageUrl' => get_query_var('pageUrl')
+        'pageUrl' => get_query_var('pageUrl'),
+        'edan_q' => get_query_var('edan_q')
       );
 
       $url .= $this->validate_single_vars($vars);

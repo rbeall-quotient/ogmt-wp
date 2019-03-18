@@ -32,6 +32,9 @@
 
     //Display Result JSON Instead
     add_rewrite_tag('%jsonDump%', '(.*)');
+
+    //EDAN search term
+    add_rewrite_tag("%edan_q%", '(.*)');
   }
 
 ?>
