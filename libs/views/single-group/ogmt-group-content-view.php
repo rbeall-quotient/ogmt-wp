@@ -2,7 +2,7 @@
   /**
    * should basic object group content (image, title, description)
    */
-  class group_content_view
+  class ogmt_group_content_view
   {
     function __construct($cache)
     {

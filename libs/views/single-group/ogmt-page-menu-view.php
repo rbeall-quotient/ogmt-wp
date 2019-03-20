@@ -2,11 +2,11 @@
   /**
    * Show page menu links
    */
-  class page_menu_view
+  class ogmt_page_menu_view
   {
     function __construct($cache)
     {
-      $this->url_handler = new url_handler();
+      $this->url_handler = new ogmt_url_handler();
       $this->group = $cache['objectGroup'];
     }
 
@@ -18,7 +18,6 @@
     function get_content()
     {
       $content  = '';
-
       if($this->group)
       {
         $content .= '<h3>Contents: </h3>';

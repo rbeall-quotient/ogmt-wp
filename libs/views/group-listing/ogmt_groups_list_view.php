@@ -2,13 +2,13 @@
   /**
    * Display generalized object group list
    */
-  class groups_list_view
+  class ogmt_groups_list_view
   {
     function __construct($cache)
     {
       $this->groups = $cache['groups'];
-      $this->url_handler = new url_handler();
-      $this->options = new options_handler();
+      $this->url_handler = new ogmt_url_handler();
+      $this->options = new ogmt_options_handler();
     }
 
     function get_content()
@@ -88,7 +88,7 @@
 
       $firstprev = $info['current'] != 1; //display "first" and "preview" links
       $nextlast  = $info['current'] != $info['total']; //display "next" and "last" links
-      $expandall = $this->options->is_minimized(); //whether to add an "Expand All" link
+      $expandall = $this->options->core->is_minimized(); //whether to add an "Expand All" link
 
       if($firstprev)
       {
@@ -202,6 +202,7 @@
     function get_page_list($info)
     {
       $total   = $info['total'];
+      console_log("TOTAL: $total");
       $current = $info['current'];
 
       $median = 5;
@@ -256,7 +257,7 @@
       $info = array();
       $index = get_query_var('ogmtStart');
 
-      if($index && is_numeric($index) && $index < ($this->groups->{'total'}/20))
+      if($index && is_numeric($index) && $index < ($this->groups->{'total'}/$this->options->get_rows()))
       {
         $info['current'] = ($index + 1);
       }
@@ -267,7 +268,8 @@
 
       if($this->groups && property_exists($this->groups, 'total') && $index < $this->groups->{'total'})
       {
-        $num = $this->groups->{'total'}/20;
+        console_log("TOTAL GROUPS: " . $this->groups->{'total'});
+        $num = $this->groups->{'total'}/$this->options->get_rows();
 
         if(($num - intval($num)) > 0)
         {

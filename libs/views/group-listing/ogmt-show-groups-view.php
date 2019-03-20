@@ -5,7 +5,7 @@
    * Featured object groups are displayed first, followed by non-featured
    * object groups.
    */
-  class show_groups_view
+  class ogmt_show_groups_view
   {
     function __construct($cache)
     {
@@ -18,8 +18,8 @@
      */
     function get_content()
     {
-      $featured = new featured_view($this->cache);
-      $groups   = new groups_list_view($this->cache);
+      $featured = new ogmt_featured_view($this->cache);
+      $groups   = new ogmt_groups_list_view($this->cache);
 
       $content  = '<div>';
       $content .= '<div>' . $featured->get_content() . '</div>';

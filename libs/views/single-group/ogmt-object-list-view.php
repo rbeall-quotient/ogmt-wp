@@ -2,12 +2,12 @@
   /**
    * Show search results and navigation
    */
-  class object_list_view
+  class ogmt_object_list_view
   {
     function __construct($cache)
     {
-      $this->url_handler = new url_handler();
-      $this->options = new options_handler();
+      $this->url_handler = new esw_url_handler();
+      $this->options = new esw_options_handler();
 
       $this->group = $cache['objectGroup'];
       $this->search = $cache['searchResults'];
@@ -30,7 +30,7 @@
 
         $info = $this->obj_page_info();
 
-        $content   .= '<div>' . $this->options->get_results_message($count, $name, $page) . '</div>';
+        $content   .= "<div> $count Results for $name - $page</div>";
         $content  .= '<div>Page ' . $info['current'] . ' ' . ($info['total'] ? 'of ' . $info['total'] : '') . '</div>';
 
         $content .= $this->get_top_nav();

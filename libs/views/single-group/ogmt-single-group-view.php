@@ -2,7 +2,7 @@
   /**
    * Class handling display for one object group
    */
-  class single_group_view
+  class ogmt_single_group_view
   {
     function __construct($cache)
     {
@@ -15,10 +15,10 @@
      */
     function get_content()
     {
-      $group = new group_content_view($this->cache);
-      $facet = new facet_view($this->cache['searchResults']);
-      $menu  = new page_menu_view($this->cache);
-      $search = new object_list_view($this->cache);
+      $group = new ogmt_group_content_view($this->cache);
+      $facet = new edan_facet_view($this->cache['searchResults']);
+      $menu  = new ogmt_page_menu_view($this->cache);
+      $search = new ogmt_object_list_view($this->cache);
 
       $content  = '<div style="width: 100%; overflow: hidden;">';
       $content .= '<div style="width: 65%; float: left;">' . $group->get_content() . '</div>';

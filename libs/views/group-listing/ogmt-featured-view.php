@@ -2,12 +2,12 @@
   /**
    * Show featured object groups list
    */
-  class featured_view
+  class ogmt_featured_view
   {
     function __construct($cache)
     {
       $this->featured = $cache['featured'];
-      $this->url_handler = new url_handler();
+      $this->url_handler = new ogmt_url_handler();
     }
 
     /**

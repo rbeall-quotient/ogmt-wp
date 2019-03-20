@@ -16,14 +16,14 @@
    */
   function ogmt_set_title( $title )
   {
-    $options = new options_handler();
-    $cache = new cache_handler();
+    $options = new ogmt_options_handler();
+    $cache = new ogmt_cache_handler();
 
     /**
      * if in the loop and the title is cached (or if object group is retrieved successfully)
      * modify the page title on display.
      */
-    if(in_the_loop() && ogmt_name_from_url() == $options->get_path())
+    if(in_the_loop() && edan_search_name_from_url() == $options->get_path())
     {
       if(get_query_var('objectGroupUrl'))
       {
@@ -37,32 +37,6 @@
           {
             $pagename = $objectGroup->{'page'}->{'title'};
             $title = "<div><h6>" . $title . "</h6>" . $pagename . "</div>";
-          }
-        }
-      }
-      elseif(get_query_var('edanUrl'))
-      {
-        $object = $cache->get()['object'];
-
-        if($object)
-        {
-          if(property_exists($object, 'content') && property_exists($object->{'content'}, 'descriptiveNonRepeating'))
-          {
-            if(property_exists($object->{'content'}->{'descriptiveNonRepeating'}, 'title'))
-            {
-              $title = $object->{'content'}->{'descriptiveNonRepeating'}->{'title'}->{'content'};
-            }
-          }
-          elseif(property_exists($object, 'title'))
-          {
-            if(property_exists($object->{'title'}, 'content'))
-            {
-              $title = $this->object->{'title'}->{'content'};
-            }
-            else
-            {
-              $title = $this->object->{'title'};
-            }
           }
         }
       }
@@ -84,10 +58,10 @@
    */
   function ogmt_set_doc_title( $title )
   {
-    $options = new options_handler();
-    $cache = new cache_handler();
+    $options = new ogmt_options_handler();
+    $cache = new ogmt_cache_handler();
 
-    if(ogmt_name_from_url() == $options->get_path())
+    if(edan_search_name_from_url() == $options->get_path())
     {
       if(get_query_var('objectGroupUrl'))
       {
@@ -108,32 +82,6 @@
           else
           {
             $title .= ' | ' . $sitename;
-          }
-        }
-      }
-      elseif(get_query_var('edanUrl'))
-      {
-        $object = $cache->get()['object'];
-
-        if($object)
-        {
-          if(property_exists($object, 'content') && property_exists($object->{'content'}, 'descriptiveNonRepeating'))
-          {
-            if(property_exists($object->{'content'}->{'descriptiveNonRepeating'}, 'title'))
-            {
-              $title = $object->{'content'}->{'descriptiveNonRepeating'}->{'title'}->{'content'};
-            }
-          }
-          elseif(property_exists($object, 'title'))
-          {
-            if(property_exists($object->{'title'}, 'content'))
-            {
-              $title = $this->object->{'title'}->{'content'};
-            }
-            else
-            {
-              $title = $this->object->{'title'};
-            }
           }
         }
       }

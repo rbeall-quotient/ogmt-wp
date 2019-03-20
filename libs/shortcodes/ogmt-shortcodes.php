@@ -12,14 +12,11 @@
   add_shortcode( 'ogmt-facets', 'ogmt_facet_shortcode');
   add_shortcode( 'ogmt-group-content', 'ogmt_group_content_shortcode');
   add_shortcode( 'ogmt-page-menu', 'ogmt_page_menu_shortcode');
-  add_shortcode( 'ogmt-search', 'ogmt_search_shortcode');
+  add_shortcode( 'ogmt-object-list', 'ogmt_object_list_shortcode');
   add_shortcode( 'ogmt-full-object-group', 'ogmt_single_group_shortcode');
 
   //shortcode for json
   add_shortcode( 'ogmt-json', 'ogmt_json_shortcode');
-
-  //shortcode for object display
-  add_shortcode('ogmt-object', 'ogmt_object_shortcode');
 
   /**
    * show featured groups as a shortcode
@@ -28,8 +25,8 @@
    */
   function ogmt_featured_shortcode()
   {
-    $call = new groups_list_call();
-    $featured = new featured_view($call->get());
+    $call = new ogmt_groups_list_call();
+    $featured = new ogmt_featured_view($call->get());
 
     return $featured->get_content();
   }
@@ -41,8 +38,8 @@
    */
   function ogmt_groups_list_shortcode()
   {
-    $call = new groups_list_call();
-    $groups = new groups_list_view($call->get());
+    $call = new ogmt_groups_list_call();
+    $groups = new ogmt_groups_list_view($call->get());
 
     return $groups->get_content();
   }
@@ -54,8 +51,8 @@
    */
   function ogmt_show_groups_shortcode()
   {
-    $call = new groups_list_call();
-    $showall = new show_groups_view($call->get());
+    $call = new ogmt_groups_list_call();
+    $showall = new ogmt_show_groups_view($call->get());
 
     return $showall->get_content();
   }
@@ -67,8 +64,8 @@
    */
   function ogmt_facet_shortcode()
   {
-    $call = new object_group_call();
-    $facet = new facet_view($call->get()['searchResults']);
+    $call = new ogmt_object_group_call();
+    $facet = new edan_facet_view($call->get()['searchResults']);
 
     return $facet->get_content();
   }
@@ -80,8 +77,8 @@
    */
   function ogmt_group_content_shortcode()
   {
-    $call = new object_group_call();
-    $content = new group_content_view($call->get());
+    $call = new ogmt_object_group_call();
+    $content = new ogmt_group_content_view($call->get());
 
     return $content->get_content();
   }
@@ -93,8 +90,8 @@
    */
   function ogmt_page_menu_shortcode()
   {
-    $call = new object_group_call();
-    $menu = new page_menu_view($call->get());
+    $call = new ogmt_object_group_call();
+    $menu = new ogmt_page_menu_view($call->get());
 
     return $menu->get_content();
   }
@@ -104,10 +101,10 @@
    *
    * @return string search content html
    */
-  function ogmt_search_shortcode()
+  function ogmt_object_list_shortcode()
   {
-    $call = new object_group_call();
-    $search = new object_list_view($call->get());
+    $call = new ogmt_object_group_call();
+    $search = new ogmt_object_list_view($call->get());
 
     return $search->get_content();
   }
@@ -119,8 +116,8 @@
    */
   function ogmt_single_group_shortcode()
   {
-    $call = new object_group_call();
-    $single = new single_group_view($call->get());
+    $call = new ogmt_object_group_call();
+    $single = new ogmt_single_group_view($call->get());
 
     return $single->get_content();
   }
@@ -132,20 +129,7 @@
    */
   function ogmt_json_shortcode()
   {
-    $json = new json_view();
+    $json = new ogmt_json_view();
     return $json->get_string();
-  }
-
-  /**
-   * Show EDAN object content
-   *
-   * @return string EDAN Object HTML
-   */
-  function ogmt_object_shortcode()
-  {
-    $call = new object_call();
-    $object = new object_view($call->get());
-
-    return $object->get_content();
   }
 ?>

@@ -1,9 +1,9 @@
 <?php
-  class object_group_call
+  class ogmt_object_group_call
   {
     function __construct()
     {
-      $this->options = new options_handler();
+      $this->options = new esw_options_handler();
       $this->edan = new edan_handler();
 
       $this->groupService = 'ogmt/v1.1/ogmt/getObjectGroup.htm';
@@ -21,6 +21,7 @@
       //if ogmt data is already cached, return cached value
       if(wp_cache_get('ogmt_cache'))
       {
+        console_log("group cached");
         $cache = wp_cache_get('ogmt_cache');
 
         $group = $cache['objectGroup'];
@@ -28,8 +29,8 @@
 
         if($group && $results)
         {
-          $results['group'] = $group;
-          $results['search'] = $search;
+          $results['objectGroup'] = $group;
+          $results['searchResults'] = $search;
 
           return $results;
         }
@@ -62,7 +63,6 @@
         $results['searchResults'] = $searchResults ? $searchResults : false;
         $results['featured'] = false;
         $results['groups'] = false;
-        $results['object'] = false;
 
         wp_cache_set('ogmt_cache', $results);
 

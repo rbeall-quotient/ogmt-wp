@@ -1,10 +1,10 @@
 <?php
-  class groups_list_call
+  class ogmt_groups_list_call
   {
     function __construct()
     {
-      $this->options = new options_handler();
       $this->edan = new edan_handler();
+      $this->options = new ogmt_options_handler();
       $this->service = '/ogmt/v1.1/ogmt/getObjectGroups.htm';
     }
 
@@ -30,7 +30,7 @@
 
       if(get_query_var('ogmtStart'))
       {
-        $start = get_query_var('ogmtStart') * 20;
+        $start = get_query_var('ogmtStart') * $this->options->get_rows();
       }
       else
       {
@@ -39,6 +39,7 @@
 
       $group_vars = array(
         'start' => $start,
+        'rows'  => $this->options->get_rows()
       );
 
       $feature_vars = array(
@@ -49,7 +50,6 @@
       $results['groups'] = json_decode($this->edan->edan_call($group_vars, $this->service));
       $results['objectGroup'] = false;
       $results['searchResults'] = false;
-      $results['object'] = false;
 
       wp_cache_set('ogmt_cache', $results);
       return $results;

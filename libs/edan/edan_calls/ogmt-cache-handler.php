@@ -1,21 +1,16 @@
 <?php
-  class cache_handler
+  class ogmt_cache_handler
   {
     function get()
     {
       if(get_query_var('objectGroupUrl'))
       {
-        $group_call = new object_group_call();
+        $group_call = new ogmt_object_group_call();
         return $group_call->get();
-      }
-      elseif(get_query_var('edanUrl'))
-      {
-        $object_call = new object_call();
-        return $object_call->get();
       }
       else
       {
-        $list_call = new groups_list_call();
+        $list_call = new ogmt_groups_list_call();
         return $list_call->get();
       }
     }

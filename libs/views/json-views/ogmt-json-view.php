@@ -2,11 +2,11 @@
   /**
    * Show OGMT JSON
    */
-  class json_view
+  class ogmt_json_view
   {
     function __construct()
     {
-      $cache_handler = new cache_handler();
+      $cache_handler = new ogmt_cache_handler();
       $this->cache = $cache_handler->get();
     }
 

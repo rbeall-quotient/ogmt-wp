@@ -13,13 +13,13 @@
   function ogmt_insert_content( $content )
   {
     //get options from admin menu and plug them into the options handler
-    $options = new options_handler();
+    $options = new ogmt_options_handler();
 
     /*Using stripped down url instead of page title because we
     * we are changing the title and this title filter might be called before
     * we access content.
     */
-    if(ogmt_name_from_url() == $options->get_path())
+    if(edan_search_name_from_url() == $options->get_path())
     {
       $view_handler = new ogmt_view_handler();
       $content = $view_handler->get_content();

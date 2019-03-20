@@ -16,25 +16,21 @@
       //check if jsonDump set
       if(get_query_var('jsonDump'))
       {
-        $view = new json_view();
+        $view = new ogmt_json_view();
         return $view->display_json();
       }
       else
       {
-        $call = new cache_handler();
+        $call = new ogmt_cache_handler();
         //if objectGroupUrl set, serve that particular object group
         if(get_query_var('objectGroupUrl'))
         {
-          $view = new single_group_view($call->get());
-        }
-        elseif(get_query_var('edanUrl'))
-        {
-          $view = new object_view($call->get());
+          $view = new ogmt_single_group_view($call->get());
         }
         else
         {
           //otherwise, serve list of featured and general object groups
-          $view = new show_groups_view($call->get());
+          $view = new ogmt_show_groups_view($call->get());
         }
 
         //serve up gathered content
